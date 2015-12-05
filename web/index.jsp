@@ -42,7 +42,7 @@
         %>
         <section class="Error">
             <article>
-                <p style="color:red">Errore nel recupero delle informazioni: username o password errati.</p>
+                <p>Errore nel recupero delle informazioni: username o password errati.</p>
             </article>
         </section>
         <%
