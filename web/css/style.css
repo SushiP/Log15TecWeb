@@ -1,6 +1,18 @@
 /* Import Open Sans font from google libraries */
 @import url(http://fonts.googleapis.com/css?family=Open+Sans);
 
+/* Class space */
+.Error article {
+    background-color: #FF8080;
+    margin-top: 1px;
+}
+
+.Error p {
+    margin: 0px;
+    padding: 10px;
+    font-size: 18px;
+}
+
 body {
     margin: 0px;
     font-family: Open Sans, Arial, Verdana;
@@ -10,6 +22,7 @@ header {
 	background-color: #F5F5F5;
         border-bottom: 1px solid #C0C0C0;
         padding: 10px;
+        margin-bottom: 0px;
 }
 
 #Login {
@@ -59,9 +72,11 @@ header {
     padding-left: 2%;
     padding-top: 10px;
     padding-bottom: 10px;
+    outline: none;
 }
 
 #Login input:focus {
+    border: 1px solid #0099FF;
     -webkit-box-shadow: 2px 2px 5px 0px rgba(50, 50, 50, 0.36);
     -moz-box-shadow: 2px 2px 5px 0px rgba(50, 50, 50, 0.36);
     box-shadow: 2px 2px 5px 0px rgba(50, 50, 50, 0.36);

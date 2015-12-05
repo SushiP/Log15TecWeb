@@ -67,7 +67,7 @@ public class Login extends HttpServlet {
                     response.setHeader("location", "driver.jsp");
             } else
                 /* Return back and manage the error */
-                response.setHeader("location", "index.jsp?error=loginfailed");
+                response.setHeader("location", "index.jsp?error=loginfailed&username=" + username);
         } catch (SQLException e) {
             System.out.println("Errore nel recupero degli utenti: " + e.getMessage());
         }
