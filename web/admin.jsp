@@ -10,6 +10,7 @@
         <%!
             DBInterrogator interrogator = new DBInterrogator(new DBConnector().getConnection());
             String userType = null;
+            WebUtility utility = new WebUtility();
         %>
         
         <%
@@ -30,6 +31,7 @@
         %>
     </head>
     <body>
+        <%=utility.navigationBarAdmin(0)%>
         <h1>Hello World!</h1>
     </body>
 </html>
