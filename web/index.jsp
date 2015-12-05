@@ -12,10 +12,17 @@
     </header>
     <body>
         <% 
-            if(request.getParameter("error")!= null){
+            if(request.getParameter("error")!= null)
+            {
         %>
-        <p>errore</p>
-        <%}%>
+        <section class="Error">
+            <article>
+                <p>Errore nel recupero delle informazioni: username o password errati.</p>
+            </article>
+        </section>
+        <%
+            }       
+        %>
         <section id="Login">
             <header>Login</header>
             <article>
@@ -26,5 +33,14 @@
                 </form>
             </article>
         </section>
+        <% if (request.getParameter("error") != null) 
+            {
+        %>
+        <script type="text/javascript">
+            document.getElementsByName("username")[0].value = "<%=request.getParameter("username")%>";
+        </script>
+        <%
+            }
+        %>
     </body>
 </html>
