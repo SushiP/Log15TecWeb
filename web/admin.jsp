@@ -43,10 +43,10 @@
                     <td style="width: 75%;">
                         <nav>
                             <ul>
-                                <li><a href="#">Gestione Clienti</a></li>
-                                <li><a href="#">Gestione Autisti</a></li>
-                                <li><a href="#">Gestione Veicoli</a></li>
-                                <li><a href="#">Gestione Spedizioni</a></li>
+                                <li><a href="mcustomers.jsp">Gestione Clienti</a></li>
+                                <li><a href="mdrivers.jsp">Gestione Autisti</a></li>
+                                <li><a href="mvehicles.jsp">Gestione Veicoli</a></li>
+                                <li><a href="mshipemnts.jsp">Gestione Spedizioni</a></li>
                             </ul>
                         </nav>
                     </td>
@@ -54,7 +54,7 @@
                 </tr>
             </table>
         </header>
-        <section id="Customers">
+        <section class="Container">
             <header>Ultimi Clienti</header>
             <article>
                 Qui andrà una lista delle prime 10 richieste dei clienti da gestire;
