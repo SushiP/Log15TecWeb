@@ -1,0 +1,40 @@
+/* Import Open Sans font from google libraries */
+@import url(http://fonts.googleapis.com/css?family=Open+Sans);
+
+body {
+    margin: 0px;
+}
+
+header {
+	background-color: #F5F5F5;
+        border-bottom: 1px solid #C0C0C0;
+        padding: 10px;
+}
+
+#Login {
+    margin: 0 auto;
+    width: 50%;
+    height: 50%;
+    text-align: center;
+    margin-top: 150px;
+}
+
+#Login article {
+    border: 1px solid #C0C0C0;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+}
+
+#Login input[type="text"] {
+    margin-top: 20px;
+}
+
+#Login input[type="password"] {
+    margin-top: 20px;
+}
+
+#Login input[type="submit"] {
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
