@@ -35,25 +35,25 @@
             }
         %>
     </head>
-    <header>
-        <table style="width: 100%; padding: 0px;">
-            <tr>
-                <td style="width: 5%;"><a href="admin.jsp"><img src="images/logo.png" onmouseover="this.src='images/logo_on.png'" onmouseout="this.src='images/logo.png'" alt="Logo" /></a></td>
-                <td style="width: 75%;">
-                    <nav>
-                        <ul>
-                            <li><a href="#">Gestione Clienti</a></li>
-                            <li><a href="#">Gestione Autisti</a></li>
-                            <li><a href="#">Gestione Veicoli</a></li>
-                            <li><a href="#">Gestione Spedizioni</a></li>
-                        </ul>
-                    </nav>
-                </td>
-                <td style="width: 15%; text-align: right;"><p><script type="text/javascript">document.write("Benvenuto <b><%=username%></b><br /><i>Accesso effettuato alle <%=logTime%></i>");</script></p></td>
-            </tr>
-        </table>
-    </header>
     <body>
+        <header>
+            <table style="width: 100%; padding: 0px;">
+                <tr>
+                    <td style="width: 5%;"><a href="admin.jsp"><img src="images/logo.png" onmouseover="this.src='images/logo_on.png'" onmouseout="this.src='images/logo.png'" alt="Logo" /></a></td>
+                    <td style="width: 75%;">
+                        <nav>
+                            <ul>
+                                <li><a href="#">Gestione Clienti</a></li>
+                                <li><a href="#">Gestione Autisti</a></li>
+                                <li><a href="#">Gestione Veicoli</a></li>
+                                <li><a href="#">Gestione Spedizioni</a></li>
+                            </ul>
+                        </nav>
+                    </td>
+                    <td style="width: 15%; text-align: right;"><p><script type="text/javascript">document.write("Benvenuto <b><%=username%></b><br /><i>Accesso effettuato alle <%=logTime%></i>");</script></p></td>
+                </tr>
+            </table>
+        </header>
         <section id="Customers">
             <header>Ultimi Clienti</header>
             <article>
