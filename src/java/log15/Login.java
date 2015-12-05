@@ -8,7 +8,6 @@ import javax.servlet.http.Cookie;
 import java.sql.*;
 import java.util.UUID;
 
-
 /**
  *
  * @author Maurizio, Giulio
