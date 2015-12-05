@@ -43,7 +43,7 @@ public class Login extends HttpServlet {
                 String uniqueID = UUID.randomUUID().toString();
                 
                 /* Create the new session */
-                query = "INSERT INTO sessioni VALUES(MD5('"+ uniqueID + "'), NOW(), ?)";
+                query = "INSERT INTO sessioni VALUES(MD5('"+ uniqueID + "'), CURTIME(), ?)";
                 ps = connection.prepareStatement(query);
                 ps.setString(1, username);
                 ps.executeUpdate();
