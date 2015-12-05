@@ -18,11 +18,38 @@ body {
     font-family: Open Sans, Arial, Verdana;
 }
 
+a:link, a:active, a:visited {
+    font-size: 17px;
+    color: black;
+    text-decoration: none;
+    
+}
+
+a:hover {
+    color: darkslateblue;
+}
+
 header {
 	background-color: #F5F5F5;
         border-bottom: 1px solid #C0C0C0;
-        padding: 10px;
-        margin-bottom: 0px;
+        padding: 0.5%;
+        margin: 0px;
+}
+
+header ul {
+    list-style: none;
+    text-align: center;
+}
+
+header li {
+    display: inline;
+    margin-left: 2%;
+}
+
+header p {
+    margin: 0px;
+    margin-right: 2%;
+    padding: 0px;
 }
 
 #Login {
@@ -103,4 +130,42 @@ header {
     background-color: #A9E2F3;
     cursor: pointer;
     color: darkslategrey;
+}
+
+#Customers {
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 5%;
+    width: 60%;
+    font-size: 14px;
+}
+
+#Customers header {
+    -webkit-border-top-left-radius: 4px;
+    -webkit-border-top-right-radius: 4px;
+    -moz-border-radius-topleft: 4px;
+    -moz-border-radius-topright: 4px;
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+    background-color: white;
+    border: 1px solid #C0C0C0;
+    border-bottom: 0px;
+    padding-left: 0.8%;
+    background-color: #F5F5F5;
+    font-weight: bold;
+    font-size: 18px;
+    color: darkslategray;
+}
+
+#Customers article {
+    border: 1px solid #C0C0C0;
+    -webkit-border-bottom-right-radius: 4px;
+    -webkit-border-bottom-left-radius: 4px;
+    -moz-border-radius-bottomright: 4px;
+    -moz-border-radius-bottomleft: 4px;
+    border-bottom-right-radius: 4px;
+    border-bottom-left-radius: 4px;
+    padding-left: 0.8%;
+    padding-top: 0.8%;
+    padding-bottom: 0.8%;
 }

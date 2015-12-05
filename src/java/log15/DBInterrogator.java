@@ -18,8 +18,9 @@ public class DBInterrogator {
         this.connection = connection;
     }
     
-    public String getSessionUser(String sessId) throws SQLException{
-        String query = "SELECT U.dir FROM utente U NATURAL JOIN sessioni S WHERE S.id=?";
+    public String getSessionUser(String sessId) throws SQLException {
+        String query = "SELECT U.dir FROM utente U NATURAL JOIN sessioni S WHERE S.id = ?";
+        
         try{
             PreparedStatement ps = connection.prepareStatement(query);
             ps.setString(1, sessId);
@@ -31,6 +32,40 @@ public class DBInterrogator {
                 return null;
             
         }catch(SQLException e){
+            throw(e);
+        }
+    }
+    
+    public String getUsernameFromSession(String sessId) throws SQLException {
+        String query = "SELECT U.username FROM utente U NATURAL JOIN sessioni S WHERE S.id = ?";
+        
+        try {
+            PreparedStatement ps = connection.prepareStatement(query);
+            ps.setString(1, sessId);
+            ResultSet rs = ps.executeQuery();
+            
+            if(rs.next())
+                return rs.getString("username");
+            else
+                return null;
+        } catch (SQLException e) {
+            throw(e);
+        }
+    }
+    
+        public String getLogTimeFromSession(String sessId) throws SQLException {
+        String query = "SELECT logTime FROM sessioni S WHERE S.id = ?";
+        
+        try {
+            PreparedStatement ps = connection.prepareStatement(query);
+            ps.setString(1, sessId);
+            ResultSet rs = ps.executeQuery();
+            
+            if(rs.next())
+                return rs.getString("logTime");
+            else
+                return null;
+        } catch (SQLException e) {
             throw(e);
         }
     }
