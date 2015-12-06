@@ -58,7 +58,7 @@
         <section class="Container">
             <header>Gestione Clienti</header>
             <article>
-                <% customers = interrogator.getTable("cliente", "Accetta"); %>
+                <% customers = interrogator.getTable("cliente"); %>
                 <script type="text/javascript">document.write("<%=customers%>");</script>
             </article>
         </section>
