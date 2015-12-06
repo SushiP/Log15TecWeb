@@ -13,6 +13,7 @@
             String userType = null;
             String username = null;
             String logTime = null;
+            String customers = null;
         %>
         
         <%
@@ -57,7 +58,8 @@
         <section class="Container">
             <header>Gestione Clienti</header>
             <article>
-                <% interrogator.getTable("cliente"); %>
+                <% customers = interrogator.getTable("cliente"); %>
+                <script type="text/javascript">document.write("<%=customers%>");</script>
             </article>
         </section>
     </body>
