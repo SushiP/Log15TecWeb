@@ -51,7 +51,7 @@
                             </ul>
                         </nav>
                     </td>
-                    <td style="width: 15%; text-align: right;"><p><script type="text/javascript">document.write("Benvenuto <b><%=username%></b><br /><i>Accesso effettuato alle <%=logTime%></i><br />(<a href='logout.jsp'>logout</a>)");</script></p></td>
+                    <td style="width: 15%; text-align: right;"><p>Benvenuto <b><%=username%></b><br /><i>Accesso effettuato alle <%=logTime%></i><br />(<a href='logout.jsp'>logout</a>)</p></td>
                 </tr>
             </table>
         </header>
@@ -59,7 +59,7 @@
             <header>Gestione Clienti</header>
             <article>
                 <% customers = interrogator.getTable("cliente"); %>
-                <script type="text/javascript">document.write("<%=customers%>");</script>
+                <%=customers%>
             </article>
         </section>
     </body>
