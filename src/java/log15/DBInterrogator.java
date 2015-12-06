@@ -85,24 +85,40 @@ public class DBInterrogator {
                 int i;
 
                 /*Start to draw the table tag.*/
-                tab = "<table id='table_" + table + "' border=1>";
+                tab = "<table id='table_" + table + "' border=1 class='Table'>";
                 
                 /*Draw the column's names.*/
                 tab += "<tr>";
-                for(i = 1; i <= count; i++)
-                    tab += "<td>" + rsmd.getColumnName(i) + "</td>";
-
+                for(i = 1; i <= count; i++) {
+                    if (i == 1)
+                        tab += "<td></td>";
+                    else
+                        tab += "<td>" + rsmd.getColumnName(i-1) + "</td>";
+                }
+                tab += "<td>" + rsmd.getColumnName(i-1) + "</td><td></td>";
                 tab += "</tr>";
+                
+                tab += "<tr><form action='#' method='get'>";
+                for (i = 1; i<= count; i++) {
+                    if (i == 1)
+                        tab += "<td></td>";
+                    else 
+                        tab += "<td><input type='text' id='" + rsmd.getColumnName(i-1) + "' /></td>";
+                }
+                tab += "<td><input type='text' id='" + rsmd.getColumnName(i-1) + "' />";
+                tab += "<td><input type='submit' name='search' value='Cerca' /></td>";
+                tab += "</form></tr>";
 
                 /*Set the result set to the first row and draw all the rows.*/
                 rs.beforeFirst();
                 
                 while(rs.next()){
-                    tab += "<tr>";
+                    tab += "<tr><form action='#' method='post'>";
+                    tab += "<td><input type='checkbox' name='sel[]' value='" + rs.getString(rsmd.getColumnName(1)) + "' </td>";
                     for(i = 1; i <= count; i++)
                         tab += "<td>" + rs.getString(rsmd.getColumnName(i)) + "</td>";
-
-                    tab += "</tr>";
+                    tab += "<td><a href='#'><button>Modifica</button></a></td>";
+                    tab += "</form></tr>";
                 }
                 
                 /*Close table tag.*/
