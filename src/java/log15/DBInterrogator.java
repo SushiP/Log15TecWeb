@@ -91,7 +91,7 @@ public class DBInterrogator {
                     idStart++;
                 
                 /*Start to draw the table tag.*/
-                tab = "<table id='table_" + table + "' border=1 class='Table'>";
+                tab = "<table id='table_" + table + "' class='Table'>";
                 
                 /*Draw the column's names.*/
                 tab += "<tr>";
