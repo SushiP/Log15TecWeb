@@ -51,14 +51,14 @@
                             </ul>
                         </nav>
                     </td>
-                    <td style="width: 15%; text-align: right;"><p><script type="text/javascript">document.write("Benvenuto <b><%=username%></b><br /><i>Accesso effettuato alle <%=logTime%></i>");</script></p></td>
+                    <td style="width: 15%; text-align: right;"><p><script type="text/javascript">document.write("Benvenuto <b><%=username%></b><br /><i>Accesso effettuato alle <%=logTime%></i><br />(<a href='logout.jsp'>logout</a>)");</script></p></td>
                 </tr>
             </table>
         </header>
         <section class="Container">
             <header>Gestione Clienti</header>
             <article>
-                <% customers = interrogator.getTable("cliente"); %>
+                <% customers = interrogator.getTable("cliente", "Accetta"); %>
                 <script type="text/javascript">document.write("<%=customers%>");</script>
             </article>
         </section>

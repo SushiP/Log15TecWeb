@@ -70,9 +70,11 @@ public class DBInterrogator {
         }
     }
     
-    public String getTable(String table) throws SQLException{
+    public String getTable(String table, String buttonText) throws SQLException{
         String tab = "";
         String query = "SELECT * FROM " + table;
+        int idStart = 1;
+        
         try{
             Statement stat = connection.createStatement();
             ResultSet rs = stat.executeQuery(query);
@@ -84,13 +86,17 @@ public class DBInterrogator {
                 int count = rsmd.getColumnCount();
                 int i;
 
+                /* If exists id field, jump it while printing the table */
+                if (rsmd.getColumnName(1).equals("id"))
+                    idStart++;
+                
                 /*Start to draw the table tag.*/
                 tab = "<table id='table_" + table + "' border=1 class='Table'>";
                 
                 /*Draw the column's names.*/
                 tab += "<tr>";
-                for(i = 1; i <= count; i++) {
-                    if (i == 1)
+                for(i = idStart; i <= count; i++) {
+                    if (i == idStart)
                         tab += "<td></td>";
                     else
                         tab += "<td>" + rsmd.getColumnName(i-1) + "</td>";
@@ -99,8 +105,8 @@ public class DBInterrogator {
                 tab += "</tr>";
                 
                 tab += "<tr><form action='#' method='get'>";
-                for (i = 1; i<= count; i++) {
-                    if (i == 1)
+                for (i = idStart; i<= count; i++) {
+                    if (i == idStart)
                         tab += "<td></td>";
                     else 
                         tab += "<td><input type='text' id='" + rsmd.getColumnName(i-1) + "' /></td>";
@@ -115,9 +121,9 @@ public class DBInterrogator {
                 while(rs.next()){
                     tab += "<tr><form action='#' method='post'>";
                     tab += "<td><input type='checkbox' name='sel[]' value='" + rs.getString(rsmd.getColumnName(1)) + "' </td>";
-                    for(i = 1; i <= count; i++)
+                    for(i = idStart; i <= count; i++)
                         tab += "<td>" + rs.getString(rsmd.getColumnName(i)) + "</td>";
-                    tab += "<td><a href='#'><button>Modifica</button></a></td>";
+                    tab += "<td><a href='#'><button>" + buttonText + "</button></a></td>";
                     tab += "</form></tr>";
                 }
                 
