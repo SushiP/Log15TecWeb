@@ -50,7 +50,7 @@
                             </ul>
                         </nav>
                     </td>
-                    <td style="width: 15%; text-align: right;"><p>Benvenuto <b><%=username%></b><br /><i>Accesso effettuato alle <%=logTime%></i><br />(<a href='logout.jsp'>logout</a>)</p></td>
+                    <td style="width: 15%; text-align: right;"><p>Benvenuto <b><%=username%></b><br /><i>Accesso effettuato alle <%=logTime%></i><br />(<a href='Logout?username=<%=username%>'>logout</a>)</p></td>
                 </tr>
             </table>
         </header>
