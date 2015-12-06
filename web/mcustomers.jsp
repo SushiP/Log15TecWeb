@@ -57,7 +57,7 @@
         </header>
         <section class="Container">
             <header>Gestione Clienti</header>
-            <article>
+            <article style="overflow: scroll;">
                 <% customers = interrogator.getTable("cliente"); %>
                 <%=customers%>
             </article>
