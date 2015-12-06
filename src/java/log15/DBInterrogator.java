@@ -70,7 +70,7 @@ public class DBInterrogator {
         }
     }
     
-    public String getTable(String table, String buttonText) throws SQLException{
+    public String getTable(String table) throws SQLException{
         String tab = "";
         String query = "SELECT * FROM " + table;
         int idStart = 1;
@@ -123,7 +123,7 @@ public class DBInterrogator {
                     tab += "<td><input type='checkbox' name='sel[]' value='" + rs.getString(rsmd.getColumnName(1)) + "' </td>";
                     for(i = idStart; i <= count; i++)
                         tab += "<td>" + rs.getString(rsmd.getColumnName(i)) + "</td>";
-                    tab += "<td><a href='#'><button>" + buttonText + "</button></a></td>";
+                    tab += "<td><a href='#'><button>Modifica</button></a></td>";
                     tab += "</form></tr>";
                 }
                 
