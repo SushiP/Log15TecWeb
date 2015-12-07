@@ -119,12 +119,11 @@ public class DBInterrogator {
                 rs.beforeFirst();
                 
                 while(rs.next()){
-                    tab += "<tr><form action='#' method='post'>";
                     tab += "<td><input type='checkbox' name='sel[]' value='" + rs.getString(rsmd.getColumnName(1)) + "' </td>";
                     for(i = idStart; i <= count; i++)
                         tab += "<td>" + rs.getString(rsmd.getColumnName(i)) + "</td>";
-                    tab += "<td><a href='#'><button>Modifica</button></a></td>";
-                    tab += "</form></tr>";
+                    tab += "<td><a href='mcustomers.jsp?op=update&id=" + rs.getString(rsmd.getColumnName(1)) + "'><button>Modifica</button></a></td>";
+                    tab += "</tr>";
                 }
                 
                 /*Close table tag.*/
@@ -135,5 +134,22 @@ public class DBInterrogator {
             throw(e);
         }
         return tab;
+    }
+    
+    public String[] getCustomerRow(String id) throws SQLException {
+        String[] Ris = new String[8];
+        
+        String query = "SELECT * FROM cliente WHERE id = ?";
+        PreparedStatement ps = connection.prepareStatement(query);
+        ps.setString(1, id);
+        ResultSet rs = ps.executeQuery();
+        ResultSetMetaData rsmd = rs.getMetaData();
+        int count = rsmd.getColumnCount();
+        
+        if (rs.next())
+            for (int i = 1; i <= count; i++)
+                Ris[i] = rs.getString(rsmd.getColumnName(i));
+        
+        return Ris;
     }
 }

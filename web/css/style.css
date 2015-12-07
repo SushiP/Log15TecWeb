@@ -13,6 +13,17 @@
     font-size: 18px;
 }
 
+.Success article {
+    background-color: #00FA9A;
+    margin-top: 1px;
+}
+
+.Success p {
+    margin: 0px;
+    padding: 10px;
+    font-size: 18px;
+}
+
 .Container {
     margin-left: auto;
     margin-right: auto;

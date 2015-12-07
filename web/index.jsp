@@ -32,10 +32,10 @@
             }
         %>
     </head>
-    <header>
-        <a href="#"><img src="images/logo.png" onmouseover="this.src='images/logo_on.png'" onmouseout="this.src='images/logo.png'" alt="Logo" /></a>
-    </header>
     <body>
+        <header>
+            <a href="#"><img src="images/logo.png" onmouseover="this.src='images/logo_on.png'" onmouseout="this.src='images/logo.png'" alt="Logo" /></a>
+        </header>
         <% 
             if(request.getParameter("error")!= null)
             {
