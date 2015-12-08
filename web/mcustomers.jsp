@@ -58,20 +58,43 @@
             </table>
         </header>
          <% 
-            if(request.getParameter("query")!= null)
+             if (request.getParameter("query") != null && request.getParameter("op") == null && !request.getParameter("query").equals("success")) 
+             {
+         %>
+        <section class="Error">
+            <article>
+                <p>Errore nella cancellazione: controlla di aver selezionato almeno un campo.</p>
+            </article>
+        </section>        
+         <%
+             }
+            if(request.getParameter("query") != null && request.getParameter("op") != null)
             {
-                if (request.getParameter("query").equals("fail"))
+                if (request.getParameter("query").equals("fail") && request.getParameter("op").equals("insert"))
                 {
         %>
         <section class="Error">
             <article>
-                <p>Errore nell'inserimento della query: controlla che tutti i campi siano non vuoti e la deadline abbia almeno 7 giorni di distanza.</p>
+                <p>Errore nell'inserimento: controlla che tutti i campi siano non vuoti e la deadline abbia almeno 7 giorni di distanza da oggi.</p>
+            </article>
+        </section>
+        <%      }
+            }
+            if(request.getParameter("query") != null && request.getParameter("op") != null)
+            {
+                if (request.getParameter("query").equals("fail") && request.getParameter("op").equals("update"))
+                {
+        %>
+        <section class="Error">
+            <article>
+                <p>Errore nella modifica: controlla che tutti i campi siano non vuoti e la nuova deadline non sia più vecchia della precedente.</p>
             </article>
         </section>
         <%
                 }
-                if (request.getParameter("query").equals("success")) 
-                {
+            }
+            if (request.getParameter("query") != null && request.getParameter("query").equals("success")) 
+            {
         %>
         <section class="Success">
             <article>
@@ -79,11 +102,31 @@
             </article>
         </section>
         <%
-                }
-            }
+           }
         %>
         <section class="Container">
-            <header>Gestione Clienti</header>
+            <header>
+        <%
+            if (request.getParameter("op") != null && request.getParameter("op").equals("insert"))
+            {
+        %>
+            Inserisci Cliente
+        <%
+            }
+            else if (request.getParameter("op") != null && request.getParameter("op").equals("update"))
+            {
+        %>
+            Modifica Cliente
+        <%
+            }
+            else
+            {
+        %>
+            Gestione Clienti
+        <%
+            }
+        %>
+            </header>
             <article>
                 <% if (request.getParameter("op") != null) 
                 {
@@ -142,8 +185,9 @@
                         <option value="Veloce" <% if (row[7].equals("Veloce")) out.println("selected"); %>>Veloce</option>
                         <option value="Fulminea" <% if (row[7].equals("Fulminea")) out.println("selected"); %>>Fulminea</option>
                     </select><br /><br />
-                    <input type="submit" value="Modifica" name="insert" />
+                    <input type="submit" value="Modifica" name="update" />
                     <input type="hidden" name="operation" value="update" />
+                    <input type="hidden" name="odeadline" value="<%=row[5]%>" />
                 </form>
                 <a href="mcustomers.jsp"><button>Annulla</button></a>
                 <%
@@ -157,7 +201,7 @@
                 else
                 {
                 %>
-                <p style="text-align: right; margin: 0;"><a href="mcustomers.jsp"><button>Refresh</button></a> <button>Cancella</button> <a href="mcustomers.jsp?op=insert"><button>Inserisci</button></a></p>
+                <p style="text-align: right; margin: 0;"><a href="mcustomers.jsp"><button>Refresh</button></a> <a href="mcustomers.jsp?op=insert"><button>Inserisci</button></a>
                 <% customers = interrogator.getTable("cliente"); %>
                 <%=customers%>
                 <%

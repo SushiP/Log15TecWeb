@@ -119,15 +119,15 @@ public class DBInterrogator {
                 rs.beforeFirst();
                 
                 while(rs.next()){
-                    tab += "<td><input type='checkbox' name='sel[]' value='" + rs.getString(rsmd.getColumnName(1)) + "' </td>";
+                    tab += "<tr><td><form method='post' action='CustomerManager?operation=delete'><input type='checkbox' name='sel[]' value='" + rs.getString(rsmd.getColumnName(1)) + "' </td>";
                     for(i = idStart; i <= count; i++)
                         tab += "<td>" + rs.getString(rsmd.getColumnName(i)) + "</td>";
-                    tab += "<td><a href='mcustomers.jsp?op=update&id=" + rs.getString(rsmd.getColumnName(1)) + "'><button>Modifica</button></a></td>";
+                    tab += "<td><a href='mcustomers.jsp?op=update&id=" + rs.getString(rsmd.getColumnName(1)) + "'>Modifica</a></td>";
                     tab += "</tr>";
                 }
                 
                 /*Close table tag.*/
-                tab += "</table>";
+                tab += "</table><input type='submit' name='del' value='Cancella' /></form>";
             }
         }
         catch(SQLException e){
