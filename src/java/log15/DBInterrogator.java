@@ -104,7 +104,7 @@ public class DBInterrogator {
                 tab += "<td>" + rsmd.getColumnName(i-1) + "</td><td></td>";
                 tab += "</tr>";
                 
-                tab += "<tr><form action='CustomerManager' method='post'><input type='hidden' value='search' name='operation' />";
+                tab += "<tr>";
                 for (i = idStart; i<= count; i++) {
                     if (i == idStart)
                         tab += "<td></td>";
@@ -113,13 +113,14 @@ public class DBInterrogator {
                 }
                 tab += "<td><input type='text' id='" + rsmd.getColumnName(i-1) + "' />";
                 tab += "<td><input type='submit' name='search' value='Cerca' /></td>";
-                tab += "</form></tr>";
+                tab += "</tr>";
 
                 /*Set the result set to the first row and draw all the rows.*/
                 rs.beforeFirst();
                 
                 while(rs.next()){
-                    tab += "<tr><td><form method='post' action='CustomerManager?operation=delete'><input type='checkbox' name='sel[]' value='" + rs.getString(rsmd.getColumnName(1)) + "' </td>";
+                    tab += "<tr class ='row'><td><form method='post' action='CustomerManager?operation=delete'>"
+                            + "<input type='checkbox' name='sel[]' value='" + rs.getString(rsmd.getColumnName(1)) + "' </td>";
                     for(i = idStart; i <= count; i++)
                         tab += "<td>" + rs.getString(rsmd.getColumnName(i)) + "</td>";
                     tab += "<td><a href='mcustomers.jsp?op=update&id=" + rs.getString(rsmd.getColumnName(1)) + "'>Modifica</a></td>";
