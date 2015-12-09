@@ -70,9 +70,9 @@ public class DBInterrogator {
         }
     }
     
-    public String getTable(String table) throws SQLException{
+    public String getCustomersTable() throws SQLException{
         String tab = "";
-        String query = "SELECT * FROM " + table;
+        String query = "SELECT * FROM cliente";
         int idStart = 1;
         
         try{
@@ -91,7 +91,7 @@ public class DBInterrogator {
                     idStart++;
                 
                 /*Start to draw the table tag.*/
-                tab = "<table id='table_" + table + "' class='Table'>";
+                tab = "<table id='table_customers' class='Table'>";
                 
                 /*Draw the column's names.*/
                 tab += "<tr>";
@@ -137,12 +137,83 @@ public class DBInterrogator {
         return tab;
     }
     
+    public String getDriversTable() throws SQLException{
+        String tab = "";
+        String query = "SELECT * FROM autista";
+        
+        try{
+            Statement stat = connection.createStatement();
+            ResultSet rs = stat.executeQuery(query);
+            
+            /*If the table exists.*/
+            if(rs.next()){
+                /*Get the table meta data.*/
+                ResultSetMetaData rsmd = rs.getMetaData();
+                int count = rsmd.getColumnCount();
+                int i;
+                
+                /*Start to draw the table tag.*/
+                tab = "<table id='table_drivers' class='Table'>";
+                
+                /*Draw the column's names.*/
+                tab += "<tr>";
+                tab += "<td></td>";
+                for(i = 1; i <= count; i++)
+                        tab += "<td>" + rsmd.getColumnName(i) + "</td>";
+                tab += "</tr>";
+                
+                tab += "<tr>";
+                tab += "<td></td>";
+                for (i = 1; i <= count; i++) 
+                        tab += "<td><input type='text' name='" + rsmd.getColumnName(i) + "' /></td>";
+                tab += "<td><input type='submit' name='search' value='Cerca' /></td>";
+                tab += "</tr>";
+
+                /*Set the result set to the first row and draw all the rows.*/
+                rs.beforeFirst();
+                
+                while(rs.next()){
+                    tab += "<tr class ='row'><td><form method='post' action='DriversManager?operation=delete'>"
+                            + "<input type='checkbox' name='sel[]' value='" + rs.getString(rsmd.getColumnName(1)) + "' </td>";
+                    for(i = 1; i <= count; i++)
+                        tab += "<td>" + rs.getString(rsmd.getColumnName(i)) + "</td>";
+                    tab += "<td><a href='mdrivers.jsp?op=update&patente=" + rs.getString(rsmd.getColumnName(1)) + "'>Modifica</a></td>";
+                    tab += "</tr>";
+                }
+                
+                /*Close table tag.*/
+                tab += "</table><input type='submit' name='del' value='Cancella' /></form>";
+            }
+        }
+        catch(SQLException e){
+            throw(e);
+        }
+        return tab;
+    }
+    
     public String[] getCustomerRow(String id) throws SQLException {
         String[] Ris = new String[8];
         
         String query = "SELECT * FROM cliente WHERE id = ?";
         PreparedStatement ps = connection.prepareStatement(query);
         ps.setString(1, id);
+        ResultSet rs = ps.executeQuery();
+        ResultSetMetaData rsmd = rs.getMetaData();
+        int count = rsmd.getColumnCount();
+        
+        if (rs.next())
+            for (int i = 1; i <= count; i++)
+                Ris[i] = rs.getString(rsmd.getColumnName(i));
+        
+        return Ris;
+    }
+    
+    public String[] getDriverRow(String patente) throws SQLException {
+        String[] Ris = new String[5];
+        
+        String query = "SELECT * FROM autista WHERE patente = '" + patente + "'";
+        PreparedStatement ps = connection.prepareStatement(query);
+        /*ps.setString(1, query);*/
         ResultSet rs = ps.executeQuery();
         ResultSetMetaData rsmd = rs.getMetaData();
         int count = rsmd.getColumnCount();

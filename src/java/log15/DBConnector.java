@@ -1,5 +1,6 @@
 package log15;
 
+import java.sql.DriverManager;
 import java.sql.*;
 
 /**

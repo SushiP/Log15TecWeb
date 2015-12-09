@@ -30,8 +30,10 @@ public class CustomerManager extends HttpServlet {
                 setSessionAttributes(request);
                 success = insertCustomer(request);
                 
-                if (success)
+                if (success) {
+                    clearSession(request);
                     response.setHeader("location", "mcustomers.jsp?query=success");
+                }
                 else
                     response.setHeader("location", "mcustomers.jsp?op=insert&query=fail");
             }
@@ -51,7 +53,7 @@ public class CustomerManager extends HttpServlet {
                 else
                     response.setHeader("location", "mcustomers.jsp?query=fail");
             }
-        }catch(SQLException e){
+        } catch(SQLException e) {
             System.out.println("Errore nell'accesso al database." + e.getMessage());
         }
     }
@@ -211,7 +213,7 @@ public class CustomerManager extends HttpServlet {
         } 
     }
     
-    private void setSessionAttributes(HttpServletRequest request){
+    private void setSessionAttributes(HttpServletRequest request) {
         HttpSession session = request.getSession();
         
         session.setAttribute("nome", request.getParameter("nome"));
@@ -220,5 +222,11 @@ public class CustomerManager extends HttpServlet {
         session.setAttribute("deadline", request.getParameter("deadline"));
         session.setAttribute("pesoMerce", request.getParameter("pesoMerce"));
         session.setAttribute("tipo", request.getParameter("tipo"));
+    }
+    
+    protected void clearSession(HttpServletRequest request) {
+    HttpSession session = request.getSession(false);
+    if (session != null)
+        session.invalidate();
     }
 }
