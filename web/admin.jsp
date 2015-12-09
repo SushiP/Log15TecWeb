@@ -55,7 +55,7 @@
             </table>
         </header>
         <section class="Container">
-            <header>Ultimi Clienti</header>
+            <header>In attesa di accettazione</header>
             <article>
                 Qui andrà una lista delle prime 10 richieste dei clienti da gestire;
             </article>
