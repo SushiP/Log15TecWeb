@@ -16,6 +16,7 @@
             String customers = null;
             String id = null;
             String row[] = null;
+            String search = null;
         %>
         
         <%
@@ -49,7 +50,7 @@
                                 <li><a href="mcustomers.jsp">Gestione Clienti</a></li>
                                 <li><a href="mdrivers.jsp">Gestione Autisti</a></li>
                                 <li><a href="mvehicles.jsp">Gestione Veicoli</a></li>
-                                <li><a href="mshipemnts.jsp">Gestione Spedizioni</a></li>
+                                <li><a href="mshipments.jsp">Gestione Spedizioni</a></li>
                             </ul>
                         </nav>
                     </td>
@@ -128,10 +129,11 @@
         %>
             </header>
             <article>
-                <% if (request.getParameter("op") != null) 
-                {
-                    if (request.getParameter("op").equals("insert"))
+                <%
+                    if (request.getParameter("op") != null) 
                     {
+                        if (request.getParameter("op").equals("insert"))
+                        {
                 %>
                 <form action="CustomerManager" method="post">
                     <input type="text" name="nome" placeholder="Nome cliente" /><br />
@@ -157,13 +159,13 @@
                 </form>
                 <a href="mcustomers.jsp"><button>Annulla</button></a>
                 <%
-                    }
-                    if (request.getParameter("op").equals("update"))
-                    {
-                        if (request.getParameter("id") != null && !request.getParameter("id").equals(""))
+                        }
+                        else if (request.getParameter("op").equals("update"))
                         {
-                            id = request.getParameter("id");
-                            row = interrogator.getCustomerRow(id);
+                            if (request.getParameter("id") != null && !request.getParameter("id").equals(""))
+                            {
+                                id = request.getParameter("id");
+                                row = interrogator.getCustomerRow(id);
                 %>
                 <form action="CustomerManager" method="post">
                     <input type="hidden" name="id" value="<%=row[1]%>" />
@@ -191,21 +193,21 @@
                 </form>
                 <a href="mcustomers.jsp"><button>Annulla</button></a>
                 <%
-                        }
-                        else {
-                            response.setStatus(302);
-                            response.setHeader("location", "mcustomers.jsp");
+                            }
+                            else {
+                                response.setStatus(302);
+                                response.setHeader("location", "mcustomers.jsp");
+                            }
                         }
                     }
-                }
-                else
-                {
+                    else
+                    {
                 %>
                 <p style="text-align: right; margin: 0;"><a href="mcustomers.jsp"><button>Refresh</button></a> <a href="mcustomers.jsp?op=insert"><button>Inserisci</button></a>
                 <% customers = interrogator.getTable("cliente"); %>
                 <%=customers%>
                 <%
-                }
+                    }
                 %>
             </article>
         </section>

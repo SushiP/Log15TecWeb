@@ -104,12 +104,12 @@ public class DBInterrogator {
                 tab += "<td>" + rsmd.getColumnName(i-1) + "</td><td></td>";
                 tab += "</tr>";
                 
-                tab += "<tr><form action='#' method='get'>";
+                tab += "<tr><form action='CustomerManager' method='post'><input type='hidden' value='search' name='operation' />";
                 for (i = idStart; i<= count; i++) {
                     if (i == idStart)
                         tab += "<td></td>";
                     else 
-                        tab += "<td><input type='text' id='" + rsmd.getColumnName(i-1) + "' /></td>";
+                        tab += "<td><input type='text' name='" + rsmd.getColumnName(i-1) + "' /></td>";
                 }
                 tab += "<td><input type='text' id='" + rsmd.getColumnName(i-1) + "' />";
                 tab += "<td><input type='submit' name='search' value='Cerca' /></td>";

@@ -8,7 +8,6 @@ import java.sql.*;
 import java.util.Vector;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -17,7 +16,7 @@ import java.util.concurrent.TimeUnit;
  */
 @WebServlet(name = "CustomerManager", urlPatterns = {"/CustomerManager"})
 public class CustomerManager extends HttpServlet {
-
+    
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) {
         response.setContentType("text/html;charset=UTF-8");
@@ -26,26 +25,26 @@ public class CustomerManager extends HttpServlet {
         response.setStatus(302);
         
         try{
-            if(operation.equals("insert")) {
+            if (operation.equals("insert")) {
                 success = insertCustomer(request);
                 
-                if(success)
+                if (success)
                     response.setHeader("location", "mcustomers.jsp?query=success");
                 else
                     response.setHeader("location", "mcustomers.jsp?op=insert&query=fail");
             }
-            else if(operation.equals("update")) {
+            else if (operation.equals("update")) {
                 success = updateCustomer(request);
-                if(success)
+                if (success)
                     response.setHeader("location", "mcustomers.jsp?query=success");
                 else {
                     response.setHeader("location", "mcustomers.jsp?op=update&id=" + request.getParameter("id") + "&query=fail");
                 }
             }
-            else if(operation.equals("delete")) {
+            else if (operation.equals("delete")) {
                 success = deleteCustomer(request);
                 
-                if(success)
+                if (success)
                     response.setHeader("location", "mcustomers.jsp?query=success");
                 else
                     response.setHeader("location", "mcustomers.jsp?query=fail");

@@ -46,7 +46,7 @@
                                 <li><a href="mcustomers.jsp">Gestione Clienti</a></li>
                                 <li><a href="mdrivers.jsp">Gestione Autisti</a></li>
                                 <li><a href="mvehicles.jsp">Gestione Veicoli</a></li>
-                                <li><a href="mshipemnts.jsp">Gestione Spedizioni</a></li>
+                                <li><a href="mshipments.jsp">Gestione Spedizioni</a></li>
                             </ul>
                         </nav>
                     </td>
