@@ -208,6 +208,7 @@
                 <% customers = interrogator.getTable("cliente"); %>
                 <%=customers%>
                 <script>
+                    /* Search function */
                     $("input[value='Cerca']").click(function(){
                         parameters = new Array(6);
                         inputs = $("tr td input[type='text']");
