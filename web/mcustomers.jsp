@@ -135,25 +135,44 @@
                     {
                         if (request.getParameter("op").equals("insert"))
                         {
+                            HttpSession sess = request.getSession();
                 %>
                 <form action="CustomerManager" method="post">
-                    <input type="text" name="nome" placeholder="Nome cliente" /><br />
-                    <input type="text" name="sedePartenza" placeholder="Sede di partenza" /><br />
-                    <input type="text" name="sedeDestinazione" placeholder="Sede di destinazione" /><br />
+                    <input type="text" name="nome" placeholder="Nome cliente" 
+                           value="<%if(sess.getAttribute("nome") != null) 
+                                        out.println((String)sess.getAttribute("nome"));%>"/><br />
+                    <input type="text" name="sedePartenza" placeholder="Sede di partenza"
+                           value="<%if(sess.getAttribute("sedePartenza") != null) 
+                                        out.println((String)sess.getAttribute("sedePartenza"));%>"/><br />
+                    <input type="text" name="sedeDestinazione" placeholder="Sede di destinazione" 
+                           value="<%if(sess.getAttribute("sedeDestinazione") != null) 
+                                        out.println((String)sess.getAttribute("sedeDestinazione"));%>"/><br />
                     Deadline: <br />
-                    <input type="date" name="deadline" /><br />
+                    <input type="date" name="deadline" 
+                           value="<%if(sess.getAttribute("deadline") != null) 
+                                        out.println((String)sess.getAttribute("deadline"));%>"/><br />
                     Peso merce: <br />
+                    <%
+                        Integer peso = null;
+                        if(sess.getAttribute("pesoMerce") != null) 
+                            peso = Integer.parseInt((String)sess.getAttribute("pesoMerce"));
+                    %>
                     <select name="pesoMerce">
-                        <option value="5">5</option>
-                        <option value="10">10</option>
-                        <option value="15">20</option>
-                        <option value="35">35</option>
+                        <option value="5" <%if(peso != null && peso.equals(5)) out.println("selected");%> >5</option>
+                        <option value="10" <%if(peso != null && peso.equals(10)) out.println("selected");%> >10</option>
+                        <option value="20" <%if(peso != null && peso.equals(20)) out.println("selected");%> >20</option>
+                        <option value="35" <%if(peso != null && peso.equals(35)) out.println("selected");%> >35</option>
                     </select> <br />
                     Tipo Spedizione: <br />
+                    <%
+                        String tipo = null;
+                        if(sess.getAttribute("tipo") != null) 
+                            tipo = (String)sess.getAttribute("tipo");
+                    %>
                     <select name="tipo">
-                        <option value="Standard">Standard</option>
-                        <option value="Veloce">Veloce</option>
-                        <option value="Fulminea">Fulminea</option>
+                        <option value="Standard" <%if(tipo != null && tipo.equals("Standard")) out.println("selected");%> >Standard</option>
+                        <option value="Veloce" <%if(tipo != null && tipo.equals("Veloce")) out.println("selected");%> >Veloce</option>
+                        <option value="Fulminea" <%if(tipo != null && tipo.equals("Fulminea")) out.println("selected");%> >Fulminea</option>
                     </select><br /><br />
                     <input type="submit" value="Inserisci" name="insert" />
                     <input type="hidden" name="operation" value="insert" />

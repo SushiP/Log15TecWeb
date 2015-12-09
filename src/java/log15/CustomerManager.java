@@ -4,6 +4,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.sql.*;
 import java.util.Vector;
 import java.text.SimpleDateFormat;
@@ -26,6 +27,7 @@ public class CustomerManager extends HttpServlet {
         
         try{
             if (operation.equals("insert")) {
+                setSessionAttributes(request);
                 success = insertCustomer(request);
                 
                 if (success)
@@ -207,5 +209,16 @@ public class CustomerManager extends HttpServlet {
             System.out.println("Errore nella data: " + e.getMessage());
             return false;
         } 
+    }
+    
+    private void setSessionAttributes(HttpServletRequest request){
+        HttpSession session = request.getSession();
+        
+        session.setAttribute("nome", request.getParameter("nome"));
+        session.setAttribute("sedePartenza", request.getParameter("sedePartenza"));
+        session.setAttribute("sedeDestinazione", request.getParameter("sedeDestinazione"));
+        session.setAttribute("deadline", request.getParameter("deadline"));
+        session.setAttribute("pesoMerce", request.getParameter("pesoMerce"));
+        session.setAttribute("tipo", request.getParameter("tipo"));
     }
 }
