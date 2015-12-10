@@ -95,13 +95,7 @@ public class DBInterrogator {
                 
                 /*Draw the column's names.*/
                 tab += "<tr>";
-                for(i = idStart; i <= count; i++) {
-                    if (i == idStart)
-                        tab += "<td></td>";
-                    else
-                        tab += "<td>" + rsmd.getColumnName(i-1) + "</td>";
-                }
-                tab += "<td>" + rsmd.getColumnName(i-1) + "</td><td></td>";
+                tab += "<td></td><td>Nome</td><td>Sede Partenza</td><td>Sede Destinazione</td><td>Destinazione</td><td>Peso Merce</td><td>Tipo Spedizione</td>";
                 tab += "</tr>";
                 
                 tab += "<tr>";
@@ -157,9 +151,7 @@ public class DBInterrogator {
                 
                 /*Draw the column's names.*/
                 tab += "<tr>";
-                tab += "<td></td>";
-                for(i = 1; i <= count; i++)
-                        tab += "<td>" + rsmd.getColumnName(i) + "</td>";
+                tab += "<td></td><td>Patente</td><td>Nome</td><td>Cognome</td><td>Assenze Mensili</td>";
                 tab += "</tr>";
                 
                 tab += "<tr>";
@@ -178,6 +170,58 @@ public class DBInterrogator {
                     for(i = 1; i <= count; i++)
                         tab += "<td>" + rs.getString(rsmd.getColumnName(i)) + "</td>";
                     tab += "<td><a href='mdrivers.jsp?op=update&patente=" + rs.getString(rsmd.getColumnName(1)) + "'>Modifica</a></td>";
+                    tab += "</tr>";
+                }
+                
+                /*Close table tag.*/
+                tab += "</table><input type='submit' name='del' value='Cancella' /></form>";
+            }
+        }
+        catch(SQLException e){
+            throw(e);
+        }
+        return tab;
+    }
+    
+    public String getVehicleTable() throws SQLException{
+        String tab = "";
+        String query = "SELECT * FROM veicolo";
+        
+        try{
+            Statement stat = connection.createStatement();
+            ResultSet rs = stat.executeQuery(query);
+            
+            /*If the table exists.*/
+            if(rs.next()){
+                /*Get the table meta data.*/
+                ResultSetMetaData rsmd = rs.getMetaData();
+                int count = rsmd.getColumnCount();
+                int i;
+                
+                /*Start to draw the table tag.*/
+                tab = "<table id='table_vehicles' class='Table'>";
+                
+                /*Draw the column's names.*/
+                tab += "<tr>";
+                tab += "<td></td><td>Targa</td><td>Anno Registrazione</td><td>Carburante</td><td>Marca</td><td>Capacità</td>";
+                tab += "</tr>";
+                
+                tab += "<tr>";
+                tab += "<td></td>";
+                for (i = 1; i <= count; i++) 
+                        tab += "<td><input type='text' name='" + rsmd.getColumnName(i) + "' /></td>";
+                tab += "<td><input type='submit' name='search' value='Cerca' /></td>";
+                tab += "</tr>";
+
+                /*Set the result set to the first row and draw all the rows.*/
+                rs.beforeFirst();
+                
+                while(rs.next()){
+                    tab += "<tr class ='row'><td><form method='post' action='VehicleManager?operation=delete'>"
+                            + "<input type='checkbox' name='sel[]' value='" + rs.getString(rsmd.getColumnName(1)) + "' </td>";
+                    for(i = 1; i <= count; i++)
+                        tab += "<td>" + rs.getString(rsmd.getColumnName(i)) + "</td>";
+                    tab += "<td><a href='mvehicles.jsp?op=update&targa=" + rs.getString(rsmd.getColumnName(1)) + "'>Modifica</a></td>";
                     tab += "</tr>";
                 }
                 
@@ -212,6 +256,23 @@ public class DBInterrogator {
         String[] Ris = new String[5];
         
         String query = "SELECT * FROM autista WHERE patente = '" + patente + "'";
+        PreparedStatement ps = connection.prepareStatement(query);
+        /*ps.setString(1, query);*/
+        ResultSet rs = ps.executeQuery();
+        ResultSetMetaData rsmd = rs.getMetaData();
+        int count = rsmd.getColumnCount();
+        
+        if (rs.next())
+            for (int i = 1; i <= count; i++)
+                Ris[i] = rs.getString(rsmd.getColumnName(i));
+        
+        return Ris;
+    }
+    
+    public String[] getVehicleRow(String targa) throws SQLException {
+        String[] Ris = new String[6];
+        
+        String query = "SELECT * FROM veicolo WHERE targa = '" + targa + "'";
         PreparedStatement ps = connection.prepareStatement(query);
         /*ps.setString(1, query);*/
         ResultSet rs = ps.executeQuery();
