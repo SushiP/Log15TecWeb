@@ -137,7 +137,7 @@ public class CustomerManager extends HttpServlet {
     public boolean checkFieldsInput(String nome, String sedeP, String sedeD, String deadline) {
         if (!nome.equals(""))
             if (!sedeP.equals(""))
-                if (!sedeD.equals(""))
+                if (!sedeD.equals("") && !sedeD.equals(sedeP))
                     if (!deadline.equals("")) {
                         if (checkDateForInsert(deadline))
                                 return true;

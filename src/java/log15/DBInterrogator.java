@@ -95,7 +95,7 @@ public class DBInterrogator {
                 
                 /*Draw the column's names.*/
                 tab += "<tr>";
-                tab += "<td></td><td>Nome</td><td>Sede Partenza</td><td>Sede Destinazione</td><td>Destinazione</td><td>Peso Merce</td><td>Tipo Spedizione</td>";
+                tab += "<td></td><td>Nome</td><td>Sede Partenza</td><td>Sede Destinazione</td><td>Deadline</td><td>Peso Merce</td><td>Tipo Spedizione</td>";
                 tab += "</tr>";
                 
                 tab += "<tr>";
