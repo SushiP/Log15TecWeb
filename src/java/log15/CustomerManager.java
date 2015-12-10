@@ -136,8 +136,8 @@ public class CustomerManager extends HttpServlet {
     
     public boolean checkFieldsInput(String nome, String sedeP, String sedeD, String deadline) {
         if (!nome.equals(""))
-            if (!sedeP.equals(""))
-                if (!sedeD.equals("") && !sedeD.equals(sedeP))
+            if (!sedeP.equals("") && sedeP.length() <= 50)
+                if (!sedeD.equals("") && !sedeD.equals(sedeP) && sedeD.length() <= 50)
                     if (!deadline.equals("")) {
                         if (checkDateForInsert(deadline))
                                 return true;
@@ -177,7 +177,7 @@ public class CustomerManager extends HttpServlet {
     public boolean checkFieldsUpdate(String nome, String sedeP, String sedeD, String deadline, String odeadline) {
         if (!nome.equals(""))
             if (!sedeP.equals(""))
-                if (!sedeD.equals(""))
+                if (!sedeD.equals("") && !sedeD.equals(sedeP))
                     if (!deadline.equals("")) {
                         if (checkDateForUpdate(deadline, odeadline))
                                 return true;

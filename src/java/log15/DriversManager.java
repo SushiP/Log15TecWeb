@@ -61,7 +61,7 @@ public class DriversManager extends HttpServlet {
             return false;
         
         Connection conn = new DBConnector().getConnection();
-        String query = "INSERT INTO autista(patente, nome, cognome, assenzeMensili) VALUES(?,?,?,0)";
+        String query = "INSERT INTO autista(patente, nome, cognome, assenzeMensili) VALUES(UPPER(?),?,?,0)";
         PreparedStatement ps = conn.prepareStatement(query);
         
         ps.setString(1, request.getParameter("patente"));
@@ -122,8 +122,8 @@ public class DriversManager extends HttpServlet {
     
     public boolean checkFields(String patente, String nome, String cognome) {
         if (!patente.equals(""))
-            if (!nome.equals(""))
-                if (!cognome.equals(""))
+            if (!nome.equals("") && nome.length() <= 15)
+                if (!cognome.equals("") && cognome.length() <= 20)
                     if (patente.length() == 10)
                         return true;
                     else

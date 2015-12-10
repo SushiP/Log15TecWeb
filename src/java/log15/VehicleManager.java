@@ -7,6 +7,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.sql.*;
 import java.util.Vector;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 
 /**
  *
@@ -66,7 +68,7 @@ public class VehicleManager extends HttpServlet {
         PreparedStatement ps = conn.prepareStatement(query);
         
         ps.setString(1, request.getParameter("targa"));
-        ps.setString(2, request.getParameter("annoRegistrazione"));
+        ps.setInt(2, Integer.parseInt(request.getParameter("annoRegistrazione")));
         ps.setString(3, request.getParameter("carburante"));
         ps.setString(4, request.getParameter("marca"));
         ps.setInt(5, Integer.parseInt(request.getParameter("capacita")));
@@ -87,7 +89,7 @@ public class VehicleManager extends HttpServlet {
         String query = "UPDATE veicolo SET annoRegistrazione = ?, carburante = ?, marca = ?, capacita = ? WHERE targa = '" + request.getParameter("targa") + "'";
         PreparedStatement ps = conn.prepareStatement(query);
         
-        ps.setString(1, request.getParameter("annoRegistrazione"));
+        ps.setInt(1, Integer.parseInt(request.getParameter("annoRegistrazione")));
         ps.setString(2, request.getParameter("carburante"));
         ps.setString(3, request.getParameter("marca"));
         ps.setString(4, request.getParameter("capacita"));
@@ -126,16 +128,21 @@ public class VehicleManager extends HttpServlet {
         }
     }
     
-    public boolean checkFields(String targa, String annoRegistrazione, String carburante, String capacita) {
+    public boolean checkFields(String targa, String annoRegistrazione, String carburante, String marca) {
         if (!targa.equals("") && targa.length() == 7)
-            if (!annoRegistrazione.equals(""))
-                if (!carburante.equals(""))
-                    if (!capacita.equals(""))
-                        return true;
+            if (!annoRegistrazione.equals("")) {
+                Calendar calendar = GregorianCalendar.getInstance();
+                if (Integer.parseInt(annoRegistrazione) <= calendar.get((Calendar.YEAR)) && Integer.parseInt(annoRegistrazione) >= 1990)
+                    if (!carburante.equals(""))
+                        if (!marca.equals("") && marca.length() <= 50)
+                            return true;
+                        else
+                            return false;
                     else
                         return false;
                 else
                     return false;
+            }
             else
                 return false;
         else

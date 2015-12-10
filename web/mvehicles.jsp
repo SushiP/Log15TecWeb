@@ -77,7 +77,7 @@
         %>
         <section class="Error">
             <article>
-                <p>Errore nell'inserimento: controlla che tutti i campi non siano vuoti ed il campo targa abbia lunghezza 7.</p>
+                <p>Errore nell'inserimento: controlla che tutti i campi non siano vuoti, che il campo targa abbia lunghezza 7 e l'anno di registrazione sia compreso tra il 1990 e l'anno attuale.</p>
             </article>
         </section>
         <%      }
@@ -89,7 +89,7 @@
         %>
         <section class="Error">
             <article>
-                <p>Errore nella modifica: controlla che tutti i campi non siano vuoti.</p>
+                <p>Errore nella modifica: controlla che tutti i campi non siano vuoti e che l'anno di registrazione sia compreso tra il 1990 e l'anno attuale.</p>
             </article>
         </section>
         <%

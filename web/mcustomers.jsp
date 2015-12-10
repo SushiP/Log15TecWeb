@@ -77,7 +77,7 @@
         %>
         <section class="Error">
             <article>
-                <p>Errore nell'inserimento: controlla che tutti i campi siano non vuoti e la deadline abbia almeno 7 giorni di distanza da oggi.</p>
+                <p>Errore nell'inserimento: controlla che tutti i campi siano non vuoti, che la deadline abbia almeno 7 giorni di distanza da oggi ed i campi sede destinazione-arrivo divergano.</p>
             </article>
         </section>
         <%      }
@@ -89,7 +89,7 @@
         %>
         <section class="Error">
             <article>
-                <p>Errore nella modifica: controlla che tutti i campi siano non vuoti e la nuova deadline non sia più vecchia della precedente.</p>
+                <p>Errore nella modifica: controlla che tutti i campi siano non vuoti, che la nuova deadline non sia più vecchia della precedente ed i campi sede destinazione-arrivo divergano.</p>
             </article>
         </section>
         <%
