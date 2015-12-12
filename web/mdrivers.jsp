@@ -41,7 +41,7 @@
         %>
     </head>
     <body>
-        <header>
+        <header class="Top">
             <table style="width: 100%; padding: 0px;">
                 <tr>
                     <td style="width: 5%;"><a href="admin.jsp"><img src="images/logo.png" onmouseover="this.src='images/logo_on.png'" onmouseout="this.src='images/logo.png'" alt="Logo" /></a></td>
@@ -112,19 +112,19 @@
             if (request.getParameter("op") != null && request.getParameter("op").equals("insert"))
             {
         %>
-            Inserisci Autista
+            INSERISCI AUTISTA
         <%
             }
             else if (request.getParameter("op") != null && request.getParameter("op").equals("update"))
             {
         %>
-            Modifica Autista
+            MODIFICA AUTISTA
         <%
             }
             else
             {
         %>
-            Gestione Autisti
+            GESTIONE AUTISTI
         <%
             }
         %>

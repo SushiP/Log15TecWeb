@@ -36,7 +36,7 @@
         %>
     </head>
     <body>
-        <header>
+        <header class="Top">
             <table style="width: 100%; padding: 0px;">
                 <tr>
                     <td style="width: 5%;"><a href="admin.jsp"><img src="images/logo.png" onmouseover="this.src='images/logo_on.png'" onmouseout="this.src='images/logo.png'" alt="Logo" /></a></td>
@@ -55,7 +55,7 @@
             </table>
         </header>
         <section class="Container">
-            <header>In attesa di accettazione</header>
+            <header>ACCETTAZIONE ASSEGNAMENTI</header>
             <article>
                 Qui andrà una lista delle prime 10 richieste dei clienti da gestire;
             </article>

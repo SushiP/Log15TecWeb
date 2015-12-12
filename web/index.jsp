@@ -33,9 +33,6 @@
         %>
     </head>
     <body>
-        <header>
-            <a href="#"><img src="images/logo.png" onmouseover="this.src='images/logo_on.png'" onmouseout="this.src='images/logo.png'" alt="Logo" /></a>
-        </header>
         <% 
             if(request.getParameter("error")!= null)
             {
@@ -48,13 +45,16 @@
         <%
             }       
         %>
-        <section id="Login">
-            <header>Login</header>
+        <header class="Top">
+            <a href="#"><img src="images/logo.png" onmouseover="this.src='images/logo_on.png'" onmouseout="this.src='images/logo.png'" alt="Logo" /></a>
+        </header>
+        <section id="Login" class="Container">
+            <header>LOGIN</header>
             <article>
                 <form action="Login" method="post">
-                    <input type="text" placeholder="Username" name="username" /><br />
-                    <input type="password" placeholder="Password" name="password" /><br />
-                    <input type="submit" name="invia" value="Accedi" />
+                    <input type="text" placeholder="Username" name="username" class="Input" style="width: 340px;"/><br />
+                    <input type="password" placeholder="Password" name="password" class="Input" style="width: 340px; margin-top: 15px;" /><br />
+                    <input type="submit" name="invia" value="ACCEDI" class="Button" style="width: 175px; height: 35px; margin-top: 15px;" />
                 </form>
             </article>
         </section>
