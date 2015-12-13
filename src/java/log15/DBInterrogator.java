@@ -114,7 +114,7 @@ public class DBInterrogator {
                 
                 while(rs.next()){
                     tab += "<tr class ='row'><td><form method='post' action='CustomerManager?operation=delete'>"
-                            + "<input type='checkbox' name='sel[]' value='" + rs.getString(rsmd.getColumnName(1)) + "' </td>";
+                            + "<input type='hidden' name='id' value='" + rs.getString(rsmd.getColumnName(1)) + "' /><input type='checkbox' name='sel[]' value='" + rs.getString(rsmd.getColumnName(1)) + "' /></td>";
                     for(i = idStart; i <= count; i++)
                         tab += "<td>" + rs.getString(rsmd.getColumnName(i)) + "</td>";
                     tab += "<td><a href='mcustomers.jsp?op=update&id=" + rs.getString(rsmd.getColumnName(1)) + "'>Modifica</a></td>";
