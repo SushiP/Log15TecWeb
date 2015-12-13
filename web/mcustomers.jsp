@@ -172,7 +172,6 @@
                     <select name="tipo">
                         <option value="Standard" <%if(tipo != null && tipo.equals("Standard")) out.println("selected");%> >Standard</option>
                         <option value="Veloce" <%if(tipo != null && tipo.equals("Veloce")) out.println("selected");%> >Veloce</option>
-                        <option value="Fulminea" <%if(tipo != null && tipo.equals("Fulminea")) out.println("selected");%> >Fulminea</option>
                     </select><br /><br />
                     <input type="submit" value="Inserisci" name="insert" />
                     <input type="hidden" name="operation" value="insert" />
@@ -205,7 +204,6 @@
                     <select name="tipo">
                         <option value="Standard" <% if (row[7].equals("Standard")) out.println("selected"); %>>Standard</option>
                         <option value="Veloce" <% if (row[7].equals("Veloce")) out.println("selected"); %>>Veloce</option>
-                        <option value="Fulminea" <% if (row[7].equals("Fulminea")) out.println("selected"); %>>Fulminea</option>
                     </select><br /><br />
                     <input type="submit" value="Modifica" name="update" />
                     <input type="hidden" name="operation" value="update" />
