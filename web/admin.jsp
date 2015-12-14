@@ -172,7 +172,7 @@
                         
                         if(id != undefined && id != null){
                             $("#" + id + "_dur").text(info.duration_text());
-                            $("#" + id + "_dur_time").val(info.duration());
+                            $("input[name='" + id + "_dur_time']").val(info.duration());
                             /*If the shipment lasts less than 10hour, the new shipment can be added.*/
                             if(info.duration() < 36000)
                                 $("input[name='del']").removeAttr("disabled");
@@ -347,7 +347,7 @@
                         <tr>
                             <td>Clienti: </td>
                             <td id="customers"><%=rs.getString("nome")%></td>
-                            <td hidden><input type="text" name="id_customers" /></td>
+                            <td hidden><input type="text" name="id_customers" value="<%=rs.getString("id")%>"/></td>
                         </tr>
                         <tr>
                             <td>Durata: </td>
@@ -375,11 +375,11 @@
                     var $thisShipment = $("#table_customers tr:nth(2)");
                     /*Modify the table.*/
                     $thisShipment.remove();
-                    $("#table_customers td:first-child").remove();
+                    $("#table_customers td:first-child").hide();
                     $("#table_customers .row td a").remove();
                     $("#table_customers .row td:last-child").html("<button disabled>Testa</button>");
                     $("input[name='del']").val("Aggiungi").attr("disabled", true);
-
+                    
                     /*The selection of the row.*/
                     $(".row > :not(td:last-child)").click(function(event){
                         /*Clean the error message.*/
@@ -392,10 +392,10 @@
 
                         /*Recall the function for get the coords.*/
                         td = event.target.parentNode.children;
-                        newNumGoods = parseInt(td[4].innerHTML);
+                        newNumGoods = parseInt(td[5].innerHTML);
 
                         if(numGoods + newNumGoods <= 35)
-                            coords.addPlaces([td[1].innerHTML, td[2].innerHTML]);
+                            coords.addPlaces([td[2].innerHTML, td[3].innerHTML]);
                         else
                             $("#error_message").text("Il peso della merce supera quello massimo");
                     });
@@ -414,7 +414,9 @@
                     $("input[name='del']").click(function(){
                         /*If the shipment to add is not the selected one, delete the row and update the 
                          * shipment route. */
-                        var newName = $(".selected td:first-child").text();
+                        var newName = $(".selected td:nth(1)").text();
+                        var newId = $(".selected input[name='id']").val();
+
                         $(".selected").hide("slow");
                         $(".selected").remove();
                         $(this).attr("disabled",true);
@@ -424,10 +426,11 @@
                         create_route(shipment.start, shipment.destination, shipment.waypoints, null);
 
                         /*Update duration.*/
-                        $("#dur_time").val() = $("new_dur_time").val();
+                        $("input[name='dur_time']").val($("input[name='new_dur_time']").val());
 
                         /*Update customers.*/
                         $("#customers").text($("#customers").text() + ", " + newName);
+                        $("input[name='id_customers']").val($("input[name='id_customers']").val() + ", " + newId);
 
                         /*Update number of pallet.*/
                         numGoods += newNumGoods;
