@@ -50,4 +50,34 @@ public class ShipmentManager extends HttpServlet {
             return null;
         }
     }
+    
+    private boolean insertShipment(String veicolo, String autista, String deadline, String partenza, String arrivo, String percorso) {
+        Connection conn = new DBConnector().getConnection();
+        String query = "INSERT INTO assegnamento(veicolo, autista, deadline, stato, partenza, arrivo, percorso) VALUES(?, ?, ?, 'In Preparazione', ?, ?, ?)";
+        
+        try {
+            PreparedStatement ps = conn.prepareStatement(query);
+            ps.setString(1, veicolo);
+            ps.setString(2, autista);
+            ps.setString(3, deadline);
+            ps.setString(4, partenza);
+            ps.setString(5, arrivo);
+            ps.setString(6, percorso);
+            if(ps.executeUpdate() > 0)
+                return true;
+            else
+                return false;
+        } catch (SQLException e) {
+            return false;
+        }
+    }
+    
+    private boolean createShipment(int weight, String deadline, String partenza, String arrivo, String percorso) {
+        String veicolo = takeVehicle(weight);
+        String autista = takeDriver();
+        if (insertShipment(veicolo, autista, deadline, partenza, arrivo, percorso))
+            return true;
+        else
+            return false;
+    }
 }
