@@ -98,35 +98,6 @@
                     return str;
                 }
             }
-            
-            /*The object to transform the address in LatLng objects.*/
-            var coords = {
-                addPlaces: function(places, i){
-                    /*If is the first call of the function, analyze the first element.*/
-                    if(i == undefined)
-                        i = 0;
-
-                    if(i < places.length){
-                        /*Analyze the i-est place, and if it has never been converted before,
-                         * add it to the list of places.*/
-                        var place = places[i];
-                        if(this[place] == undefined){
-                            geocoder.geocode({'address': place}, function(results, status){
-                                if(status == google.maps.GeocoderStatus.OK){
-                                    coords[place] = results[0].geometry.location;
-                                    coords.addPlaces(places, i+1);
-                                }
-                                else
-                                    alert("Problem: " + status);
-                            });
-                        }
-                        else
-                            this.addPlaces(places, i+1);
-                    }
-                    else
-                        create_new_route(places);
-                }
-            };
         </script>
         <script>
             var map = null;
@@ -185,40 +156,16 @@
                 });
             }
             
-            function get_coords(place, index){
-                geocoder.geocode({'address': place}, function(results, status){
-                    if(status == google.maps.GeocoderStatus.OK)
-                        shipment[index] = results[0].geometry.location;
-                    else
-                        alert("Problem: " + status);
-                });
-            }
-            
-            function route_controller(){
-                var id = window.setInterval(function(){
-                    if(shipment.start && shipment.destination){
-                        placesVisited.push(shipment.start);
-                        placesVisited.push(shipment.destination);
-                        create_route(shipment.start, shipment.destination, shipment.waypoints);
-                        clear();
-                    }
-                }, 1000);
-
-                function clear(){
-                    window.clearInterval(id);
-                }
-            }
-            
             /*Create a new route with two new places.*/
             function create_new_route(newPlace){
                 newStart = newPlace[0];
                 newDest = newPlace[1];
                 
                 /*Create an array with all the places to visit.*/
-                var places = placesVisited;
+                var places = placesVisited.slice();
                 places.push(newStart);
                 places.push(newDest);
-                
+
                 /*Create the request for matrix distances service.*/
                 var request = {
                     origins: places,
@@ -335,12 +282,14 @@
                         rs.next();
                     %>
                     var shipment = [{nome : "<%=rs.getString("nome")%>"}];
-                    get_coords("<%=rs.getString("sedePartenza")%>", "start");
-                    get_coords("<%=rs.getString("sedeDestinazione")%>", "destination");
+                    shipment.start = "<%=rs.getString("sedePartenza")%>";
+                    shipment.destination = "<%=rs.getString("sedeDestinazione")%>";
                     var numGoods = parseInt(<%=rs.getString("pesoMerce")%>);
                     var newNumGoods;
 
-                    route_controller();
+                    placesVisited.push(shipment.start);
+                    placesVisited.push(shipment.destination);
+                    create_route(shipment.start, shipment.destination, shipment.waypoints);
                 </script>
                 <form>
                     <table>
@@ -395,7 +344,7 @@
                         newNumGoods = parseInt(td[5].innerHTML);
 
                         if(numGoods + newNumGoods <= 35)
-                            coords.addPlaces([td[2].innerHTML, td[3].innerHTML]);
+                            create_new_route([td[2].innerHTML, td[3].innerHTML]);
                         else
                             $("#error_message").text("Il peso della merce supera quello massimo");
                     });
