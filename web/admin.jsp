@@ -277,9 +277,11 @@
                 <div id="map" style="margin: 5% 20%;width: 60%; height: 500px;"></div>
                 <script>
                     <%
-                        Statement st = new DBConnector().getConnection().createStatement();
-                        ResultSet rs = st.executeQuery("SELECT * FROM cliente WHERE tipo='standard'");
-                        rs.next();
+                        try{
+                            Statement st = new DBConnector().getConnection().createStatement();
+                            ResultSet rs = st.executeQuery("SELECT * FROM cliente C WHERE tipo='standard' " +
+                                                            "AND DATEDIFF(C.deadline, CURDATE()) <= 7");
+                            rs.next();
                     %>
                     var shipment = [{nome : "<%=rs.getString("nome")%>"}];
                     shipment.start = "<%=rs.getString("sedePartenza")%>";
@@ -291,7 +293,7 @@
                     placesVisited.push(shipment.destination);
                     create_route(shipment.start, shipment.destination, shipment.waypoints);
                 </script>
-                <form>
+                <form action="ShipmentManager" method="post">
                     <table>
                         <tr>
                             <td>Clienti: </td>
@@ -311,6 +313,10 @@
                         <tr>
                             <td>Numero Pallet: </td>
                             <td id="pallet"><%=rs.getString("pesoMerce")%></td>
+                            <td hidden><input type="text" name="pallet" value="<%=rs.getString("pesoMerce")%>" /></td>
+                        </tr>
+                        <tr>
+                            <td hidden><input type="text" name="route"/></td>
                         </tr>
                         <tr>
                             <td><button id="show_shipment">Mostra percorso attuale</button></td>
@@ -319,15 +325,69 @@
                     </table>
                 </form>    
                 <p id="error_message" style="color:red"></p>
-                <%= interrogator.getCustomersTable()%>
+                <%
+                    String tab = "";
+                    try{
+                        /*If the table exists.*/
+                        if(rs.next()){
+                            /*Get the table meta data.*/
+                            ResultSetMetaData rsmd = rs.getMetaData();
+                            int count = rsmd.getColumnCount();
+                            int i, idStart = 1;                            
+                            
+                            /* If exists id field, jump it while printing the table */
+                            if (rsmd.getColumnName(1).equals("id"))
+                                idStart++;
+                
+                            /*Start to draw the table tag.*/
+                            tab = "<table id='table_customers' class='Table'>";
+
+                            /*Draw the column's names.*/
+                            tab += "<tr>";
+                            tab += "<td></td><td>Nome</td><td>Sede Partenza</td><td>Sede Destinazione</td><td>Deadline</td><td>Peso Merce</td><td>Tipo Spedizione</td>";
+                            tab += "</tr>";
+
+                            tab += "<tr>";
+                            for (i = idStart; i<= count; i++) {
+                                if (i == idStart)
+                                    tab += "<td></td>";
+                                else 
+                                    tab += "<td><input type='text' name='" + rsmd.getColumnName(i-1) + "' /></td>";
+                            }
+                            tab += "<td><input type='text' id='" + rsmd.getColumnName(i-1) + "' />";
+                            tab += "<td><input type='submit' name='search' value='Cerca' /></td>";
+                            tab += "</tr>";
+                            
+                            /*Print the table.*/
+                            rs.previous();
+                            while(rs.next()){
+                                tab += "<tr class ='row'><td>"
+                                        + "<input type='hidden' name='id' value='" + rs.getString(rsmd.getColumnName(1)) + "' /><input type='checkbox' name='sel[]' value='" + rs.getString(rsmd.getColumnName(1)) + "' /></td>";
+                                for(i = idStart; i <= count; i++)
+                                    tab += "<td>" + rs.getString(rsmd.getColumnName(i)) + "</td>";
+                                tab += "<td><button disabled>Testa</button></td>";
+                                tab += "</tr>";
+                            }
+
+                            /*Close table tag.*/
+                            tab += "</table><input type='submit' name='del' value='Aggiungi' disabled/>";
+                        }
+                    }
+                    catch(SQLException e){%>
+                        <p>Errore nella stampa della tabella</p>
+                    <%}
+                    
+                    rs.beforeFirst();
+                %>
+                <%= tab %>
                 <script>
                     var $thisShipment = $("#table_customers tr:nth(2)");
                     /*Modify the table.*/
-                    $thisShipment.remove();
                     $("#table_customers td:first-child").hide();
-                    $("#table_customers .row td a").remove();
-                    $("#table_customers .row td:last-child").html("<button disabled>Testa</button>");
-                    $("input[name='del']").val("Aggiungi").attr("disabled", true);
+                    $("#table_customers td:last-child button").attr("disabled", "true");
+                    
+                    /*Set the shipment.*/
+                    $("input[name='route']").val(JSON.stringify(shipment));
                     
                     /*The selection of the row.*/
                     $(".row > :not(td:last-child)").click(function(event){
@@ -373,6 +433,7 @@
                         /*Update route.*/
                         shipment = newRoute;
                         create_route(shipment.start, shipment.destination, shipment.waypoints, null);
+                        $("input[name='route']").val(JSON.stringify(shipment));
 
                         /*Update duration.*/
                         $("input[name='dur_time']").val($("input[name='new_dur_time']").val());
@@ -384,12 +445,20 @@
                         /*Update number of pallet.*/
                         numGoods += newNumGoods;
                         $("#pallet").text(numGoods);
+                        $("input[name='pallet']").val(numGoods);
 
                         /*Update visited places.*/
                         placesVisited.push(newStart);
                         placesVisited.push(newDest);
                     });         
                 </script>
+                <%}
+                    catch(SQLException e){ 
+                %>
+                <p>Nessun assegnamento da gestire.</p>
+                <%
+                    }
+                %>
             </article>
         </section>
     </body>

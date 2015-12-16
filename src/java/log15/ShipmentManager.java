@@ -1,5 +1,7 @@
 package log15;
 
+import java.io.PrintWriter;
+import java.io.IOException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -14,8 +16,30 @@ import java.sql.*;
 public class ShipmentManager extends HttpServlet {
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) {
-        
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) {
+        response.setStatus(302);
+        /*Insert the data passed by post and create a new shipment.*/
+        String route = request.getParameter("route");
+        int weigth = Integer.parseInt(request.getParameter("pallet"));
+
+        if(this.createShipment(weigth, "2015-12-23", "2015-12-23", "2015-12-23", route)){
+            response.setHeader("Location","admin.jsp");
+            
+            /*Update the customers inserted into new shipment.*/
+            String []values = request.getParameter("id_customers").split(", ");
+            String query = "UPDATE cliente SET tipo = 'Assegna' WHERE id = " + values[0];
+
+            for(int i = 1; i < values.length; i++)
+                query += " OR id = " + values[i];
+
+            try(Statement st = new DBConnector().getConnection().createStatement()){
+                st.executeUpdate(query);
+            }catch(SQLException e){
+                System.out.println("Errore nella modifica dei clienti: " + e.getMessage());
+            }
+        }
+        else
+            response.setHeader("Location","admin.jsp?error=1");
     }
     
     private String takeDriver() {
