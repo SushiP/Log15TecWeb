@@ -102,7 +102,7 @@
         <script>
             var map = null;
             var directionsService = new google.maps.DirectionsService();
-            var directionsDisplay = new google.maps.DirectionsRenderer({draggable: "true"});
+            var directionsDisplay = new google.maps.DirectionsRenderer();
             var matrixService = new google.maps.DistanceMatrixService();
             var geocoder = new google.maps.Geocoder();
             var shipment = new Route();
