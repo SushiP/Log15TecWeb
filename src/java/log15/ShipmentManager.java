@@ -40,7 +40,7 @@ public class ShipmentManager extends HttpServlet {
             response.setHeader("Location","admin.jsp?query=fail");
     }
     
-    private String takeDriver() {
+    public String takeDriver() {
         Connection conn = new DBConnector().getConnection();
         String query = "SELECT A1.patente FROM autista AS A1 WHERE NOT EXISTS(SELECT A1.patente FROM autista AS A1 JOIN assegnamento AS A2 ON A1.patente = A2.autista WHERE A2.stato <> 'Consegnato') ORDER BY assenzeMensili DESC";
         
@@ -56,7 +56,7 @@ public class ShipmentManager extends HttpServlet {
         }
     }
     
-    private String takeVehicle(int weight) {
+    public String takeVehicle(int weight) {
         Connection conn = new DBConnector().getConnection();
         String query = "SELECT V.targa from veicolo AS V WHERE NOT EXISTS(SELECT V.targa FROM veicolo AS V JOIN assegnamento AS A ON V.targa = A.veicolo WHERE A.stato <> 'Consegnato') AND ? <= V.capacita ORDER BY V.capacita ASC";
         

@@ -235,6 +235,66 @@ public class DBInterrogator {
         return tab;
     }
     
+    public String getShipmentsTable() throws SQLException {
+        String tab = "";
+        String query = "SELECT * FROM assegnamento";
+        int idStart = 1;
+        
+        try{
+            Statement stat = connection.createStatement();
+            ResultSet rs = stat.executeQuery(query);
+            
+            /*If the table exists.*/
+            if(rs.next()){
+                /*Get the table meta data.*/
+                ResultSetMetaData rsmd = rs.getMetaData();
+                int count = rsmd.getColumnCount();
+                int i;
+
+                /* If exists id field, jump it while printing the table */
+                if (rsmd.getColumnName(1).equals("id"))
+                    idStart++;
+                
+                /*Start to draw the table tag.*/
+                tab = "<table id='table_customers' class='Table'>";
+                
+                /*Draw the column's names.*/
+                tab += "<tr style='background-color: #F5F5F5;'>";
+                tab += "<td></td><td>Veicolo</td><td>Autista</td><td>Deadline</td><td>Stato</td><td></td>";
+                tab += "</tr>";
+                
+                tab += "<tr>";
+                for (i = idStart; i<= count-1; i++) {
+                    if (i == idStart)
+                        tab += "<td></td>";
+                    else 
+                        tab += "<td><input type='text' name='" + rsmd.getColumnName(i-1) + "' /></td>";
+                }
+                tab += "<td><input type='text' id='" + rsmd.getColumnName(i-1) + "' />";
+                tab += "<td><input class='Button' style='height: 30px; width: 80px;' type='submit' name='search' value='Cerca' /></td>";
+                tab += "</tr>";
+
+                /*Set the result set to the first row and draw all the rows.*/
+                rs.beforeFirst();
+                
+                while(rs.next()){
+                    tab += "<tr class ='row'><td>"
+                            + "<input type='hidden' name='id' value='" + rs.getString(rsmd.getColumnName(1)) + "' /></td>";
+                    for(i = idStart; i <= count-1; i++)
+                        tab += "<td>" + rs.getString(rsmd.getColumnName(i)) + "</td>";
+                    tab += "</tr>";
+                }
+                
+                /*Close table tag.*/
+                tab += "</table>";
+            }
+        }
+        catch(SQLException e){
+            throw(e);
+        }
+        return tab;
+    }
+    
     public String[] getCustomerRow(String id) throws SQLException {
         String[] Ris = new String[8];
         

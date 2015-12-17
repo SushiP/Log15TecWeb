@@ -14,10 +14,15 @@
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
         <%@page import="java.sql.*" %>
         <%@page import="log15.*" %>
+        <% 
+            DBInterrogator interrogator = new DBInterrogator(new DBConnector().getConnection());
+            String shipments = null;
+        %>
         <%
             String query = "SELECT * FROM assegnamento WHERE deadline = curdate()";
             
-            try(Statement st = new DBConnector().getConnection().createStatement();){
+            try{
+                Statement st = new DBConnector().getConnection().createStatement();
                 ResultSet rs = st.executeQuery(query);
         %>
         <script>
@@ -44,7 +49,7 @@
                 directionsDisplay.setMap(map); //Set map for Renderer object.
             }
             
-            /*Create routes.
+            /*Create routes.*/
             function create_routes(){
                 for(i = 0; i < routes.length; i++){
                     var request = {
@@ -54,14 +59,14 @@
                         travelMode: google.maps.DirectionsTravelMode.DRIVING
                     };
                     
-                    directionsService.route(request, function(response, status, i){
+                    /*directionsService.route(request, function(response, status, i){
                         if (status == google.maps.DirectionsStatus.OK)
                             create_polyline(response.routes[0], i);
-                    });
+                    });*/
                 }
             }
             
-            function create_polyline(route, index){
+            /*function create_polyline(route, index){
                 var color = Math.floor(Math.random() * 16777216);
                 var polyline = new google.maps.Polyline({
                                     path: [],
@@ -83,9 +88,10 @@
                 }*/
         </script>
     </head>
-    <body>
-        <div id="map"></div>
-    
+    <body onload="create_map();">
+    <div id="map" style="background-color: black; width: 500px; height: 500px;">a</div>
+    <% shipments = interrogator.getShipmentsTable(); %>
+    <%=shipments%>
     <%
         }catch(SQLException e){%>
         <p>Errore nel database</p>

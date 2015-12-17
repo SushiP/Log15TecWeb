@@ -65,20 +65,38 @@ public class CustomerManager extends HttpServlet {
             return false;
         
         Connection conn = new DBConnector().getConnection();
-        String query = "INSERT INTO cliente(nome, sedePartenza, sedeDestinazione, deadline, pesoMerce, tipo) VALUES(?,?,?,?,?,?)";
-        PreparedStatement ps = conn.prepareStatement(query);
         
-        ps.setString(1, request.getParameter("nome"));
-        ps.setString(2, request.getParameter("sedePartenza"));
-        ps.setString(3, request.getParameter("sedeDestinazione"));
-        ps.setString(4, request.getParameter("deadline"));
-        ps.setInt(5, Integer.parseInt(request.getParameter("pesoMerce")));
-        ps.setString(6, request.getParameter("tipo"));
-        
-        if(ps.executeUpdate() > 0)
-            return true;
-        else
-            return false;
+        if (request.getParameter("tipo").equals("Veloce")) {
+            String query = "INSERT INTO assegnamento(veicolo, autista, deadline, stato, percorso) VALUES (?, ?, ?, 'In Preparazione', '{\"start\": " + request.getParameter("sedePartenza") + ", \"destination\": " + request.getParameter("sedeDestinazione") +  ", \"waypoints\": []}')";
+            ShipmentManager shipment = new ShipmentManager();
+            String veicolo = shipment.takeVehicle(Integer.parseInt(request.getParameter("pesoMerce")));
+            String autista = shipment.takeDriver();
+            PreparedStatement ps = conn.prepareStatement(query);
+            
+            ps.setString(1, veicolo);
+            ps.setString(2, autista);
+            ps.setString(3, request.getParameter("deadline"));
+            
+            if (ps.executeUpdate() > 0)
+                return true;
+            else
+                return false;
+        } else {
+            String query = "INSERT INTO cliente(nome, sedePartenza, sedeDestinazione, deadline, pesoMerce, tipo) VALUES(?,?,?,?,?,?)";
+            PreparedStatement ps = conn.prepareStatement(query);
+
+            ps.setString(1, request.getParameter("nome"));
+            ps.setString(2, request.getParameter("sedePartenza"));
+            ps.setString(3, request.getParameter("sedeDestinazione"));
+            ps.setString(4, request.getParameter("deadline"));
+            ps.setInt(5, Integer.parseInt(request.getParameter("pesoMerce")));
+            ps.setString(6, request.getParameter("tipo"));
+
+            if(ps.executeUpdate() > 0)
+                return true;
+            else
+                return false;
+        }
     }
     
     private boolean updateCustomer(HttpServletRequest request) throws SQLException {
