@@ -164,7 +164,7 @@ public class CustomerManager extends HttpServlet {
             Date date2 = sdf.parse(deadline);
             long diff = date2.getTime() - date1.getTime();
             diff = TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
-            if (diff > 7)
+            if (diff >= 7)
                 return true;
             else
                 return false;

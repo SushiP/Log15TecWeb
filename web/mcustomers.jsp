@@ -41,24 +41,6 @@
         %>
     </head>
     <body>
-        <header class="Top">
-            <table style="width: 100%; padding: 0px;">
-                <tr>
-                    <td style="width: 5%;"><a href="admin.jsp"><img src="images/logo.png" onmouseover="this.src='images/logo_on.png'" onmouseout="this.src='images/logo.png'" alt="Logo" /></a></td>
-                    <td style="width: 75%;">
-                        <nav>
-                            <ul>
-                                <li><a href="mcustomers.jsp">Gestione Clienti</a></li>
-                                <li><a href="mdrivers.jsp">Gestione Autisti</a></li>
-                                <li><a href="mvehicles.jsp">Gestione Veicoli</a></li>
-                                <li><a href="mshipments.jsp">Gestione Spedizioni</a></li>
-                            </ul>
-                        </nav>
-                    </td>
-                    <td style="width: 15%; text-align: right;"><p>Benvenuto <b><%=username%></b><br /><i>Accesso effettuato alle <%=logTime%></i><br />(<a href='Logout?username=<%=username%>'>logout</a>)</p></td>
-                </tr>
-            </table>
-        </header>
          <% 
              if (request.getParameter("query") != null && request.getParameter("op") == null && !request.getParameter("query").equals("success")) 
              {
@@ -106,6 +88,24 @@
         <%
            }
         %>
+        <header class="Top">
+            <table style="width: 100%; padding: 0px;">
+                <tr>
+                    <td style="width: 5%;"><a href="admin.jsp"><img src="images/logo.png" onmouseover="this.src='images/logo_on.png'" onmouseout="this.src='images/logo.png'" alt="Logo" /></a></td>
+                    <td style="width: 75%; text-align: center;">
+                        <nav class="Nav">
+                            <ul>
+                                <li><a href="mcustomers.jsp">Gestione Clienti</a></li>
+                                <li><a href="mdrivers.jsp">Gestione Autisti</a></li>
+                                <li><a href="mvehicles.jsp">Gestione Veicoli</a></li>
+                                <li><a href="mshipments.jsp">Gestione Spedizioni</a></li>
+                            </ul>
+                        </nav>
+                    </td>
+                    <td style="width: 15%; text-align: right;"><p>Benvenuto <b><%=username%></b><br /><i>Accesso effettuato alle <%=logTime%></i><br />(<a href='Logout?username=<%=username%>'> logout </a>)</p></td>
+                </tr>
+            </table>
+        </header>
         <section class="Container">
             <header>
         <%
@@ -221,7 +221,7 @@
                     else
                     {
                 %>
-                <p style="text-align: right; margin: 0;"><a href="mcustomers.jsp"><button>Refresh</button></a> <a href="mcustomers.jsp?op=insert"><button>Inserisci</button></a>
+                <p style="text-align: right; margin: 0;"><a href="mcustomers.jsp"><button class="Button" style="width: 100px; height: 30px;">Refresh</button></a> <a href="mcustomers.jsp?op=insert"><button class="Button" style="width: 100px; height: 30px;">Inserisci</button></a>
                 <% customers = interrogator.getCustomersTable(); %>
                 <%=customers%>
                 <script>

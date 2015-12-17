@@ -94,8 +94,8 @@ public class DBInterrogator {
                 tab = "<table id='table_customers' class='Table'>";
                 
                 /*Draw the column's names.*/
-                tab += "<tr>";
-                tab += "<td></td><td>Nome</td><td>Sede Partenza</td><td>Sede Destinazione</td><td>Deadline</td><td>Peso Merce</td><td>Tipo Spedizione</td>";
+                tab += "<tr style='background-color: #F5F5F5;'>";
+                tab += "<td></td><td>Nome</td><td>Sede Partenza</td><td>Sede Destinazione</td><td>Deadline</td><td>Peso Merce</td><td>Tipo Spedizione</td><td></td>";
                 tab += "</tr>";
                 
                 tab += "<tr>";
@@ -106,7 +106,7 @@ public class DBInterrogator {
                         tab += "<td><input type='text' name='" + rsmd.getColumnName(i-1) + "' /></td>";
                 }
                 tab += "<td><input type='text' id='" + rsmd.getColumnName(i-1) + "' />";
-                tab += "<td><input type='submit' name='search' value='Cerca' /></td>";
+                tab += "<td><input class='Button' style='height: 30px; width: 80px;' type='submit' name='search' value='Cerca' /></td>";
                 tab += "</tr>";
 
                 /*Set the result set to the first row and draw all the rows.*/
@@ -117,12 +117,12 @@ public class DBInterrogator {
                             + "<input type='hidden' name='id' value='" + rs.getString(rsmd.getColumnName(1)) + "' /><input type='checkbox' name='sel[]' value='" + rs.getString(rsmd.getColumnName(1)) + "' /></td>";
                     for(i = idStart; i <= count; i++)
                         tab += "<td>" + rs.getString(rsmd.getColumnName(i)) + "</td>";
-                    tab += "<td><a href='mcustomers.jsp?op=update&id=" + rs.getString(rsmd.getColumnName(1)) + "'>Modifica</a></td>";
+                    tab += "<td><a href='mcustomers.jsp?op=update&id=" + rs.getString(rsmd.getColumnName(1)) + "'><button style='height: 30px; width: 80px;' class='Button' type='Button'>Modifica</button></a></td>";
                     tab += "</tr>";
                 }
                 
                 /*Close table tag.*/
-                tab += "</table><input type='submit' name='del' value='Cancella' /></form>";
+                tab += "</table><input class='Button' style='height: 30px; width: 100px;' type='submit' name='del' value='Cancella' /></form>";
             }
         }
         catch(SQLException e){
@@ -150,15 +150,15 @@ public class DBInterrogator {
                 tab = "<table id='table_drivers' class='Table'>";
                 
                 /*Draw the column's names.*/
-                tab += "<tr>";
-                tab += "<td></td><td>Patente</td><td>Nome</td><td>Cognome</td><td>Assenze Mensili</td>";
+                tab += "<tr style='background-color: #F5F5F5;'>";
+                tab += "<td></td><td>Patente</td><td>Nome</td><td>Cognome</td><td>Assenze Mensili</td><td></td>";
                 tab += "</tr>";
                 
                 tab += "<tr>";
                 tab += "<td></td>";
                 for (i = 1; i <= count; i++) 
                         tab += "<td><input type='text' name='" + rsmd.getColumnName(i) + "' /></td>";
-                tab += "<td><input type='submit' name='search' value='Cerca' /></td>";
+                tab += "<td><input class='Button' style='height: 30px; width: 80px;' type='submit' name='search' value='Cerca' /></td>";
                 tab += "</tr>";
 
                 /*Set the result set to the first row and draw all the rows.*/
@@ -169,12 +169,12 @@ public class DBInterrogator {
                             + "<input type='checkbox' name='sel[]' value='" + rs.getString(rsmd.getColumnName(1)) + "' </td>";
                     for(i = 1; i <= count; i++)
                         tab += "<td>" + rs.getString(rsmd.getColumnName(i)) + "</td>";
-                    tab += "<td><a href='mdrivers.jsp?op=update&patente=" + rs.getString(rsmd.getColumnName(1)) + "'>Modifica</a></td>";
+                    tab += "<td><a href='mdrivers.jsp?op=update&patente=" + rs.getString(rsmd.getColumnName(1)) + "'><button style='height: 30px; width: 80px;' class='Button' type='Button'>Modifica</button></a></td>";
                     tab += "</tr>";
                 }
                 
                 /*Close table tag.*/
-                tab += "</table><input type='submit' name='del' value='Cancella' /></form>";
+                tab += "</table><input class='Button' style='height: 30px; width: 100px;' type='submit' name='del' value='Cancella' /></form>";
             }
         }
         catch(SQLException e){
@@ -202,15 +202,15 @@ public class DBInterrogator {
                 tab = "<table id='table_vehicles' class='Table'>";
                 
                 /*Draw the column's names.*/
-                tab += "<tr>";
-                tab += "<td></td><td>Targa</td><td>Anno Registrazione</td><td>Carburante</td><td>Marca</td><td>Capacità</td>";
+                tab += "<tr style='background-color: #F5F5F5;'>";
+                tab += "<td></td><td>Targa</td><td>Anno Registrazione</td><td>Carburante</td><td>Marca</td><td>Capacità</td><td></td>";
                 tab += "</tr>";
                 
                 tab += "<tr>";
                 tab += "<td></td>";
                 for (i = 1; i <= count; i++) 
                         tab += "<td><input type='text' name='" + rsmd.getColumnName(i) + "' /></td>";
-                tab += "<td><input type='submit' name='search' value='Cerca' /></td>";
+                tab += "<td><input class='Button' style='height: 30px; width: 80px;' type='submit' name='search' value='Cerca' /></td>";
                 tab += "</tr>";
 
                 /*Set the result set to the first row and draw all the rows.*/
@@ -221,12 +221,12 @@ public class DBInterrogator {
                             + "<input type='checkbox' name='sel[]' value='" + rs.getString(rsmd.getColumnName(1)) + "' </td>";
                     for(i = 1; i <= count; i++)
                         tab += "<td>" + rs.getString(rsmd.getColumnName(i)) + "</td>";
-                    tab += "<td><a href='mvehicles.jsp?op=update&targa=" + rs.getString(rsmd.getColumnName(1)) + "'>Modifica</a></td>";
+                    tab += "<td><a href='mvehicles.jsp?op=update&targa=" + rs.getString(rsmd.getColumnName(1)) + "'><button style='height: 30px; width: 80px;' class='Button' type='Button'>Modifica</button></a></td>";
                     tab += "</tr>";
                 }
                 
                 /*Close table tag.*/
-                tab += "</table><input type='submit' name='del' value='Cancella' /></form>";
+                tab += "</table><input class='Button' style='height: 30px; width: 100px;' type='submit' name='del' value='Cancella' /></form>";
             }
         }
         catch(SQLException e){

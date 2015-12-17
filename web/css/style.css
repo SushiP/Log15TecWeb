@@ -7,6 +7,18 @@ body {
     font-family: Roboto, Sans-Serif, Arial, Verdana;
 }
 
+a:link, a:active, a:visited {
+    color: darkslategrey;
+    font-size: 16px;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+a:hover {
+    color: #63cae9;
+    text-shadow: 2px 2px white;
+}
+
 /* Header Class */
 .Top {
     min-width: 1024px;
@@ -40,10 +52,37 @@ body {
     color: darkslategrey;
 }
 
+.Success {
+    margin: 0;
+    padding: 0;
+    min-width: 1024px;
+    background-color: #90EE90;
+}
+
+.Success p {
+    margin: 0;
+    padding-top: 10px;
+    padding-left: 10px;
+    padding-bottom: 10px;
+    font-size: 18px;
+    font-weight: bold;
+    color: darkslategrey;
+}
+
 .Container {
     margin: 0;
     padding: 0;
     margin-bottom: 50px;
+}
+
+.Nav ul li {
+    display: inline;
+    margin-right: 15px;
+    font-size: 20px;
+}
+
+.Nav ul li a:active, a:link, a:visited {
+    font-size: 20px;
 }
 
 .Container article {
@@ -120,9 +159,33 @@ body {
     border-radius: 4px;
 }
 
+.Table {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    width: 1024px;
+    border-collapse: collapse;
+    border-top: 2px solid #63cae9;
+}
 
+.Table td {
+    border-bottom: 2px solid #63cae9;
+    width: 5px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    text-align: center;
+}
 
+.Table input[type="text"] {
+    font-size: 14px;
+    outline: none;
+    border: 1px solid #C0C0C0;
+    width: 100px;
+    padding: 5px;
+}
 
+.Table input[type="checkbox"] {
+    width: 30px;
+}
 
 /* Class space
 .Error article {

@@ -54,7 +54,7 @@
                 <form action="Login" method="post">
                     <input type="text" placeholder="Username" name="username" class="Input" style="width: 340px;"/><br />
                     <input type="password" placeholder="Password" name="password" class="Input" style="width: 340px; margin-top: 15px;" /><br />
-                    <input type="submit" name="invia" value="ACCEDI" class="Button" style="width: 175px; height: 35px; margin-top: 15px;" />
+                    <input type="submit" name="invia" value="Accedi" class="Button" style="width: 175px; height: 35px; margin-top: 15px;" />
                 </form>
             </article>
         </section>

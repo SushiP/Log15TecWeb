@@ -257,8 +257,8 @@
             <table style="width: 100%; padding: 0px;">
                 <tr>
                     <td style="width: 5%;"><a href="admin.jsp"><img src="images/logo.png" onmouseover="this.src='images/logo_on.png'" onmouseout="this.src='images/logo.png'" alt="Logo" /></a></td>
-                    <td style="width: 75%;">
-                        <nav>
+                    <td style="width: 75%; text-align: center;">
+                        <nav class="Nav">
                             <ul>
                                 <li><a href="mcustomers.jsp">Gestione Clienti</a></li>
                                 <li><a href="mdrivers.jsp">Gestione Autisti</a></li>
@@ -267,7 +267,7 @@
                             </ul>
                         </nav>
                     </td>
-                    <td style="width: 15%; text-align: right;"><p>Benvenuto <b><%=username%></b><br /><i>Accesso effettuato alle <%=logTime%></i><br />(<a href='Logout?username=<%=username%>'>logout</a>)</p></td>
+                    <td style="width: 15%; text-align: right;"><p>Benvenuto <b><%=username%></b><br /><i>Accesso effettuato alle <%=logTime%></i><br />(<a href='Logout?username=<%=username%>'> logout </a>)</p></td>
                 </tr>
             </table>
         </header>
@@ -319,8 +319,8 @@
                             <td hidden><input type="text" name="route"/></td>
                         </tr>
                         <tr>
-                            <td><button id="show_shipment">Mostra percorso attuale</button></td>
-                            <td><input type="submit" name="sub" value="Crea Assegnamento"></td>
+                            <td><button style='height: 40px; width: 180px;' class='Button' id="show_shipment">Mostra percorso attuale</button></td>
+                            <td><input style='height: 40px; width: 180px;' class='Button' type="submit" name="sub" value="Crea Assegnamento"></td>
                         </tr>
                     </table>
                 </form>    
@@ -343,8 +343,8 @@
                             tab = "<table id='table_customers' class='Table'>";
 
                             /*Draw the column's names.*/
-                            tab += "<tr>";
-                            tab += "<td></td><td>Nome</td><td>Sede Partenza</td><td>Sede Destinazione</td><td>Deadline</td><td>Peso Merce</td><td>Tipo Spedizione</td>";
+                            tab += "<tr style='background-color: #F5F5F5;'>";
+                            tab += "<td></td><td>Nome</td><td>Sede Partenza</td><td>Sede Destinazione</td><td>Deadline</td><td>Peso Merce</td><td>Tipo Spedizione</td><td></td>";
                             tab += "</tr>";
 
                             tab += "<tr>";
@@ -355,22 +355,22 @@
                                     tab += "<td><input type='text' name='" + rsmd.getColumnName(i-1) + "' /></td>";
                             }
                             tab += "<td><input type='text' id='" + rsmd.getColumnName(i-1) + "' />";
-                            tab += "<td><input type='submit' name='search' value='Cerca' /></td>";
+                            tab += "<td><input class='Button' style='height: 30px; width: 80px;' type='submit' name='search' value='Cerca' /></td>";
                             tab += "</tr>";
                             
                             /*Print the table.*/
                             rs.previous();
                             while(rs.next()){
                                 tab += "<tr class ='row'><td>"
-                                        + "<input type='hidden' name='id' value='" + rs.getString(rsmd.getColumnName(1)) + "' /><input type='checkbox' name='sel[]' value='" + rs.getString(rsmd.getColumnName(1)) + "' /></td>";
+                                        + "<input type='hidden' name='id' value='" + rs.getString(rsmd.getColumnName(1)) + "' /></td>";
                                 for(i = idStart; i <= count; i++)
                                     tab += "<td>" + rs.getString(rsmd.getColumnName(i)) + "</td>";
-                                tab += "<td><button disabled>Testa</button></td>";
+                                tab += "<td><button style='height: 30px; width: 80px;' class='Button' type='Button'>Verifica</button></td>";
                                 tab += "</tr>";
                             }
 
                             /*Close table tag.*/
-                            tab += "</table><input type='submit' name='del' value='Aggiungi' disabled/>";
+                            tab += "</table><input class='Button' style='height: 30px; width: 100px;' type='submit' name='del' value='Aggiungi' disabled/>";
                         }
                     }
                     catch(SQLException e){%>
