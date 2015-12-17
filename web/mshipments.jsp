@@ -44,7 +44,7 @@
                 directionsDisplay.setMap(map); //Set map for Renderer object.
             }
             
-            /*Create routes.*/
+            /*Create routes.
             function create_routes(){
                 for(i = 0; i < routes.length; i++){
                     var request = {
@@ -80,10 +80,10 @@
                         for (k=0;k<nextSegment.length;k++)
                             pol.getPath().push(nextSegment[k]);
                     } 
-                }
+                }*/
         </script>
     </head>
-    <body onload="create_map();">
+    <body>
         <div id="map"></div>
     
     <%

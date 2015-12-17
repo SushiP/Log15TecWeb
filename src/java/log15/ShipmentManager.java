@@ -19,7 +19,7 @@ public class ShipmentManager extends HttpServlet {
         /*Insert the data passed by post and create a new shipment.*/
         String route = request.getParameter("route");
         int weigth = Integer.parseInt(request.getParameter("pallet"));
-        System.out.println(request.getParameter("route"));
+        
         if(this.createShipment(weigth, "2015-12-23", route)){
             response.setHeader("Location","admin.jsp");
             

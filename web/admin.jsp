@@ -151,7 +151,6 @@
                         }
                         else{
                             $("#dur").text(info.duration_text());
-                            alert(JSON.stringify(shipment));
                             $("input[name='route']").val(JSON.stringify(shipment));
                         }
                             
@@ -289,7 +288,7 @@
                     var shipment = [{nome : "<%=rs.getString("nome")%>"}];
                     shipment.start = "<%=rs.getString("sedePartenza")%>";
                     shipment.destination = "<%=rs.getString("sedeDestinazione")%>";
-                    alert(JSON.stringify(shipment));
+                    
                     var numGoods = parseInt(<%=rs.getString("pesoMerce")%>);
                     var newNumGoods;
 
