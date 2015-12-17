@@ -159,6 +159,12 @@ a:hover {
     border-radius: 4px;
 }
 
+.Button:disabled {
+    background-color: lightgrey;
+    border: 1px solid lightgrey;
+    color: grey;
+}
+
 .Table {
     margin-top: 10px;
     margin-bottom: 10px;

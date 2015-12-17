@@ -19,13 +19,13 @@ public class ShipmentManager extends HttpServlet {
         /*Insert the data passed by post and create a new shipment.*/
         String route = request.getParameter("route");
         int weigth = Integer.parseInt(request.getParameter("pallet"));
-
+        System.out.println(request.getParameter("route"));
         if(this.createShipment(weigth, "2015-12-23", route)){
             response.setHeader("Location","admin.jsp");
             
             /*Update the customers inserted into new shipment.*/
             String []values = request.getParameter("id_customers").split(", ");
-            String query = "UPDATE cliente SET tipo = 'Assegna' WHERE id = " + values[0];
+            String query = "DELETE FROM cliente WHERE id = " + values[0];
 
             for(int i = 1; i < values.length; i++)
                 query += " OR id = " + values[i];
@@ -37,12 +37,12 @@ public class ShipmentManager extends HttpServlet {
             }
         }
         else
-            response.setHeader("Location","admin.jsp?error=1");
+            response.setHeader("Location","admin.jsp?query=fail");
     }
     
     private String takeDriver() {
         Connection conn = new DBConnector().getConnection();
-        String query = "SELECT A.patente FROM autista AS A1 WHERE NOT EXISTS(SELECT A.patente FROM autista AS A1 JOIN assegnamento AS A2 ON A1.patente = A2.autista WHERE A2.stato <> 'Consegnato') ORDER BY assenzeMensili DESC";
+        String query = "SELECT A1.patente FROM autista AS A1 WHERE NOT EXISTS(SELECT A1.patente FROM autista AS A1 JOIN assegnamento AS A2 ON A1.patente = A2.autista WHERE A2.stato <> 'Consegnato') ORDER BY assenzeMensili DESC";
         
         try {
             PreparedStatement ps = conn.prepareStatement(query);
@@ -87,7 +87,7 @@ public class ShipmentManager extends HttpServlet {
                 return true;
             else
                 return false;
-        } catch (SQLException e) {
+        } catch (SQLException e) { System.out.println(e.getMessage());
             return false;
         }
     }

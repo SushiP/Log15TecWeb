@@ -135,6 +135,7 @@
                 
                 /*Set the map in which draw the route and what to do when it's ready.*/
                 directionsService.route(request, function(response, status){
+                    
                     if (status == google.maps.DirectionsStatus.OK){
                         var info = new RouteInfo(response.routes[0]);
                         
@@ -150,6 +151,8 @@
                         }
                         else{
                             $("#dur").text(info.duration_text());
+                            alert(JSON.stringify(shipment));
+                            $("input[name='route']").val(JSON.stringify(shipment));
                         }
                             
                     }
@@ -286,6 +289,7 @@
                     var shipment = [{nome : "<%=rs.getString("nome")%>"}];
                     shipment.start = "<%=rs.getString("sedePartenza")%>";
                     shipment.destination = "<%=rs.getString("sedeDestinazione")%>";
+                    alert(JSON.stringify(shipment));
                     var numGoods = parseInt(<%=rs.getString("pesoMerce")%>);
                     var newNumGoods;
 
@@ -319,7 +323,7 @@
                             <td hidden><input type="text" name="route"/></td>
                         </tr>
                         <tr>
-                            <td><button style='height: 40px; width: 180px;' class='Button' id="show_shipment">Mostra percorso attuale</button></td>
+                            <td><button type='Button' style='height: 40px; width: 180px;' class='Button' id="show_shipment">Mostra percorso attuale</button></td>
                             <td><input style='height: 40px; width: 180px;' class='Button' type="submit" name="sub" value="Crea Assegnamento"></td>
                         </tr>
                     </table>
@@ -433,7 +437,6 @@
                         /*Update route.*/
                         shipment = newRoute;
                         create_route(shipment.start, shipment.destination, shipment.waypoints, null);
-                        $("input[name='route']").val(JSON.stringify(shipment));
 
                         /*Update duration.*/
                         $("input[name='dur_time']").val($("input[name='new_dur_time']").val());
