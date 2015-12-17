@@ -1,7 +1,5 @@
 package log15;
 
-import java.io.PrintWriter;
-import java.io.IOException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -22,7 +20,7 @@ public class ShipmentManager extends HttpServlet {
         String route = request.getParameter("route");
         int weigth = Integer.parseInt(request.getParameter("pallet"));
 
-        if(this.createShipment(weigth, "2015-12-23", "2015-12-23", "2015-12-23", route)){
+        if(this.createShipment(weigth, "2015-12-23", route)){
             response.setHeader("Location","admin.jsp");
             
             /*Update the customers inserted into new shipment.*/
@@ -75,18 +73,16 @@ public class ShipmentManager extends HttpServlet {
         }
     }
     
-    private boolean insertShipment(String veicolo, String autista, String deadline, String partenza, String arrivo, String percorso) {
+    private boolean insertShipment(String veicolo, String autista, String deadline, String percorso) {
         Connection conn = new DBConnector().getConnection();
-        String query = "INSERT INTO assegnamento(veicolo, autista, deadline, stato, partenza, arrivo, percorso) VALUES(?, ?, ?, 'In Preparazione', ?, ?, ?)";
+        String query = "INSERT INTO assegnamento(veicolo, autista, deadline, stato, percorso) VALUES (?, ?, ?, 'In Preparazione', ?)";
         
         try {
             PreparedStatement ps = conn.prepareStatement(query);
             ps.setString(1, veicolo);
             ps.setString(2, autista);
             ps.setString(3, deadline);
-            ps.setString(4, partenza);
-            ps.setString(5, arrivo);
-            ps.setString(6, percorso);
+            ps.setString(4, percorso);
             if(ps.executeUpdate() > 0)
                 return true;
             else
@@ -96,10 +92,10 @@ public class ShipmentManager extends HttpServlet {
         }
     }
     
-    private boolean createShipment(int weight, String deadline, String partenza, String arrivo, String percorso) {
+    private boolean createShipment(int weight, String deadline, String percorso) {
         String veicolo = takeVehicle(weight);
         String autista = takeDriver();
-        if (insertShipment(veicolo, autista, deadline, partenza, arrivo, percorso))
+        if (insertShipment(veicolo, autista, deadline, percorso))
             return true;
         else
             return false;
