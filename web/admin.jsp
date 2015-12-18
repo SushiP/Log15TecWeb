@@ -109,6 +109,7 @@
             var newRoute = new Route();
             var newStart, newDest;
             var placesVisited = [];
+            var row;
 
             /*Create the google maps.*/
             function create_map(){
@@ -135,25 +136,28 @@
                 
                 /*Set the map in which draw the route and what to do when it's ready.*/
                 directionsService.route(request, function(response, status){
-                    
                     if (status == google.maps.DirectionsStatus.OK){
                         var info = new RouteInfo(response.routes[0]);
                         
-                        /*Draw the route and its info.*/
-                        directionsDisplay.setDirections(response);
-                        
-                        if(id != undefined && id != null){
-                            $("#" + id + "_dur").text(info.duration_text());
-                            $("input[name='" + id + "_dur_time']").val(info.duration());
-                            /*If the shipment lasts less than 10hour, the new shipment can be added.*/
-                            if(info.duration() < 36000)
-                                $("input[name='del']").removeAttr("disabled");
+                        if(id == "Ajax" && info.duration() > 36000){
+                            find_shipment(++row);
                         }
                         else{
-                            $("#dur").text(info.duration_text());
-                            $("input[name='route']").val(JSON.stringify(shipment));
-                        }
-                            
+                            /*Draw the route and its info.*/
+                            directionsDisplay.setDirections(response);
+
+                            if(id != undefined && id != null){
+                                $("#new_dur").text(info.duration_text());
+                                $("input[name='new_dur_time']").val(info.duration());
+                                /*If the shipment lasts less than 10hour, the new shipment can be added.*/
+                                if(info.duration() < 36000)
+                                    $("input[name='del']").removeAttr("disabled");
+                            }
+                            else{
+                                $("#dur").text(info.duration_text());
+                                $("input[name='route']").val(JSON.stringify(shipment));
+                            }
+                        }    
                     }
                 });
             }
@@ -252,6 +256,15 @@
                 
                 return ret;
             }
+            
+            /*Use ajax to find a valid automatic shipment.*/
+            function find_shipment(ind){
+                row = ind;
+                $.ajax("ShipmentAssign?row=" + row).done(function(response){
+                   var route = JSON.parse(response);
+                   create_route(route.start, route.dest, route.waypoints, "Ajax");
+                });
+            }
         </script>
     </head>
     <body onload="create_map();">
@@ -324,6 +337,7 @@
                         <tr>
                             <td><button type='Button' style='height: 40px; width: 180px;' class='Button' id="show_shipment">Mostra percorso attuale</button></td>
                             <td><input style='height: 40px; width: 180px;' class='Button' type="submit" name="sub" value="Crea Assegnamento"></td>
+                            <td><button type='Button' class='Button' onclick='find_shipment(0)'>Assegnamento automatico</button></td>
                         </tr>
                     </table>
                 </form>    

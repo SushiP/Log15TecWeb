@@ -85,7 +85,8 @@
                         for (k=0;k<nextSegment.length;k++)
                             pol.getPath().push(nextSegment[k]);
                     } 
-                }*/
+                }
+            }*/
         </script>
     </head>
     <body onload="create_map();">
