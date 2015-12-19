@@ -47,7 +47,7 @@ public class ShipmentAssign extends HttpServlet {
             if(row == 0){
                 String query = "SELECT * FROM cliente C1 JOIN cliente C2 ON C1.sedeDestinazione = C2.sedePartenza "
                                 + "WHERE DATEDIFF(C1.deadline, CURDATE()) <= 7 AND DATEDIFF(C2.deadline, CURDATE()) <= 7 "
-                                + "ORDER BY C1.id";
+                                + "AND C1.pesoMerce + C2.pesoMerce <= 35 ORDER BY C1.id";
                 Statement st = new DBConnector().getConnection().createStatement();
                 rs = st.executeQuery(query);
                 
@@ -64,7 +64,10 @@ public class ShipmentAssign extends HttpServlet {
             /*If the row was finded, create the object for the route.*/
             if(i == row)
                 obj = "{\"start\" : \"" + rs.getString("C1.sedePartenza") + "\", \"dest\" : \"" + rs.getString("C2.sedeDestinazione")
-                        + "\", \"waypoints\" : [{\"location\" : \"" + rs.getString("C1.sedeDestinazione") + "\"}]}";
+                        + "\", \"waypoints\" : [{\"location\" : \"" + rs.getString("C1.sedeDestinazione") + "\"}], \"customer1\" :"
+                        + "{\"name\" : \"" + rs.getString("C1.nome") + "\", \"id\": \""+ rs.getString("C1.id") +"\"}, \"customer2\" :"
+                        + "{\"name\" : \"" + rs.getString("C2.nome") + "\", \"id\": \""+ rs.getString("C2.id") +"\"},"
+                        + "\"goods\" : \"" + (rs.getInt("C1.pesoMerce") + rs.getInt("C2.pesoMerce")) + "\"}";
             else
                 obj = "null";
             

@@ -109,7 +109,7 @@
             var newRoute = new Route();
             var newStart, newDest;
             var placesVisited = [];
-            var row;
+            var row, ajaxResponse;
 
             /*Create the google maps.*/
             function create_map(){
@@ -139,19 +139,34 @@
                     if (status == google.maps.DirectionsStatus.OK){
                         var info = new RouteInfo(response.routes[0]);
                         
+                        /*If the route returned by Ajax call is too long, search another one.*/
                         if(id == "Ajax" && info.duration() > 36000){
                             find_shipment(++row);
                         }
                         else{
-                            /*Draw the route and its info.*/
+                            /*Draw the route.*/
                             directionsDisplay.setDirections(response);
-
+                            
+                            /*Draw the info route, basis on the id.*/
                             if(id != undefined && id != null){
-                                $("#new_dur").text(info.duration_text());
-                                $("input[name='new_dur_time']").val(info.duration());
-                                /*If the shipment lasts less than 10hour, the new shipment can be added.*/
-                                if(info.duration() < 36000)
-                                    $("input[name='del']").removeAttr("disabled");
+                                if(id != "Ajax"){
+                                    $("#" + id + "_dur").text(info.duration_text());
+                                    $("input[name='" + id + "_dur_time']").val(info.duration());
+                                    
+                                    /*If the shipment lasts less than 10hour, the new shipment can be added.*/
+                                    if(info.duration() < 36000)
+                                        $("input[name='del']").removeAttr("disabled");
+                                }
+                                else{
+                                    $("input[value='" + ajaxResponse.customer2.id + "'").parents("tr").hide('slow');
+                                    update_route_info(info.duration(), ajaxResponse.customer2.name, ajaxResponse.customer2.id,
+                                                ajaxResponse.goods, ajaxResponse.waypoints[0].location, ajaxResponse.dest);
+                                    $("input[name='route']").val(JSON.stringify({
+                                                                                    start: ajaxResponse.start,
+                                                                                    dest: ajaxResponse.dest,
+                                                                                    waypoints: ajaxResponse.waypoints
+                                                                                }));
+                                }
                             }
                             else{
                                 $("#dur").text(info.duration_text());
@@ -167,76 +182,86 @@
                 newStart = newPlace[0];
                 newDest = newPlace[1];
                 
-                /*Create an array with all the places to visit.*/
-                var places = placesVisited.slice();
-                places.push(newStart);
-                places.push(newDest);
+                /*If the new route is a extension of the old one, just merge them.*/
+                if(shipment.destination == newStart){
+                    newRoute = shipment;
+                    newRoute.waypoints.push({location: newStart});
+                    newRoute.destination = newDest;
+                    $(".selected button").removeAttr("disabled");
+                }
+                /*Else create a new one.*/
+                else{
+                    /*Create an array with all the places to visit.*/
+                    var places = placesVisited.slice();
+                    places.push(newStart);
+                    places.push(newDest);
 
-                /*Create the request for matrix distances service.*/
-                var request = {
-                    origins: places,
-                    destinations: places,
-                    travelMode: google.maps.TravelMode.DRIVING
-                };
-                
-                matrixService.getDistanceMatrix(request, function(response, status){
-                    if(status === google.maps.DistanceMatrixStatus.OK){
-                        var s, e, min;
-                        var w = [], visited = [], toVisit = [];
-                        
-                        /*Initialize the array of visited places.*/
-                        for(i = 0; i < response.rows.length; i++)
-                            visited[i] = false;
+                    /*Create the request for matrix distances service.*/
+                    var request = {
+                        origins: places,
+                        destinations: places,
+                        travelMode: google.maps.TravelMode.DRIVING
+                    };
 
-                        /*Riempiamo un array con oggetti che rappresentano i punti della matrice da analizzare.*/
-                        for(i = 0; i < response.rows.length; i += 2){
-                            toVisit.push({i: i, j: i+1});
-                            for(j = 0; j < response.rows.length; j += 2)
-                                if(j != i)
-                                    toVisit.push({i: i, j: j});
-                        }
-                        
-                        /*Cerchiamo il minimo tra i vari posti analizzati ed avremo l'inizio del percorso ed il primo
-                         * wayoint.*/
-                        min = search_min_matrix(response.rows, toVisit);
-                        s = min.i;
-                        w[0] = min.j;
-                        visited[s] = true;
-                        visited[w[0]] = true;
-                        
-                        /*Per ogni waypoints cerchiamo quale dei luoghi della matrice è il più vicino con lo stesso
-                         * metodo utilizzato prima (ATTENZIONE: un luogo dispari, ovvero una destinazione, può essere
-                         * raggiunto solo se la sua partenza è stata raggiunta).*/
-                        for(i = 0; i < response.rows.length - 3; i++){
-                            toVisit = [];
-                            
-                            for(j = 0; j < response.rows.length; j++)
-                                if(!visited[j] && (j%2 == 0 || visited[j - 1]))
-                                    toVisit.push({i: w[i], j: j});
-                            
+                    matrixService.getDistanceMatrix(request, function(response, status){
+                        if(status === google.maps.DistanceMatrixStatus.OK){
+                            var s, e, min;
+                            var w = [], visited = [], toVisit = [];
+
+                            /*Initialize the array of visited places.*/
+                            for(i = 0; i < response.rows.length; i++)
+                                visited[i] = false;
+
+                            /*Riempiamo un array con oggetti che rappresentano i punti della matrice da analizzare.*/
+                            for(i = 0; i < response.rows.length; i += 2){
+                                toVisit.push({i: i, j: i+1});
+                                for(j = 0; j < response.rows.length; j += 2)
+                                    if(j != i)
+                                        toVisit.push({i: i, j: j});
+                            }
+
+                            /*Cerchiamo il minimo tra i vari posti analizzati ed avremo l'inizio del percorso ed il primo
+                             * wayoint.*/
                             min = search_min_matrix(response.rows, toVisit);
-                            w[i+1] = min.j;
-                            
-                            visited[w[i+1]] = true;
+                            s = min.i;
+                            w[0] = min.j;
+                            visited[s] = true;
+                            visited[w[0]] = true;
+
+                            /*Per ogni waypoints cerchiamo quale dei luoghi della matrice è il più vicino con lo stesso
+                             * metodo utilizzato prima (ATTENZIONE: un luogo dispari, ovvero una destinazione, può essere
+                             * raggiunto solo se la sua partenza è stata raggiunta).*/
+                            for(i = 0; i < response.rows.length - 3; i++){
+                                toVisit = [];
+
+                                for(j = 0; j < response.rows.length; j++)
+                                    if(!visited[j] && (j%2 == 0 || visited[j - 1]))
+                                        toVisit.push({i: w[i], j: j});
+
+                                min = search_min_matrix(response.rows, toVisit);
+                                w[i+1] = min.j;
+
+                                visited[w[i+1]] = true;
+                            }
+
+                            /*La fine è l'unico posto non ancora visitato*/
+                            for(i = 0; i < response.rows.length; i++)
+                                if(!visited[i])
+                                    e = i;
+
+                            newRoute.start = response.originAddresses[s];
+                            newRoute.destination = response.originAddresses[e];
+                            newRoute.waypoints = [];
+                            for(i = 0; i < w.length; i++)
+                                newRoute.waypoints.push({location: response.originAddresses[w[i]]});
+
+                            $(".selected button").removeAttr("disabled");
                         }
-                        
-                        /*La fine è l'unico posto non ancora visitato*/
-                        for(i = 0; i < response.rows.length; i++)
-                            if(!visited[i])
-                                e = i;
-                        
-                        newRoute.start = response.originAddresses[s];
-                        newRoute.destination = response.originAddresses[e];
-                        newRoute.waypoints = [];
-                        for(i = 0; i < w.length; i++)
-                            newRoute.waypoints.push({location: response.originAddresses[w[i]]});
-                        
-                        $(".selected button").removeAttr("disabled");
-                    }
-                    else
-                        alert("Problemi con i servizi google, assicurarsi che vi sia connessione o riprovare più tardi.\n\
-                                Errore: " + status);
-                });
+                        else
+                            alert("Problemi con i servizi google, assicurarsi che vi sia connessione o riprovare più tardi.\n\
+                                    Errore: " + status);
+                    });
+                }
             }
             
             /*Search the smallest route in the matrix rows between the places.*/
@@ -257,12 +282,34 @@
                 return ret;
             }
             
+            /*Update the printed route info.*/
+            function update_route_info(newDur, newName, newId, goods, start, dest){
+                /*Update duration.*/
+                $("input[name='dur_time']").val(newDur);
+
+                /*Update customers.*/
+                $("#customers").text($("#customers").text() + ", " + newName);
+                $("input[name='id_customers']").val($("input[name='id_customers']").val() + ", " + newId);
+
+                /*Update number of pallet.*/
+                $("#pallet").text(goods);
+                $("input[name='pallet']").val(goods);
+
+                /*Update visited places.*/
+                placesVisited.push(start);
+                placesVisited.push(dest);
+            }
+            
             /*Use ajax to find a valid automatic shipment.*/
             function find_shipment(ind){
                 row = ind;
                 $.ajax("ShipmentAssign?row=" + row).done(function(response){
-                   var route = JSON.parse(response);
-                   create_route(route.start, route.dest, route.waypoints, "Ajax");
+                    if(response != null){
+                        ajaxResponse = JSON.parse(response);
+                        create_route(ajaxResponse.start, ajaxResponse.dest, ajaxResponse.waypoints, "Ajax");
+                    }
+                    else
+                        $("#error_message").text("Nessun assegnamento automatico è stato trovato");
                 });
             }
         </script>
@@ -298,7 +345,6 @@
                                                             "AND DATEDIFF(C.deadline, CURDATE()) <= 7");
                             rs.next();
                     %>
-                    var shipment = [{nome : "<%=rs.getString("nome")%>"}];
                     shipment.start = "<%=rs.getString("sedePartenza")%>";
                     shipment.destination = "<%=rs.getString("sedeDestinazione")%>";
                     
@@ -332,12 +378,12 @@
                             <td hidden><input type="text" name="pallet" value="<%=rs.getString("pesoMerce")%>" /></td>
                         </tr>
                         <tr>
-                            <td hidden><input type="text" name="route"/></td>
+                            <td><input type="text" name="route"/></td>
                         </tr>
                         <tr>
                             <td><button type='Button' style='height: 40px; width: 180px;' class='Button' id="show_shipment">Mostra percorso attuale</button></td>
                             <td><input style='height: 40px; width: 180px;' class='Button' type="submit" name="sub" value="Crea Assegnamento"></td>
-                            <td><button type='Button' class='Button' onclick='find_shipment(0)'>Assegnamento automatico</button></td>
+                            <td><button type='Button' class='Button' onclick='find_shipment(0)' id="aut_ship">Assegnamento automatico</button></td>
                         </tr>
                     </table>
                 </form>    
@@ -379,7 +425,7 @@
                             rs.previous();
                             while(rs.next()){
                                 tab += "<tr class ='row'><td>"
-                                        + "<input type='hidden' name='id' value='" + rs.getString(rsmd.getColumnName(1)) + "' /></td>";
+                                        + "<input type='hidden' name='id' value='" + rs.getString("id") + "' /></td>";
                                 for(i = idStart; i <= count; i++)
                                     tab += "<td>" + rs.getString(rsmd.getColumnName(i)) + "</td>";
                                 tab += "<td><button style='height: 30px; width: 80px;' class='Button' type='Button'>Verifica</button></td>";
@@ -438,6 +484,8 @@
 
                     /*Add the new shipment to the first one.*/
                     $("input[name='del']").click(function(){
+                        /*Disabled the button to create a random shipment.*/
+                        $("#aut_ship").attr("disabled", true);
                         /*If the shipment to add is not the selected one, delete the row and update the 
                          * shipment route. */
                         var newName = $(".selected td:nth(1)").text();
@@ -450,22 +498,10 @@
                         /*Update route.*/
                         shipment = newRoute;
                         create_route(shipment.start, shipment.destination, shipment.waypoints, null);
-
-                        /*Update duration.*/
-                        $("input[name='dur_time']").val($("input[name='new_dur_time']").val());
-
-                        /*Update customers.*/
-                        $("#customers").text($("#customers").text() + ", " + newName);
-                        $("input[name='id_customers']").val($("input[name='id_customers']").val() + ", " + newId);
-
-                        /*Update number of pallet.*/
+                        /*Update the number of goods.*/
                         numGoods += newNumGoods;
-                        $("#pallet").text(numGoods);
-                        $("input[name='pallet']").val(numGoods);
-
-                        /*Update visited places.*/
-                        placesVisited.push(newStart);
-                        placesVisited.push(newDest);
+                        
+                        update_route_info($("input[name='new_dur_time']").val(), newName, newId, numGoods, newStart, newDest);
                     });         
                 </script>
                 <%}
