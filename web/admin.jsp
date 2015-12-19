@@ -181,87 +181,91 @@
             function create_new_route(newPlace){
                 newStart = newPlace[0];
                 newDest = newPlace[1];
-                
-                /*If the new route is a extension of the old one, just merge them.*/
-                if(shipment.destination == newStart){
-                    newRoute = shipment;
-                    newRoute.waypoints.push({location: newStart});
-                    newRoute.destination = newDest;
-                    $(".selected button").removeAttr("disabled");
-                }
-                /*Else create a new one.*/
-                else{
-                    /*Create an array with all the places to visit.*/
-                    var places = placesVisited.slice();
-                    places.push(newStart);
-                    places.push(newDest);
+               
+                /*Create an array with all the places to visit.*/
+                var places = placesVisited.slice();
+                places.push(newStart);
+                places.push(newDest);
 
-                    /*Create the request for matrix distances service.*/
-                    var request = {
-                        origins: places,
-                        destinations: places,
-                        travelMode: google.maps.TravelMode.DRIVING
-                    };
+                /*Create the request for matrix distances service.*/
+                var request = {
+                    origins: places,
+                    destinations: places,
+                    travelMode: google.maps.TravelMode.DRIVING
+                };
 
-                    matrixService.getDistanceMatrix(request, function(response, status){
-                        if(status === google.maps.DistanceMatrixStatus.OK){
-                            var s, e, min;
-                            var w = [], visited = [], toVisit = [];
-
-                            /*Initialize the array of visited places.*/
-                            for(i = 0; i < response.rows.length; i++)
-                                visited[i] = false;
-
-                            /*Riempiamo un array con oggetti che rappresentano i punti della matrice da analizzare.*/
-                            for(i = 0; i < response.rows.length; i += 2){
-                                toVisit.push({i: i, j: i+1});
-                                for(j = 0; j < response.rows.length; j += 2)
-                                    if(j != i)
-                                        toVisit.push({i: i, j: j});
-                            }
-
-                            /*Cerchiamo il minimo tra i vari posti analizzati ed avremo l'inizio del percorso ed il primo
-                             * wayoint.*/
-                            min = search_min_matrix(response.rows, toVisit);
-                            s = min.i;
-                            w[0] = min.j;
-                            visited[s] = true;
-                            visited[w[0]] = true;
-
-                            /*Per ogni waypoints cerchiamo quale dei luoghi della matrice è il più vicino con lo stesso
-                             * metodo utilizzato prima (ATTENZIONE: un luogo dispari, ovvero una destinazione, può essere
-                             * raggiunto solo se la sua partenza è stata raggiunta).*/
-                            for(i = 0; i < response.rows.length - 3; i++){
-                                toVisit = [];
-
-                                for(j = 0; j < response.rows.length; j++)
-                                    if(!visited[j] && (j%2 == 0 || visited[j - 1]))
-                                        toVisit.push({i: w[i], j: j});
-
-                                min = search_min_matrix(response.rows, toVisit);
-                                w[i+1] = min.j;
-
-                                visited[w[i+1]] = true;
-                            }
-
-                            /*La fine è l'unico posto non ancora visitato*/
-                            for(i = 0; i < response.rows.length; i++)
-                                if(!visited[i])
-                                    e = i;
-
-                            newRoute.start = response.originAddresses[s];
-                            newRoute.destination = response.originAddresses[e];
-                            newRoute.waypoints = [];
-                            for(i = 0; i < w.length; i++)
-                                newRoute.waypoints.push({location: response.originAddresses[w[i]]});
-
-                            $(".selected button").removeAttr("disabled");
+                matrixService.getDistanceMatrix(request, function(response, status){
+                    if(status === google.maps.DistanceMatrixStatus.OK){
+                        var minDist = Number.MAX_VALUE, dijk;
+                        
+                        /*For every start, apply Dijkstra.*/
+                        for(var row = 0; row < response.rows.length; row += 2){
+                            dijk = Dijkstra(response.rows, row);
+                            
+                            /*If the returned route is the shortest one, save it.*/
+                            if(dijk.dist < minDist){
+                                minDist = dijk.dist;
+                                newRoute.start = response.originAddresses[dijk.start];
+                                newRoute.destination = response.originAddresses[dijk.dest];
+                                newRoute.waypoints = [];
+                                for(var i = 0; i < dijk.waypoints.length; i++)
+                                    newRoute.waypoints.push({location: response.originAddresses[dijk.waypoints[i]]});
+                            } 
                         }
-                        else
-                            alert("Problemi con i servizi google, assicurarsi che vi sia connessione o riprovare più tardi.\n\
-                                    Errore: " + status);
-                    });
+                        $(".selected button").removeAttr("disabled");
+                    }
+                    else
+                        alert("Problemi con i servizi google, assicurarsi che vi sia connessione o riprovare più tardi.\n\
+                                Errore: " + status);
+                });
+            }
+            
+            function Dijkstra(matrix, startInd){
+                var s, e, min, currDist = 0, i, j;
+                var w = [], visited = [], toVisit = [];
+
+                /*Initialize the array of visited places.*/
+                for(i = 0; i < matrix.length; i++)
+                    visited[i] = false;
+
+                /*Search for the nearest place and make it the first. waypoint.*/
+                toVisit.push({i: startInd, j: startInd+1});
+                for(j = 0; j < matrix.length; j += 2)
+                    if(j != startInd)
+                        toVisit.push({i: startInd, j: j});
+
+                min = search_min_matrix(matrix, toVisit);
+                s = startInd;
+                w[0] = min.j;
+                visited[s] = true;
+                visited[w[0]] = true;
+                currDist += matrix[s].elements[w[0]].distance.value;
+
+                /*For every waypoints, search the nearest one, and make it the next.
+                 * A destination can be visited only if its start was already visited.*/
+                for(i = 0; i < matrix.length - 3; i++){
+                    toVisit = [];
+
+                    for(j = 0; j < matrix.length; j++)
+                        if(!visited[j] && (j%2 == 0 || visited[j - 1]))
+                            toVisit.push({i: w[i], j: j});
+
+                    min = search_min_matrix(matrix, toVisit);
+                    w[i+1] = min.j;
+
+                    visited[w[i+1]] = true;
+                    currDist += matrix[w[i]].elements[w[i+1]].distance.value;
                 }
+
+                /*The destination is the place not visited yet.*/
+                for(i = 0; i < matrix.length; i++)
+                    if(!visited[i])
+                        e = i;
+
+                currDist += matrix[w[w.length-1]].elements[e].distance.value;
+                
+                /*Return the shortest path and its length.*/
+                return {start: s, dest: e, waypoints: w, dist: currDist};
             }
             
             /*Search the smallest route in the matrix rows between the places.*/
