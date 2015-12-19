@@ -100,6 +100,7 @@
             }
         </script>
         <script>
+            var MAXDURATION = 36000;
             var map = null;
             var directionsService = new google.maps.DirectionsService();
             var directionsDisplay = new google.maps.DirectionsRenderer();
@@ -124,8 +125,8 @@
                 directionsDisplay.setMap(map); //Set map for Renderer object.
             }
             
-            /*Create and display route.*/
-            function create_route(origin, destination, waypoints, id){
+            /*Create and display route. If handler is not undefined, recall it after the route has been created.*/
+            function create_route(origin, destination, waypoints, handler, visible){
                 /*Create the request for the route.*/
                 var request = {
                     origin: origin,
@@ -139,46 +140,18 @@
                     if (status == google.maps.DirectionsStatus.OK){
                         var info = new RouteInfo(response.routes[0]);
                         
-                        /*If the route returned by Ajax call is too long, search another one.*/
-                        if(id == "Ajax" && info.duration() > 36000){
-                            find_shipment(++row);
-                        }
-                        else{
-                            /*Draw the route.*/
+                        /*Draw the route.*/
+                        if(visible == undefined || visible == true)
                             directionsDisplay.setDirections(response);
-                            
-                            /*Draw the info route, basis on the id.*/
-                            if(id != undefined && id != null){
-                                if(id != "Ajax"){
-                                    $("#" + id + "_dur").text(info.duration_text());
-                                    $("input[name='" + id + "_dur_time']").val(info.duration());
-                                    
-                                    /*If the shipment lasts less than 10hour, the new shipment can be added.*/
-                                    if(info.duration() < 36000)
-                                        $("input[name='del']").removeAttr("disabled");
-                                }
-                                else{
-                                    $("input[value='" + ajaxResponse.customer2.id + "'").parents("tr").hide('slow');
-                                    update_route_info(info.duration(), ajaxResponse.customer2.name, ajaxResponse.customer2.id,
-                                                ajaxResponse.goods, ajaxResponse.waypoints[0].location, ajaxResponse.dest);
-                                    $("input[name='route']").val(JSON.stringify({
-                                                                                    start: ajaxResponse.start,
-                                                                                    dest: ajaxResponse.dest,
-                                                                                    waypoints: ajaxResponse.waypoints
-                                                                                }));
-                                }
-                            }
-                            else{
-                                $("#dur").text(info.duration_text());
-                                $("input[name='route']").val(JSON.stringify(shipment));
-                            }
-                        }    
+                        
+                        if(handler != undefined && handler != null)
+                            handler(info);
                     }
                 });
             }
             
-            /*Create a new route with two new places.*/
-            function create_new_route(newPlace){
+            /*Create a new route with two new places and when the operation is done, recall handler.*/
+            function create_new_route(newPlace, handler){
                 newStart = newPlace[0];
                 newDest = newPlace[1];
                
@@ -212,7 +185,8 @@
                                     newRoute.waypoints.push({location: response.originAddresses[dijk.waypoints[i]]});
                             } 
                         }
-                        $(".selected button").removeAttr("disabled");
+                        /*Recall the handler.*/
+                        handler(minDist);
                     }
                     else
                         alert("Problemi con i servizi google, assicurarsi che vi sia connessione o riprovare più tardi.\n\
@@ -220,6 +194,7 @@
                 });
             }
             
+            /*Search for the shortest path.*/
             function Dijkstra(matrix, startInd){
                 var s, e, min, currDist = 0, i, j;
                 var w = [], visited = [], toVisit = [];
@@ -286,35 +261,72 @@
                 return ret;
             }
             
-            /*Update the printed route info.*/
-            function update_route_info(newDur, newName, newId, goods, start, dest){
-                /*Update duration.*/
-                $("input[name='dur_time']").val(newDur);
-
-                /*Update customers.*/
-                $("#customers").text($("#customers").text() + ", " + newName);
-                $("input[name='id_customers']").val($("input[name='id_customers']").val() + ", " + newId);
-
-                /*Update number of pallet.*/
-                $("#pallet").text(goods);
-                $("input[name='pallet']").val(goods);
-
-                /*Update visited places.*/
-                placesVisited.push(start);
-                placesVisited.push(dest);
-            }
-            
             /*Use ajax to find a valid automatic shipment.*/
             function find_shipment(ind){
-                row = ind;
-                $.ajax("ShipmentAssign?row=" + row).done(function(response){
-                    if(response != null){
-                        ajaxResponse = JSON.parse(response);
-                        create_route(ajaxResponse.start, ajaxResponse.dest, ajaxResponse.waypoints, "Ajax");
+                var rows = document.getElementsByClassName("row");
+                
+                /*Search if the destination of the shipment and the start of the current client are the same.*/
+                if(ind < 0){
+                    /*Find the index of the row to analyze.*/
+                    var index = -1 * (ind + 1);
+                    
+                    if(index < rows.length){
+                        if(rows[index].children[2].innerHTML == shipment.destination){
+                            /*Copy in newRoute the current shipment, modifing it with the new destination.*/
+                            newRoute.start = shipment.start;
+                            //newRoute.waypoints = shipment.destination.split();
+                            newRoute.waypoints.push({location: shipment.destination});
+                            newRoute.destination = rows[index].children[3].innerHTML;
+                            
+                            create_route(newRoute.start, newRoute.destination, newRoute.waypoints, function(info){
+                                var newPallet = parseInt($("input[name='pallet']").val()) + 
+                                                parseInt(rows[index].children[5].innerHTML);
+                                
+                                if(info.duration() > MAXDURATION || newPallet > 35)
+                                    find_shipment(--ind);
+                                else{
+                                    $("input[name='id_customers']").val($("input[name='id_customers']").val() + "," +
+                                                                        rows[index].children[0].children[0].value);
+                                    $("input[name='dur_tim']").val(info.duration());
+                                    $("input[name='pallet']").val(newPallet);
+                                    $("input[name='route']").val(JSON.stringify(newRoute));
+                                    $("input[name='sub']").click();
+                                }
+                            }, false);
+                        }
+                        else
+                            find_shipment(--ind);
                     }
                     else
-                        $("#error_message").text("Nessun assegnamento automatico è stato trovato");
-                });
+                        find_shipment(0);
+                }
+                /*Else search for a client that can be merged with the shipment.*/
+                else if(ind < rows.length){
+                    var tds = rows[ind].children;
+                    
+                    create_new_route([tds[2].innerHTML, tds[3].innerHTML], function(dist){
+                        if(dist != undefined && dist != null){
+                            var newPallet = parseInt($("input[name='pallet']").val()) + parseInt(tds[5].innerHTML);
+                                        
+                            if(dist > 1000000 || newPallet > 35)
+                                window.setTimeout(function(){find_shipment(++ind)}, 300);
+                            else{
+                                shipment = newRoute;
+                                create_route(shipment.start, shipment.destination, shipment.waypoints, function(info){
+                                    $("input[name='id_customers']").val($("input[name='id_customers']").val() + "," +
+                                                                        tds[0].children[0].value);
+                                    $("input[name='dur_tim']").val(info.duration());
+                                    $("input[name='pallet']").val(newPallet);
+                                    $("input[name='route']").val(JSON.stringify(shipment));
+                                    
+                                    $("input[name='sub']").click();
+                                });
+                            }
+                        }
+                    });
+                }
+                else
+                    $("#error_message").text("Nessun assegnamento automatico disponibile");
             }
         </script>
     </head>
@@ -357,14 +369,25 @@
 
                     placesVisited.push(shipment.start);
                     placesVisited.push(shipment.destination);
-                    create_route(shipment.start, shipment.destination, shipment.waypoints);
+                    create_route(shipment.start, shipment.destination, shipment.waypoints, function(info){
+                        /*Set duration visible and set shipment JSON object.*/
+                        $("#customers").text("<%=rs.getString("nome")%>");
+                        $("input[name='id_customers']").val("<%=rs.getString("id")%>");
+                        
+                        $("#dur").text(info.duration_text());
+                        $("input[name='dur_time']").val(info.duration());
+                        
+                        $("input[name='pallet']").val(<%=rs.getString("pesoMerce")%>);
+                        
+                        $("input[name='route']").val(JSON.stringify(shipment));
+                    });
                 </script>
                 <form action="ShipmentManager" method="post">
                     <table>
                         <tr>
                             <td>Clienti: </td>
-                            <td id="customers"><%=rs.getString("nome")%></td>
-                            <td hidden><input type="text" name="id_customers" value="<%=rs.getString("id")%>"/></td>
+                            <td id="customers"></td>
+                            <td><input type="text" name="id_customers"/></td>
                         </tr>
                         <tr>
                             <td>Durata: </td>
@@ -378,11 +401,10 @@
                         </tr>
                         <tr>
                             <td>Numero Pallet: </td>
-                            <td id="pallet"><%=rs.getString("pesoMerce")%></td>
-                            <td hidden><input type="text" name="pallet" value="<%=rs.getString("pesoMerce")%>" /></td>
+                            <td><input type="text" name="pallet" style="border:none" readonly/></td>
                         </tr>
                         <tr>
-                            <td><input type="text" name="route"/></td>
+                            <td hidden><input type="text" name="route"/></td>
                         </tr>
                         <tr>
                             <td><button type='Button' style='height: 40px; width: 180px;' class='Button' id="show_shipment">Mostra percorso attuale</button></td>
@@ -432,12 +454,13 @@
                                         + "<input type='hidden' name='id' value='" + rs.getString("id") + "' /></td>";
                                 for(i = idStart; i <= count; i++)
                                     tab += "<td>" + rs.getString(rsmd.getColumnName(i)) + "</td>";
-                                tab += "<td><button style='height: 30px; width: 80px;' class='Button' type='Button'>Verifica</button></td>";
+                                tab += "<td><button style='height: 30px; width: 80px;' class='Button' type='Button' name='test'>"
+                                        + "Verifica</button></td>";
                                 tab += "</tr>";
                             }
 
                             /*Close table tag.*/
-                            tab += "</table><input class='Button' style='height: 30px; width: 100px;' type='submit' name='del' value='Aggiungi' disabled/>";
+                            tab += "</table><input class='Button' style='height: 30px; width: 100px;' type='submit' name='add' value='Aggiungi' disabled/>";
                         }
                     }
                     catch(SQLException e){%>
@@ -451,10 +474,8 @@
                     var $thisShipment = $("#table_customers tr:nth(2)");
                     /*Modify the table.*/
                     $("#table_customers td:first-child").hide();
-                    $("#table_customers td:last-child button").attr("disabled", "true");
-                    
-                    /*Set the shipment.*/
-                    $("input[name='route']").val(JSON.stringify(shipment));
+                    $(".row td:last-child button").attr("disabled", "true");
+                    $("input[name='add']").attr("disabled", true);
                     
                     /*The selection of the row.*/
                     $(".row > :not(td:last-child)").click(function(event){
@@ -464,32 +485,44 @@
                         $(".selected button").attr("disabled", true);
                         $(".selected").toggleClass("selected");                  
                         $(event.target.parentNode).toggleClass("selected");
-                        $("input[name='del']").attr("disabled", true);
+                        
+                        /*Disabled add button*/
+                        $("input[name='add']").attr("disabled", true);
 
-                        /*Recall the function for get the coords.*/
+                        /*Save the number of new goods.*/
                         td = event.target.parentNode.children;
                         newNumGoods = parseInt(td[5].innerHTML);
 
                         if(numGoods + newNumGoods <= 35)
-                            create_new_route([td[2].innerHTML, td[3].innerHTML]);
+                            create_new_route([td[2].innerHTML, td[3].innerHTML], 
+                                            function(){$(".selected button").removeAttr("disabled");});
                         else
                             $("#error_message").text("Il peso della merce supera quello massimo");
                     });
 
-                    /*Show the new possible route.*/
+                    /*Show the current shipment.*/
                     $("#show_shipment").click(function(){
-                        create_route(shipment.start, shipment.destination, shipment.waypoints, null);
+                        create_route(shipment.start, shipment.destination, shipment.waypoints);
                     });
 
                     /*Show the new possible route.*/
-                    $(".row button").click(function(){
-                        create_route(newRoute.start, newRoute.destination, newRoute.waypoints, "new");
+                    $(".row button[name='test']").click(function(){
+                        create_route(newRoute.start, newRoute.destination, newRoute.waypoints, function(info){
+                            /*Update the new route duration.*/
+                            $("#new_dur").text(info.duration_text());
+                            $("input[name='new_dur_time']").val(info.duration());
+                            $("input[name='add']").attr("disabled", true);
+                            
+                            /*If its duration is less than 10 hours, it can be added to the shipment.*/
+                            if(info.duration() <= MAXDURATION)
+                                $("input[name='add']").removeAttr("disabled");
+                            else
+                                $("#error_message").text("The route is too long");
+                        });
                     });
 
                     /*Add the new shipment to the first one.*/
-                    $("input[name='del']").click(function(){
-                        /*Disabled the button to create a random shipment.*/
-                        $("#aut_ship").attr("disabled", true);
+                    $("input[name='add']").click(function(){
                         /*If the shipment to add is not the selected one, delete the row and update the 
                          * shipment route. */
                         var newName = $(".selected td:nth(1)").text();
@@ -501,12 +534,27 @@
 
                         /*Update route.*/
                         shipment = newRoute;
-                        create_route(shipment.start, shipment.destination, shipment.waypoints, null);
+                        create_route(shipment.start, shipment.destination, shipment.waypoints, function(info){
+                            /*Update the duration and shipment JSON object.*/
+                            $("#dur").text(info.duration_text());
+                            $("input[name='dur_time']").val(info.duration());
+                            $("input[name='route']").val(JSON.stringify(shipment));
+                        });
+                        
                         /*Update the number of goods.*/
                         numGoods += newNumGoods;
                         
-                        update_route_info($("input[name='new_dur_time']").val(), newName, newId, numGoods, newStart, newDest);
-                    });         
+                        /*Update customers.*/
+                        $("#customers").text($("#customers").text() + ", " + newName);
+                        $("input[name='id_customers']").val($("input[name='id_customers']").val() + ", " + newId);
+
+                        /*Update number of pallet.*/
+                        $("input[name='pallet']").val(numGoods);
+                        
+                        /*Update visited places.*/
+                        placesVisited.push(newStart);
+                        placesVisited.push(newDest);
+                    });
                 </script>
                 <%}
                     catch(SQLException e){ 
