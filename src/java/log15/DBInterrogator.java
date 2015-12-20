@@ -282,6 +282,7 @@ public class DBInterrogator {
                             + "<input type='hidden' name='id' value='" + rs.getString(rsmd.getColumnName(1)) + "' /></td>";
                     for(i = idStart; i <= count-1; i++)
                         tab += "<td>" + rs.getString(rsmd.getColumnName(i)) + "</td>";
+                    tab += "<td hidden>" + rs.getString(rsmd.getColumnName(i)) + "</td>";
                     tab += "</tr>";
                 }
                 

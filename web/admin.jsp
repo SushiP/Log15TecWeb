@@ -533,7 +533,7 @@
                         $(this).attr("disabled",true);
 
                         /*Update route.*/
-                        shipment = newRoute;
+                        copy_shipment(newRoute, shipment);
                         create_route(shipment.start, shipment.destination, shipment.waypoints, function(info){
                             /*Update the duration and shipment JSON object.*/
                             $("#dur").text(info.duration_text());
@@ -555,6 +555,12 @@
                         placesVisited.push(newStart);
                         placesVisited.push(newDest);
                     });
+                    
+                    function copy_shipment(from, to){
+                        to.start = from.start;
+                        to.dest = from.dest;
+                        to.waypoints = from.waypoints;
+                    }
                 </script>
                 <%}
                     catch(SQLException e){ 
