@@ -5,6 +5,7 @@
         <meta charset="UTF-8" />
         <title>Log15 Manage Drivers</title>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+        <script src="controlInput.js"></script>
         <link rel="stylesheet" type="text/css" href="css/style.css" />
         <link rel="icon" href="images/favicon.ico" type="favicon" sizes="16x16" />
         <%@page import="log15.*" %>
@@ -140,20 +141,24 @@
                 <form action="DriversManager" method="post">
                     <input type="text" name="patente" placeholder="Patente autista" 
                            value="<%if(sess.getAttribute("patente") != null) 
-                                        out.println((String)sess.getAttribute("patente"));%>"/><br />
+                                        out.println((String)sess.getAttribute("patente"));%>" required/><br />
                     <input type="text" name="nome" placeholder="Nome autista"
                            value="<%if(sess.getAttribute("nome") != null) 
-                                        out.println((String)sess.getAttribute("nome"));%>"/><br />
+                                        out.println((String)sess.getAttribute("nome"));%>"required/><br />
                     <input type="text" name="cognome" placeholder="Cognome autista" 
                            value="<%if(sess.getAttribute("cognome") != null) 
-                                        out.println((String)sess.getAttribute("cognome"));%>"/><br />
+                                        out.println((String)sess.getAttribute("cognome"));%>"required/><br />
                     Assenze mensili: <br />
                     <input type="text" name="assenzeMensili" readonly="true" 
                            value="<%if(sess.getAttribute("assenzeMensili") != null) 
-                                        out.println((String)sess.getAttribute("assenzeMensili")); else out.println('0');%>"/><br /><br />
-                    <input type="submit" value="Inserisci" name="insert" />
-                    <input type="hidden" name="operation" value="insert" />
+                                        out.println((String)sess.getAttribute("assenzeMensili")); else out.println('0');%>"required/><br /><br />
+                    <p id="error_input_message" style="color:red"></p>
+                    <input type="submit" value="Inserisci" name="insert" required/>
+                    <input type="hidden" name="operation" value="insert" required/>
                 </form>
+                <script>
+                    control_customers_input();
+                </script>
                 <a href="mdrivers.jsp"><button>Annulla</button></a>
                 <%
                         }
@@ -165,14 +170,18 @@
                                 row = interrogator.getDriverRow(patente);
                 %>
                 <form action="DriversManager" method="post">
-                    <input type="text" readonly="readonly" name="patente" placeholder="Patente autista" value="<%=row[1]%>" /><br />
-                    <input type="text" name="nome" placeholder="Nome autista" value="<%=row[2]%>" /><br />
-                    <input type="text" name="cognome" placeholder="Cognome autista" value="<%=row[3]%>" /><br />
+                    <input type="text" readonly="readonly" name="patente" placeholder="Patente autista" value="<%=row[1]%>" required/><br />
+                    <input type="text" name="nome" placeholder="Nome autista" value="<%=row[2]%>" required/><br />
+                    <input type="text" name="cognome" placeholder="Cognome autista" value="<%=row[3]%>" required/><br />
                     Assenze mensili: <br />
-                    <input type="text" name="assenzeMensili" value="<%=row[4]%>" readonly="true" /><br /><br />
-                    <input type="submit" value="Modifica" name="update" />
-                    <input type="hidden" name="operation" value="update" />
+                    <input type="text" name="assenzeMensili" value="<%=row[4]%>" readonly="true" required/><br /><br />
+                    <p id="error_input_message" style="color:red"></p>
+                    <input type="submit" value="Modifica" name="update" required/>
+                    <input type="hidden" name="operation" value="update" required/>
                 </form>
+                <script>
+                    control_customers_input();
+                </script>
                 <a href="mdrivers.jsp"><button>Annulla</button></a>
                 <%
                             }
