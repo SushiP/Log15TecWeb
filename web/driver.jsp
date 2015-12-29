@@ -14,7 +14,7 @@
             DBInterrogator interrogator = new DBInterrogator(new DBConnector().getConnection());
             String userType = null, driver = null, logTime = null;
         %>
-        
+        <%--Be sure the driver was successfully logged--%>
         <%
             Cookie[] cookies = request.getCookies();
             
@@ -36,6 +36,29 @@
         %>
     </head>
     <body>
+        <% 
+            String error = request.getParameter("error");
+            if (error != null) 
+            {
+        %>
+        <section class="Error">
+            <article>
+                <p>
+                    <%
+                        int numErr = Integer.parseInt(error);
+                        if(numErr == 0)
+                            out.println("Errore nella connessione al database, controllare che tutto funzioni correttamente.");
+                        else if(numErr == 1)
+                            out.println("Numero massimo assenze mensili raggiunte, impossibile rifiutare");
+                        else if(numErr == 2)
+                            out.println("Nessun altro autista disponibile, impossibile rifiutare");
+                    %>
+                </p>
+            </article>
+        </section>        
+        <%
+             }
+        %>
         <header class="Top">
             <table style="width: 100%; padding: 0px;">
                 <tr>
@@ -49,6 +72,7 @@
             </table>
         </header>
         <section class="Container">
+        <%--Query to recover all the shipments of the logged sriver --%>
         <%
             String query = "SELECT * FROM assegnamento WHERE autista = \"" + driver + "\" AND DATEDIFF(deadline, CURDATE()) <= 7 "
                     + "AND accettato = 0";
@@ -84,13 +108,16 @@
                         <td></td>
                         <td></td>
                         <td hidden><%=rs.getString("id")%></td>
+                        <td hidden><%=rs.getInt("deadline")%></td>
                         <td><button class="Button">Accetta</button></td>
                         <td><button class="Button">Rifiuta</button></td>
                         <script>
+                            /*Fill the row with data about the shipment.*/
                             $start = $("#<%=rs.getString("id")%> td:nth(1)");
                             $wayp = $("#<%=rs.getString("id")%> td:nth(2)");
                             $dest = $("#<%=rs.getString("id")%> td:nth(3)");
-
+                            
+                            /*Parse the route and insert it into the row.*/
                             route = JSON.parse('<%=rs.getString("percorso")%>');
                             $start.text(route.start);
                             $dest.text(route.destination);
@@ -110,12 +137,16 @@
             <form method="post" action="ShipmentAcceptance" hidden>
                 <input type="text" name="shipment" />
                 <input type="text" name="action" />
+                <input type="date" name="deadline" />
                 <input type="submit" />
                 <script>
+                    /*When a button is pressed, recover the data about the shipment and insert them into the form.*/
                     $("table button").click(function(){
                        var shipment = this.parentNode.parentNode.children[4].innerHTML;
+                       var deadline = this.parentNode.parentNode.children[5].innerHTML;
                        
                        $("input[name='shipment']").val(shipment);
+                       $("input[name='deadline']").val(deadline);
                        $("input[name='action']").val(this.innerHTML);
                        
                        $("input[type='submit']").click();

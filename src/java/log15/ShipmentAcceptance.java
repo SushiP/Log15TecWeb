@@ -30,10 +30,17 @@ public class ShipmentAcceptance extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
+    
+    static final int maxAbsences = 3;
+            
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        /*Get the parameters for the query.*/
         int shipment = Integer.parseInt(request.getParameter("shipment"));
         String action = request.getParameter("action");
+        /*Set the redirect.*/
+        response.setStatus(302);
+        response.setHeader("location", "driver.jsp");
         
         /*Change the accettato attribute to 1.*/
         if(action.equals("Accetta")){
@@ -45,36 +52,51 @@ public class ShipmentAcceptance extends HttpServlet {
                 ps.executeUpdate();
             }catch(SQLException e){
                 System.out.println("Errore aggiornamento assegnamento: " + e.getMessage());
+                response.setHeader("location", "driver.jsp?error=0");
             }
         }
         /*Else find a new driver and increase the number of absences of the driver.*/
         else{
             try{
+                /*Recover the driver license of the connected driver.*/
                 String dlicence = null;
                 DBInterrogator interrogator = new DBInterrogator(new DBConnector().getConnection());
                 Cookie[] cookies = request.getCookies();
 
                 for(Cookie cookie : cookies)
-                    if(cookie.getName().equals("session"))
-                        dlicence = interrogator.getUsernameFromSession(cookie.getValue());
-
-                String newAutista = dlicence;
-                String driver = new ShipmentManager().takeDriver();
-                String query1 = "UPDATE assegnamento SET `autista`='" + newAutista + "' WHERE `id`=?";
-                String query2 = "UPDATE autista SET assenzeMensili = assenzeMensili+1 WHERE patente='" + driver + "'";
-                PreparedStatement ps = new DBConnector().getConnection().prepareStatement(query1);
-                Statement st = new DBConnector().getConnection().createStatement();
-
-                /*Set a new driver for the shipment.*/
-                ps.setInt(1, shipment);
-                ps.executeUpdate();
+                        if(cookie.getName().equals("session"))
+                            dlicence = interrogator.getUsernameFromSession(cookie.getValue());
                 
-                /*Update the absence of the driver.*/
-                st.executeUpdate(query2);
+                /*Be sure the driver has not the max number of absences.*/
+                String query0 = "SELECT assenzeMensili FROM autista WHERE patente = '" + dlicence + "'";
+                Statement psAbs = new DBConnector().getConnection().createStatement();
+                ResultSet rs = psAbs.executeQuery(query0);
+
+                if(rs.next() && rs.getInt("assenzeMensili") < maxAbsences){
+                    /*Find a new driver and prepare the query if he is not null.*/
+                    String newAutista = new ShipmentManager().takeDriver(request.getParameter("deadline"));
+                    if(newAutista != null){
+                        String query1 = "UPDATE assegnamento SET `autista`='" + newAutista + "' WHERE `id`=?";
+                        String query2 = "UPDATE autista SET assenzeMensili = assenzeMensili+1 WHERE patente='" + dlicence + "'";
+                        PreparedStatement ps = new DBConnector().getConnection().prepareStatement(query1);
+                        Statement st = new DBConnector().getConnection().createStatement();
+
+                        /*Set a new driver for the shipment.*/
+                        ps.setInt(1, shipment);
+                        ps.executeUpdate();
+
+                        /*Update the absence of the driver.*/
+                        st.executeUpdate(query2);
+                    }
+                    else
+                        response.setHeader("location", "driver.jsp?error=2");
+                }
+                else
+                    response.setHeader("location", "driver.jsp?error=1");
             }catch(SQLException e){
                 System.out.println("Errore aggiornamento assegnamento: " + e.getMessage());
+                response.setHeader("location", "driver.jsp?error=0");
             }    
         }
     }
-
 }
