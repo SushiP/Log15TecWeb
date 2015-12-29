@@ -113,7 +113,7 @@
                                 <td></td>
                                 <td></td>
                                 <td hidden><%=rs.getString("id")%></td>
-                                <td hidden><%=rs.getInt("deadline")%></td>
+                                <td hidden><%=rs.getString("deadline")%></td>
                                 <td><button class="Button">Accetta</button></td>
                                 <td><button class="Button">Rifiuta</button></td>
                                 <script>

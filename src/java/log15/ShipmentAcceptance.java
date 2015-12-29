@@ -44,7 +44,7 @@ public class ShipmentAcceptance extends HttpServlet {
         
         /*Change the accettato attribute to 1.*/
         if(action.equals("Accetta")){
-            String query = "UPDATE assegnamento SET accettato=1 WHERE id=?";
+            String query = "UPDATE assegnamento SET accettato=1, stato='In Arrivo' WHERE id=?";
             try{
                 PreparedStatement ps = new DBConnector().getConnection().prepareStatement(query);
                 
