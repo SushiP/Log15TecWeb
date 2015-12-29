@@ -387,7 +387,7 @@
                         <tr>
                             <td>Clienti: </td>
                             <td id="customers"></td>
-                            <td><input type="text" name="id_customers"/></td>
+                            <td hidden><input type="text" name="id_customers"/></td>
                         </tr>
                         <tr>
                             <td>Durata: </td>

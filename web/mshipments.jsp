@@ -115,7 +115,7 @@
                         /*Create the polyline and get the time passed from the start of the shipment.*/
                         var pol = create_polyline(response.routes[0]);
                         var today = new Date();
-                        var start = new Date(today.getFullYear(), today.getMonth(), today.getDate(), 15, 0);
+                        var start = new Date(today.getFullYear(), today.getMonth(), today.getDate(), 7, 0);
                         var passedTime = Math.floor((today - start) / 1000);
                         
                         /*If the shipment is not yet end, make it moving.*/
@@ -172,8 +172,7 @@
         $(".row").click(function(){
             /*If the clicked row, is not the selected one, make it.*/
             if(!$(this).hasClass("selected")){
-                var shipment = JSON.parse(this.children[6].innerHTML);
-                
+                var shipment = JSON.parse(this.children[5].innerHTML);
                 $(".selected").toggleClass("selected");
                 $(this).toggleClass("selected");
                 

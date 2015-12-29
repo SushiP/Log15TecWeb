@@ -248,12 +248,7 @@ public class DBInterrogator {
             if(rs.next()){
                 /*Get the table meta data.*/
                 ResultSetMetaData rsmd = rs.getMetaData();
-                int count = rsmd.getColumnCount();
-                int i;
-
-                /* If exists id field, jump it while printing the table */
-                if (rsmd.getColumnName(1).equals("id"))
-                    idStart++;
+                int i=1;
                 
                 /*Start to draw the table tag.*/
                 tab = "<table id='table_customers' class='Table'>";
@@ -263,14 +258,11 @@ public class DBInterrogator {
                 tab += "<td></td><td>Veicolo</td><td>Autista</td><td>Deadline</td><td>Stato</td><td></td>";
                 tab += "</tr>";
                 
-                tab += "<tr>";
-                for (i = idStart; i<= count-1; i++) {
-                    if (i == idStart)
-                        tab += "<td></td>";
-                    else 
-                        tab += "<td><input type='text' name='" + rsmd.getColumnName(i-1) + "' /></td>";
-                }
-                tab += "<td><input type='text' id='" + rsmd.getColumnName(i-1) + "' />";
+                tab += "<tr><td></td>";
+                tab += "<td><input type='text' name='veicolo' /></td>";
+                tab += "<td><input type='text' name='autista' /></td>";
+                tab += "<td><input type='text' name='deadline' /></td>";
+                tab += "<td><input type='text' name='stato' /></td>";
                 tab += "<td><input class='Button' style='height: 30px; width: 80px;' type='submit' name='search' value='Cerca' /></td>";
                 tab += "</tr>";
 
@@ -280,9 +272,12 @@ public class DBInterrogator {
                 while(rs.next()){
                     tab += "<tr class ='row'><td>"
                             + "<input type='hidden' name='id' value='" + rs.getString(rsmd.getColumnName(1)) + "' /></td>";
-                    for(i = idStart; i <= count-1; i++)
-                        tab += "<td>" + rs.getString(rsmd.getColumnName(i)) + "</td>";
-                    tab += "<td hidden>" + rs.getString(rsmd.getColumnName(i)) + "</td>";
+
+                    tab += "<td>" + rs.getString(rsmd.getColumnName(2)) + "</td>";
+                    tab += "<td>" + rs.getString(rsmd.getColumnName(3)) + "</td>";
+                    tab += "<td>" + rs.getString(rsmd.getColumnName(4)) + "</td>";
+                    tab += "<td>" + rs.getString(rsmd.getColumnName(6)) + "</td>";
+                    tab += "<td hidden>" + rs.getString(rsmd.getColumnName(7)) + "</td>";
                     tab += "</tr>";
                 }
                 
