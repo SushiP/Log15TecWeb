@@ -21,7 +21,7 @@
             for(Cookie cookie : cookies)
                 if(cookie.getName().equals("session")){
                     userType = interrogator.getSessionUser(cookie.getValue());
-                    driver = interrogator.getUsernameFromSession(cookie.getValue());
+                    driver = interrogator.getDriverFromSession(cookie.getValue());
                     logTime = interrogator.getLogTimeFromSession(cookie.getValue());
                 }
             

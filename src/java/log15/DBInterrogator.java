@@ -53,6 +53,23 @@ public class DBInterrogator {
         }
     }
     
+    public String getDriverFromSession (String sessId) throws SQLException {
+        String query = "SELECT autista.Nome FROM autista, sessioni, utente WHERE sessioni.id = ? AND autista.patente = utente.username AND utente.username = sessioni.username";
+        
+        try {
+            PreparedStatement ps = connection.prepareStatement(query);
+            ps.setString(1, sessId);
+            ResultSet rs = ps.executeQuery();
+            
+            if(rs.next())
+                return rs.getString("nome");
+            else
+                return null;
+        } catch (SQLException e) {
+            throw(e);
+        }
+    }
+    
         public String getLogTimeFromSession(String sessId) throws SQLException {
         String query = "SELECT logTime FROM sessioni S WHERE S.id = ?";
         
