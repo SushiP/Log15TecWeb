@@ -72,90 +72,96 @@
             </table>
         </header>
         <section class="Container">
-        <%--Query to recover all the shipments of the logged sriver --%>
-        <%
-            String query = "SELECT * FROM assegnamento WHERE autista = \"" + driver + "\" AND DATEDIFF(deadline, CURDATE()) <= 7 "
-                    + "AND accettato = 0";
-            ResultSet rs = null;
-            try{
-                Statement st = new DBConnector().getConnection().createStatement();
-                rs = st.executeQuery(query);  
-            }catch(SQLException e){
-                System.out.println("Errore recupero dati"); 
-        %>
-                <p>Impossibile accedere al database.</p>
-        <%
-            }
+            <header>
+                ACCETTAZIONE ASSEGNAMENTI
+            </header>
+            <article>
+                <%--Query to recover all the shipments of the logged sriver --%>
+                <%
+                    String query = "SELECT * FROM assegnamento WHERE autista = \"" + driver + "\" AND DATEDIFF(deadline, CURDATE()) <= 7 "
+                            + "AND accettato = 0";
+                    ResultSet rs = null;
+                    try{
+                        Statement st = new DBConnector().getConnection().createStatement();
+                        rs = st.executeQuery(query);  
+                    }catch(SQLException e){
+                        System.out.println("Errore recupero dati"); 
+                %>
+                        <p>Impossibile accedere al database.</p>
+                <%
+                    }
 
-            if(rs != null){
-        %>
-            <table class="Table">
-                <thead>
-                    <tr>
-                        <th>Deadline</th>
-                        <th>Partenza</th>
-                        <th>Tappe intermedie</th>
-                        <th>Arrivo</th>
-                    </tr>
-                </thead>
-                <tbody>
-        <%
-                while(rs.next()){
-        %>
-                    <tr id = "<%=rs.getString("id")%>">
-                        <td><%=rs.getString("deadline")%></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td hidden><%=rs.getString("id")%></td>
-                        <td hidden><%=rs.getInt("deadline")%></td>
-                        <td><button class="Button">Accetta</button></td>
-                        <td><button class="Button">Rifiuta</button></td>
+                    if(rs != null){
+                %>
+                    <table class="Table">
+                        <thead>
+                            <tr>
+                                <th>Deadline</th>
+                                <th>Partenza</th>
+                                <th>Tappe intermedie</th>
+                                <th>Arrivo</th>
+                                <th></th><th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                <%
+                        while(rs.next()){
+                %>
+                            <tr id = "<%=rs.getString("id")%>">
+                                <td><%=rs.getString("deadline")%></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td hidden><%=rs.getString("id")%></td>
+                                <td hidden><%=rs.getInt("deadline")%></td>
+                                <td><button class="Button">Accetta</button></td>
+                                <td><button class="Button">Rifiuta</button></td>
+                                <script>
+                                    /*Fill the row with data about the shipment.*/
+                                    $start = $("#<%=rs.getString("id")%> td:nth(1)");
+                                    $wayp = $("#<%=rs.getString("id")%> td:nth(2)");
+                                    $dest = $("#<%=rs.getString("id")%> td:nth(3)");
+
+                                    /*Parse the route and insert it into the row.*/
+                                    route = JSON.parse('<%=rs.getString("percorso")%>');
+                                    $start.text(route.start);
+                                    $dest.text(route.destination);
+
+                                    for(i = 0; i < route.waypoints.length; i++){
+                                        $way.text($way.text() + route.waypoints[i]);
+                                        if(i < route.waypoints.length - 1)
+                                            $way.text($way.text() + ", ");
+                                    }
+                                </script>
+                            </tr>
+                <%
+                        }
+                %>
+                        </tbody>
+                    </table>
+                    <form method="post" action="ShipmentAcceptance" hidden>
+                        <input type="text" name="shipment" />
+                        <input type="text" name="action" />
+                        <input type="date" name="deadline" />
+                        <input type="submit" />
                         <script>
-                            /*Fill the row with data about the shipment.*/
-                            $start = $("#<%=rs.getString("id")%> td:nth(1)");
-                            $wayp = $("#<%=rs.getString("id")%> td:nth(2)");
-                            $dest = $("#<%=rs.getString("id")%> td:nth(3)");
-                            
-                            /*Parse the route and insert it into the row.*/
-                            route = JSON.parse('<%=rs.getString("percorso")%>');
-                            $start.text(route.start);
-                            $dest.text(route.destination);
+                            /*When a button is pressed, recover the data about the shipment and insert them into the form.*/
+                            $("table button").click(function(){
+                               var shipment = this.parentNode.parentNode.children[4].innerHTML;
+                               var deadline = this.parentNode.parentNode.children[5].innerHTML;
 
-                            for(i = 0; i < route.waypoints.length; i++){
-                                $way.text($way.text() + route.waypoints[i]);
-                                if(i < route.waypoints.length - 1)
-                                    $way.text($way.text() + ", ");
-                            }
+                               $("input[name='shipment']").val(shipment);
+                               $("input[name='deadline']").val(deadline);
+                               $("input[name='action']").val(this.innerHTML);
+
+                               $("input[type='submit']").click();
+                            });
                         </script>
-                    </tr>
-        <%
-                }
-        %>
-                </tbody>
-            </table>
-            <form method="post" action="ShipmentAcceptance" hidden>
-                <input type="text" name="shipment" />
-                <input type="text" name="action" />
-                <input type="date" name="deadline" />
-                <input type="submit" />
-                <script>
-                    /*When a button is pressed, recover the data about the shipment and insert them into the form.*/
-                    $("table button").click(function(){
-                       var shipment = this.parentNode.parentNode.children[4].innerHTML;
-                       var deadline = this.parentNode.parentNode.children[5].innerHTML;
-                       
-                       $("input[name='shipment']").val(shipment);
-                       $("input[name='deadline']").val(deadline);
-                       $("input[name='action']").val(this.innerHTML);
-                       
-                       $("input[type='submit']").click();
-                    });
-                </script>
-            </form>
-        <%
-            }
-        %> 
+                    </form>
+                <%
+                    }
+                %> 
+            </article>
         </section>
         
     </body>
