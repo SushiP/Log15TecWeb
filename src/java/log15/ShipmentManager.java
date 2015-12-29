@@ -42,7 +42,7 @@ public class ShipmentManager extends HttpServlet {
     
     public String takeDriver(String data) {
         Connection conn = new DBConnector().getConnection();
-        String query = "SELECT A1.patente FROM autista AS A1 WHERE NOT EXISTS(SELECT A1.patente FROM autista AS A1 JOIN assegnamento AS A2 ON A1.patente = A2.autista WHERE A2.stato <> 'Consegnato' AND DATEDIFF(A2.deadline, ?) == 0) ORDER BY assenzeMensili DESC";
+        String query = "SELECT A1.patente FROM autista AS A1 WHERE NOT EXISTS(SELECT A1.patente FROM autista AS A3 JOIN assegnamento AS A2 ON A3.patente = A2.autista WHERE A2.stato <> 'Consegnato' AND DATEDIFF(A2.deadline, ?) = 0 AND A3.patente = A1.patente) ORDER BY assenzeMensili DESC";
         
         try {
             PreparedStatement ps = conn.prepareStatement(query);
@@ -59,7 +59,7 @@ public class ShipmentManager extends HttpServlet {
     
     public String takeVehicle(int weight) {
         Connection conn = new DBConnector().getConnection();
-        String query = "SELECT V.targa from veicolo AS V WHERE NOT EXISTS(SELECT V.targa FROM veicolo AS V JOIN assegnamento AS A ON V.targa = A.veicolo WHERE A.stato <> 'Consegnato') AND ? <= V.capacita ORDER BY V.capacita ASC";
+        String query = "SELECT V.targa from veicolo AS V WHERE NOT EXISTS(SELECT V.targa FROM veicolo AS V1 JOIN assegnamento AS A ON V1.targa = A.veicolo WHERE A.stato <> 'Consegnato' AND V1.targa = V.targa) AND ? <= V.capacita ORDER BY V.capacita ASC";
         
         try {
             PreparedStatement ps = conn.prepareStatement(query);
