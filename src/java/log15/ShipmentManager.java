@@ -40,12 +40,13 @@ public class ShipmentManager extends HttpServlet {
             response.setHeader("Location","admin.jsp?query=fail");
     }
     
-    public String takeDriver() {
+    public String takeDriver(String data) {
         Connection conn = new DBConnector().getConnection();
-        String query = "SELECT A1.patente FROM autista AS A1 WHERE NOT EXISTS(SELECT A1.patente FROM autista AS A1 JOIN assegnamento AS A2 ON A1.patente = A2.autista WHERE A2.stato <> 'Consegnato') ORDER BY assenzeMensili DESC";
+        String query = "SELECT A1.patente FROM autista AS A1 WHERE NOT EXISTS(SELECT A1.patente FROM autista AS A1 JOIN assegnamento AS A2 ON A1.patente = A2.autista WHERE A2.stato <> 'Consegnato' AND DATEDIFF(A2.deadline, ?) == 0) ORDER BY assenzeMensili DESC";
         
         try {
             PreparedStatement ps = conn.prepareStatement(query);
+            ps.setString(1, data);
             ResultSet rs = ps.executeQuery();
             if (rs.next())
                 return rs.getString("patente");
@@ -94,7 +95,7 @@ public class ShipmentManager extends HttpServlet {
     
     private boolean createShipment(int weight, String deadline, String percorso) {
         String veicolo = takeVehicle(weight);
-        String autista = takeDriver();
+        String autista = takeDriver(deadline);
         if (insertShipment(veicolo, autista, deadline, percorso))
             return true;
         else

@@ -6,7 +6,6 @@
 package log15;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -60,8 +59,9 @@ public class ShipmentAcceptance extends HttpServlet {
                         dlicence = interrogator.getUsernameFromSession(cookie.getValue());
 
                 String newAutista = dlicence;
+                String driver = new ShipmentManager().takeDriver();
                 String query1 = "UPDATE assegnamento SET `autista`='" + newAutista + "' WHERE `id`=?";
-                String query2 = "UPDATE autista SET assenzeMensili = assenzeMensili+1 WHERE patente='" + dlicence + "'";
+                String query2 = "UPDATE autista SET assenzeMensili = assenzeMensili+1 WHERE patente='" + driver + "'";
                 PreparedStatement ps = new DBConnector().getConnection().prepareStatement(query1);
                 Statement st = new DBConnector().getConnection().createStatement();
 
