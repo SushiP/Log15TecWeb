@@ -4,6 +4,7 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+        <script src="https://maps.googleapis.com/maps/api/js"></script>
         <link rel="stylesheet" type="text/css" href="css/style.css" />
         <link rel="icon" href="images/favicon.ico" type="favicon" sizes="16x16" />
         <title>Log15 Driver Panel</title>
@@ -12,7 +13,7 @@
         <%@page import="java.sql.*" %>
         <%!
             DBInterrogator interrogator = new DBInterrogator(new DBConnector().getConnection());
-            String userType = null, driver = null, logTime = null;
+            String userType = null, driver = null, logTime = null, dlicence = null;
         %>
         <%--Be sure the driver was successfully logged--%>
         <%
@@ -23,6 +24,7 @@
                     userType = interrogator.getSessionUser(cookie.getValue());
                     driver = interrogator.getDriverFromSession(cookie.getValue());
                     logTime = interrogator.getLogTimeFromSession(cookie.getValue());
+                    dlicence = interrogator.getUsernameFromSession(cookie.getValue());
                 }
             
             if(userType == null){
@@ -78,7 +80,7 @@
             <article>
                 <%--Query to recover all the shipments of the logged sriver --%>
                 <%
-                    String query = "SELECT * FROM assegnamento WHERE autista = \"" + driver + "\" AND DATEDIFF(deadline, CURDATE()) <= 7 "
+                    String query = "SELECT * FROM assegnamento WHERE autista = \"" + dlicence + "\" AND DATEDIFF(deadline, CURDATE()) <= 7 "
                             + "AND accettato = 0";
                     ResultSet rs = null;
                     try{
