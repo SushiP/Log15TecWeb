@@ -70,7 +70,7 @@ public class CustomerManager extends HttpServlet {
             String query = "INSERT INTO assegnamento(veicolo, autista, deadline, stato, percorso) VALUES (?, ?, ?, 'In Preparazione', '{\"start\": " + request.getParameter("sedePartenza") + ", \"destination\": " + request.getParameter("sedeDestinazione") +  ", \"waypoints\": []}')";
             ShipmentManager shipment = new ShipmentManager();
             String veicolo = shipment.takeVehicle(Integer.parseInt(request.getParameter("pesoMerce")));
-            String autista = shipment.takeDriver();
+            String autista = shipment.takeDriver(request.getParameter("deadline"));
             PreparedStatement ps = conn.prepareStatement(query);
             
             ps.setString(1, veicolo);
