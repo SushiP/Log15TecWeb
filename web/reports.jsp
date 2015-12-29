@@ -97,7 +97,7 @@
                     <table>
                         <tr>
                             <td><label>Minuti ritardo: </label></td>
-                            <td><input type="number" min="1" max="300"/></td>
+                            <td><input type="number" min="0" max="300"/></td>
                         </tr>
                         <tr>
                             <td><label>Descrizione aggiuntiva</label></td>
