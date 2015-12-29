@@ -276,7 +276,7 @@ public class DBInterrogator {
                     tab += "<td>" + rs.getString(rsmd.getColumnName(2)) + "</td>";
                     tab += "<td>" + rs.getString(rsmd.getColumnName(3)) + "</td>";
                     tab += "<td>" + rs.getString(rsmd.getColumnName(4)) + "</td>";
-                    tab += "<td>" + rs.getString(rsmd.getColumnName(6)) + "</td>";
+                    tab += "<td>" + rs.getString(rsmd.getColumnName(6)) + "</td><td></td>";
                     tab += "<td hidden>" + rs.getString(rsmd.getColumnName(7)) + "</td>";
                     tab += "</tr>";
                 }

@@ -409,7 +409,7 @@
                         <tr>
                             <td><button type='Button' style='height: 40px; width: 180px;' class='Button' id="show_shipment">Mostra percorso attuale</button></td>
                             <td><input style='height: 40px; width: 180px;' class='Button' type="submit" name="sub" value="Crea Assegnamento"></td>
-                            <td><button type='Button' class='Button' onclick='find_shipment(0)' id="aut_ship">Assegnamento automatico</button></td>
+                            <td><button type='Button' style='height: 40px; width: 180px;' class='Button' onclick='find_shipment(0)' id="aut_ship">Assegnamento automatico</button></td>
                         </tr>
                     </table>
                 </form>    
