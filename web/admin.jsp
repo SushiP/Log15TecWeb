@@ -401,8 +401,6 @@
                         
                         $("input[name='pallet']").val(<%=rs.getString("pesoMerce")%>);
                         
-                        $("input[name='deadline']").val(<%=rs.getString("deadline")%>);
-                        
                         $("input[name='route']").val(JSON.stringify(shipment));
                     });
                 </script>
@@ -429,7 +427,7 @@
                         </tr>
                         <tr>
                             <td hidden><input type="text" name="route"/></td>
-                            <td hidden><input type='text' name='deadline'/></td>
+                            <td><input type='text' name='deadline' value="<%=rs.getDate("deadline")%>"/></td>
                         </tr>
                         <tr>
                             <td><button type='Button' style='height: 40px; width: 180px;' class='Button' id="show_shipment">Mostra percorso attuale</button></td>
