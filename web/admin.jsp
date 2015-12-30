@@ -331,6 +331,28 @@
         </script>
     </head>
     <body onload="create_map();">
+         <% 
+             if (request.getParameter("query") != null && request.getParameter("query").equals("fail")) 
+             {
+         %>
+        <section class="Error">
+            <article>
+                <p>Errore nella creazione dell'assegnamento: nessun autista o veicolo è disponibile.</p>
+            </article>
+        </section>        
+         <%
+             } 
+             if (request.getParameter("query") != null && request.getParameter("query").equals("success")) 
+             {
+         %>
+        <section class="Success">
+            <article>
+                <p>L'assegnamento è stato creato con successo!</p>
+            </article>
+        </section>        
+         <%
+             }
+        %>
         <header class="Top">
             <table style="width: 100%; padding: 0px;">
                 <tr>
@@ -379,6 +401,8 @@
                         
                         $("input[name='pallet']").val(<%=rs.getString("pesoMerce")%>);
                         
+                        $("input[name='deadline']").val(<%=rs.getString("deadline")%>);
+                        
                         $("input[name='route']").val(JSON.stringify(shipment));
                     });
                 </script>
@@ -405,6 +429,7 @@
                         </tr>
                         <tr>
                             <td hidden><input type="text" name="route"/></td>
+                            <td hidden><input type='text' name='deadline'/></td>
                         </tr>
                         <tr>
                             <td><button type='Button' style='height: 40px; width: 180px;' class='Button' id="show_shipment">Mostra percorso attuale</button></td>
