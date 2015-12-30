@@ -52,6 +52,10 @@ public class Report extends HttpServlet {
                 response.setHeader("Location", "reports.jsp?query=fail");
             }
         }
+        
+        if (request.getParameter("Arrivo") == null && request.getParameter("Partenza") == null && request.getParameter("id") != null) {
+            
+        }
     }
 
 }
