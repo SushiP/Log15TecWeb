@@ -69,7 +69,7 @@
                         <nav class="Nav">
                         </nav>
                     </td>
-                    <td style="width: 15%; text-align: right;"><p>Benvenuto <b><%=driver%></b><br /><i>Accesso effettuato alle <%=logTime%></i><br />(<a href='Logout?username=<%=driver%>'> logout </a>)</p></td>
+                    <td style="width: 15%; text-align: right;"><p>Benvenuto <b><%=driver%></b><br /><i>Accesso effettuato alle <%=logTime%></i><br />(<a href='Logout?username=<%=dlicence%>'> logout </a>)</p></td>
                 </tr>
             </table>
         </header>
