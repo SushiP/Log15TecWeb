@@ -67,6 +67,9 @@
                     <td style="width: 5%;"><a href="admin.jsp"><img src="images/logo.png" onmouseover="this.src='images/logo_on.png'" onmouseout="this.src='images/logo.png'" alt="Logo" /></a></td>
                     <td style="width: 75%; text-align: center;">
                         <nav class="Nav">
+                            <ul>
+                                <li><a href="reports.jsp">Reports</a></li>
+                            </ul>
                         </nav>
                     </td>
                     <td style="width: 15%; text-align: right;"><p>Benvenuto <b><%=driver%></b><br /><i>Accesso effettuato alle <%=logTime%></i><br />(<a href='Logout?username=<%=driver%>'> logout </a>)</p></td>
@@ -86,13 +89,13 @@
                         ResultSet rs = st.executeQuery(query);
                         if(rs.next()){
                 %>
-                <form id="buttons_form">
+                <form id="buttons_form" action="Report">
                     <input type="text" value="<%=rs.getString("id")%>" name="id" hidden/>
                     <input type="submit" value="Partenza" name="Partenza" class="Button"/>
                     <input type="submit" value="Arrivo" name="Arrivo" class="Button"/>
                     <button type="button" id="problem_button" class="Button">Riporta un problema</button>
                 </form>
-                <form id="problem_form" hidden>
+                <form id="problem_form" hidden action="Report">
                     <input type="text" value="<%=rs.getString("id")%>" name="id" hidden/>
                     <table>
                         <tr>

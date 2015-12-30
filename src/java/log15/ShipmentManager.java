@@ -20,7 +20,6 @@ public class ShipmentManager extends HttpServlet {
         String route = request.getParameter("route");
         int weigth = Integer.parseInt(request.getParameter("pallet"));
         String deadline = request.getParameter("deadline");
-        System.out.println(deadline);
         
         if(this.createShipment(weigth, deadline, route)){
             response.setHeader("Location","admin.jsp?query=success");
