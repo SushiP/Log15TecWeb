@@ -226,6 +226,32 @@
             </header>
             <article>
                 <div id="map" style="margin: 5% 20%;width: 60%; height: 500px;"></div>
+                <%
+                    /*Create the table of the problems.*/
+                    String table = "";
+                    try{
+                        String query1 = "SELECT * FROM logproblemi";
+                        Statement st1 = new DBConnector().getConnection().createStatement();
+                        ResultSet rs1 = st1.executeQuery(query1);                      
+                        table = "<table id='logproblems' class='Table'>" +
+                                "<thead><tr><td colspan='3'>Log Problemi</td></tr></thead>"+
+                                "<tbody>";
+                        
+                        while(rs1.next()){
+                            table += "<tr class='" + rs1.getString("idAsse") + "' hidden>";
+                            table += "<td>" + rs1.getString("idAsse") + "</td>";
+                            table += "<td>" + rs1.getString("descrizione") + "</td>";
+                            table += "<td>" + rs1.getString("ritardo") + "</td>";
+                            table += "</tr>";
+                        }
+                        table += "</tbody></table>";
+                    }catch(SQLException e){
+                        out.println("<p style='color: red'>Errore recupero dati nel database</p>");
+                    }
+                %>
+                <%=table%>
+                <br/>
+                <br/>
                 <% shipments = interrogator.getShipmentsTable(); %>
                 <%=shipments%>
                 <script>
@@ -235,6 +261,10 @@
                             var shipment = JSON.parse(this.children[6].innerHTML);
                             $(".selected").toggleClass("selected");
                             $(this).toggleClass("selected");
+                            
+                            /*Show only the problems of selected shipment.*/
+                            $("#logproblems tbody > tr").hide("slow");
+                            $("." + $(".selected input[name='id']").val()).show("slow");
 
                             /*If it is not the first selection, clear the previous one.*/
                             if(id)
