@@ -38,6 +38,28 @@
         %>
     </head>
     <body>
+         <% 
+             if (request.getParameter("query") != null && request.getParameter("query").equals("fail")) 
+             {
+         %>
+        <section class="Error">
+            <article>
+                <p>Errore nel report.</p>
+            </article>
+        </section>        
+         <%
+             } 
+             if (request.getParameter("query") != null && request.getParameter("query").equals("success")) 
+             {
+         %>
+        <section class="Success">
+            <article>
+                <p>Il report è avvenuto con successo.</p>
+            </article>
+        </section>        
+         <%
+             }
+        %>
         <% 
             String error = request.getParameter("error");
             if (error != null) 
@@ -100,11 +122,11 @@
                     <table>
                         <tr>
                             <td><label>Minuti ritardo: </label></td>
-                            <td><input type="number" min="0" max="300"/></td>
+                            <td><input type="number" min="0" max="300" name="min" /></td>
                         </tr>
                         <tr>
                             <td><label>Descrizione aggiuntiva</label></td>
-                            <td><textarea></textarea></td>
+                            <td><textarea name="desc"></textarea></td>
                         </tr>
                         <tr>
                             <td><input type="submit" value="Invia report" class="Button"/></td>

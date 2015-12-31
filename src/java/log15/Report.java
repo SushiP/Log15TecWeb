@@ -36,7 +36,7 @@ public class Report extends HttpServlet {
             }
         }
         
-        if (request.getParameter("Arrivo") != null && request.getParameter("Arrivo").equals("Arrivo")) {
+        else if (request.getParameter("Arrivo") != null && request.getParameter("Arrivo").equals("Arrivo")) {
             int id = Integer.parseInt(request.getParameter("id"));
             
             try {
@@ -53,8 +53,25 @@ public class Report extends HttpServlet {
             }
         }
         
-        if (request.getParameter("Arrivo") == null && request.getParameter("Partenza") == null && request.getParameter("id") != null) {
+        else if (request.getParameter("min") != null && request.getParameter("desc") != null && request.getParameter("id") != null) {
+            int id = Integer.parseInt(request.getParameter("id"));
+            int min = Integer.parseInt(request.getParameter("min"));
+            String desc = request.getParameter("desc");
             
+            try {
+                String query = "INSERT INTO logproblemi VALUES(?, ?, ?)";
+                PreparedStatement ps = conn.prepareStatement(query);
+                ps.setInt(3, id);
+                ps.setInt(2, min);
+                ps.setString(1, desc);
+                
+                if (ps.executeUpdate() > 0)
+                    response.setHeader("Location", "reports.jsp?query=success");
+                else
+                    response.setHeader("Location", "reports.jsp?query=fail");
+            } catch (SQLException e) {
+                response.setHeader("Location", "reports.jsp?query=fail");
+            }
         }
     }
 
