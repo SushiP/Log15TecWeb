@@ -267,6 +267,9 @@
                 
                 /*Search if the destination of the shipment and the start of the current client are the same.*/
                 if(ind < 0){
+                    /*Start the loading screen*/
+                    if(ind == -1)
+                        loading_screen();
                     /*Find the index of the row to analyze.*/
                     var index = -1 * (ind + 1);
                     
@@ -327,6 +330,12 @@
                 }
                 else
                     $("#error_message").text("Nessun assegnamento automatico disponibile");
+            }
+            
+            function loading_screen(){
+                var $screen = $(document.createElement("div")).addClass("loading");
+                
+                $("body").append($screen);
             }
         </script>
     </head>
@@ -432,7 +441,7 @@
                         <tr>
                             <td><button type='Button' style='height: 40px; width: 180px;' class='Button' id="show_shipment">Mostra percorso attuale</button></td>
                             <td><input style='height: 40px; width: 180px;' class='Button' type="submit" name="sub" value="Crea Assegnamento"></td>
-                            <td><button type='Button' style='height: 40px; width: 180px;' class='Button' onclick='find_shipment(0)' id="aut_ship">Assegnamento automatico</button></td>
+                            <td><button type='Button' style='height: 40px; width: 180px;' class='Button' onclick='find_shipment(-1)' id="aut_ship">Assegnamento automatico</button></td>
                         </tr>
                     </table>
                 </form>    
@@ -569,7 +578,7 @@
                         
                         /*Update customers.*/
                         $("#customers").text($("#customers").text() + ", " + newName);
-                        $("input[name='id_customers']").val($("input[name='id_customers']").val() + ", " + newId);
+                        $("input[name='id_customers']").val($("input[name='id_customers']").val() + "," + newId);
 
                         /*Update number of pallet.*/
                         $("input[name='pallet']").val(numGoods);
