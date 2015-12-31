@@ -328,8 +328,10 @@
                         }
                     });
                 }
-                else
+                else{
+                    $(".loading").remove();
                     $("#error_message").text("Nessun assegnamento automatico disponibile");
+                }
             }
             
             function loading_screen(){
@@ -337,6 +339,7 @@
                 
                 $("body").append($screen);
             }
+            
         </script>
     </head>
     <body onload="create_map();">
