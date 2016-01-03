@@ -350,6 +350,7 @@
 
                     /*Show the current shipment.*/
                     $("#show_shipment").click(function(){
+                        $("#error_message").empty();
                         create_route(shipment.start, shipment.destination, shipment.waypoints);
                     });
 

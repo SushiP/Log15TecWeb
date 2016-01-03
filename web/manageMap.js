@@ -78,7 +78,7 @@ function create_route(origin, destination, waypoints, handler, visible){
                 directionsDisplay.setDirections(response);
 
             if(handler != undefined && handler != null)
-                handler(info);
+                handler(info, response);
         }
     });
 }

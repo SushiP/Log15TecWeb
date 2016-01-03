@@ -5,6 +5,7 @@
         <meta charset="UTF-8" />
         <title>Log15 Manage Vehicles</title>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+        <script src="search.js"></script>
         <script src="controlInput.js"></script>
         <link rel="stylesheet" type="text/css" href="css/style.css" />
         <link rel="icon" href="images/favicon.ico" type="favicon" sizes="16x16" />
@@ -228,46 +229,7 @@
                 <script>
                     /* Search function */
                     $("input[value='Cerca']").click(function(){
-                        parameters = new Array(5);
-                        inputs = $("tr td input[type='text']");
-                        allNull = false;
-                        
-                        /*Store all the search parameters into array.*/
-                        for(i = 0; i < inputs.length; i++){
-                            val = $(inputs[i]).val();
-                            
-                            if(val != undefined && val != ""){
-                                parameters[i] = val;
-                                allNull = true;
-                            }
-                            else
-                                parameters[i] = null;
-                        }
-                        
-                        /*Select all the rows that contain an effective db row.*/
-                        $rows = $(".row");
-                        
-                        /*If the search inputs contain nothings, show all the rows.*/
-                        if(!allNull)
-                            $rows.show(1000);
-                        else{
-                            /*Scroll all the rows.*/
-                            for(i = 0; i < $rows.length; i++){
-                                /*For all the rows, scroll all its children.*/
-                                $td = $($rows[i]).children();
-                                to_delete = false;
-
-                                /*If a parameter does not match, hide that row.*/
-                                for(j = 0; j < $td.length; j++)
-                                    if(parameters[j] != null && parameters[j] != $($td[j+1]).text())
-                                        to_delete = true;
-
-                                if(to_delete)
-                                    $($rows[i]).hide('slow');
-                                else if(!to_delete && $($rows[i]).is(":hidden"))
-                                    $($rows[i]).show('slow');
-                            }
-                        }
+                        search("#search_row input[type='text']", "row")
                     });
                 </script>
                 <%
