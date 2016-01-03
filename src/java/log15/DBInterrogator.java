@@ -223,7 +223,7 @@ public class DBInterrogator {
                 tab += "<td></td><td>Targa</td><td>Anno Registrazione</td><td>Carburante</td><td>Marca</td><td>Capacità</td><td></td>";
                 tab += "</tr>";
                 
-                tab += "<tr>";
+                tab += "<tr id='search_row'>";
                 tab += "<td></td>";
                 for (i = 1; i <= count; i++) 
                         tab += "<td><input type='text' name='" + rsmd.getColumnName(i) + "' /></td>";
