@@ -140,22 +140,22 @@
                             HttpSession sess = request.getSession();
                 %>
                 <form action="VehicleManager" method="post">
-                    <input type="text" name="targa" placeholder="Targa veicolo" 
+                    <input style="margin-bottom: 15px;" class="Input" type="text" name="targa" placeholder="Targa veicolo" 
                            value="<%if(sess.getAttribute("targa") != null) 
                                         out.println((String)sess.getAttribute("targa"));%>" required/><br />
-                    <input type="text" name="annoRegistrazione" placeholder="Anno registrazione veicolo"
+                    <input style="margin-bottom: 15px;" class="Input"type="text" name="annoRegistrazione" placeholder="Anno registrazione veicolo"
                            value="<%if(sess.getAttribute("annoRegistrazione") != null) 
                                         out.println((String)sess.getAttribute("annoRegistrazione"));%>" required/><br />
-                    <input type="text" name="marca" placeholder="Marca veicolo"
+                    <input style="margin-bottom: 15px;" class="Input" type="text" name="marca" placeholder="Marca veicolo"
                            value="<%if(sess.getAttribute("marca") != null) 
                                         out.println((String)sess.getAttribute("marca"));%>" required/><br />
-                    Tipo Carburante:
+                    Tipo Carburante:<br />
                     <%
                         String carburante = null;
                         if(sess.getAttribute("carburante") != null) 
                             carburante = (String)sess.getAttribute("carburante");
                     %>
-                    <select name="carburante" required>
+                    <select style="margin-bottom: 15px;" class="Input" name="carburante" required>
                         <option value="Benzina" <%if(carburante != null && carburante.equals("Benzina")) out.println("selected");%> >Benzina</option>
                         <option value="Diesel" <%if(carburante != null && carburante.equals("Diesel")) out.println("selected");%> >Diesel</option>
                     </select><br />
@@ -165,20 +165,19 @@
                         if(sess.getAttribute("capacita") != null) 
                             capacita = Integer.parseInt((String)sess.getAttribute("capacita"));
                     %>
-                    <select name="capacita" required>
+                    <select class="Input" name="capacita" required>
                         <option value="5" <%if(capacita != null && capacita.equals(5)) out.println("selected");%> >5</option>
                         <option value="10" <%if(capacita != null && capacita.equals(10)) out.println("selected");%> >10</option>
                         <option value="20" <%if(capacita != null && capacita.equals(20)) out.println("selected");%> >20</option>
                         <option value="35" <%if(capacita != null && capacita.equals(35)) out.println("selected");%> >35</option>
                     </select> <br />
                     <p id="error_input_message" style="color:red"></p>
-                    <input type="submit" value="Inserisci" name="insert" />
+                    <input style="height: 30px; width: 120px;" class="Button" type="submit" value="Inserisci" name="insert" /> <a href="mvehicles.jsp"><button style="height: 30px; width: 120px;" class="Button" type="button">Annulla</button></a>
                     <input type="hidden" name="operation" value="insert" />
                 </form>
                 <script>
                     control_vehicles_input();
                 </script>
-                <a href="mvehicles.jsp"><button>Annulla</button></a>
                 <%
                         }
                         else if (request.getParameter("op").equals("update"))
@@ -189,29 +188,28 @@
                                 row = interrogator.getVehicleRow(targa);
                 %>
                 <form action="VehicleManager" method="post">
-                    <input type="text" readonly="readonly" name="targa" placeholder="Targa veicolo" value="<%=row[1]%>" required/><br />
-                    <input type="text" name="annoRegistrazione" placeholder="Anno registrazione veicolo" value="<%=row[2]%>" required/><br />
-                    <input type="text" name="marca" placeholder="Marca veicolo" value="<%=row[4]%>" required/><br />
+                    <input style="margin-bottom: 15px;" class="Input" type="text" readonly="readonly" name="targa" placeholder="Targa veicolo" value="<%=row[1]%>" required/><br />
+                    <input style="margin-bottom: 15px;" class="Input" type="text" name="annoRegistrazione" placeholder="Anno registrazione veicolo" value="<%=row[2]%>" required/><br />
+                    <input style="margin-bottom: 15px;" class="Input" type="text" name="marca" placeholder="Marca veicolo" value="<%=row[4]%>" required/><br />
                     Tipo carburante: <br />
-                    <select name="carburante" required>
+                    <select style="margin-bottom: 15px;" class="Input" name="carburante" required>
                         <option value="Benzina" <% if (row[3].equals("Benzina")) out.println("selected"); %>>Benzina</option>
                         <option value="Diesel" <% if (row[3].equals("Diesel")) out.println("selected"); %>>Diesel</option>
                     </select><br />
                     Capacità: <br />
-                    <select name="capacita" required>
+                    <select class="Input" name="capacita" required>
                         <option value="5" <% if (row[5].equals("5")) out.println("selected"); %>>5</option>
                         <option value="10" <% if (row[5].equals("10")) out.println("selected"); %>>10</option>
                         <option value="15" <% if (row[5].equals("20")) out.println("selected"); %>>20</option>
                         <option value="35" <% if (row[5].equals("35")) out.println("selected"); %>>35</option>
                     </select><br /><br/>
                     <p id="error_input_message" style="color:red"></p>
-                    <input type="submit" value="Modifica" name="update" />
+                    <input style="height: 30px; width: 120px;" class="Button" type="submit" value="Modifica" name="update" /> <a href="mvehicles.jsp"><button style="height: 30px; width: 120px;" class="Button" type="button">Annulla</button></a>
                     <input type="hidden" name="operation" value="update" />
                 </form>
                 <script>
                     control_vehicles_input();
                 </script>
-                <a href="mvehicles.jsp"><button>Annulla</button></a>
                 <%
                             }
                             else {
