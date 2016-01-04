@@ -78,7 +78,7 @@
         </header>
         <section class="Container">
             <header>
-                ACCETTAZIONE ASSEGNAMENTI
+                ACCETTAZIONE ASSEGNAMENTI GIORNALIERI
             </header>
             <article>
                 <%--Query to recover all the shipments of the logged sriver --%>
@@ -166,6 +166,11 @@
                 <%
                     }
                 %> 
+            </article>
+            <header>
+                ASSEGNAMENTI IN SETTIMANA
+            </header>
+            <article>
             </article>
         </section>
         
