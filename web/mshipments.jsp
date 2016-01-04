@@ -144,10 +144,10 @@
         </header>
         <section class="Container">
             <header>
-                GESTIONE SPEDIZIONI
+                GESTIONE SPEDIZIONI GIORNALIERE
             </header>
             <article>
-                <div id="map" style="margin: 5% 20%;width: 60%; height: 500px;"></div>
+                <div id="map" style="width: 1024px; height: 500px;"></div>
                 <p id="error_message" style="color:red"></p>
                 <%
                     /*Create the table of the problems.*/

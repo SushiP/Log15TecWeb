@@ -199,7 +199,7 @@
         <section class="Container">
             <header>ACCETTAZIONE ASSEGNAMENTI IN ATTESA</header>
             <article>
-                <div id="map" style="margin: 5% 20%;width: 60%; height: 500px;"></div>
+                <div id="map" style="width: 1024px; height: 500px;"></div>
                 <script>
                     <%
                         try{
