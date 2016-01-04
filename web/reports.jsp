@@ -94,7 +94,7 @@
                             </ul>
                         </nav>
                     </td>
-                    <td style="width: 15%; text-align: right;"><p>Benvenuto <b><%=driver%></b><br /><i>Accesso effettuato alle <%=logTime%></i><br />(<a href='Logout?username=<%=driver%>'> logout </a>)</p></td>
+                    <td style="width: 15%; text-align: right;"><p>Benvenuto <b><%=driver%></b><br /><i>Accesso effettuato alle <%=logTime%></i><br />(<a href='Logout?username=<%=dlicence%>'> logout </a>)</p></td>
                 </tr>
             </table>
         </header>
@@ -113,23 +113,23 @@
                 %>
                 <form id="buttons_form" action="Report">
                     <input type="text" value="<%=rs.getString("id")%>" name="id" hidden/>
-                    <input type="submit" value="Partenza" name="Partenza" class="Button"/>
-                    <input type="submit" value="Arrivo" name="Arrivo" class="Button"/>
-                    <button type="button" id="problem_button" class="Button">Riporta un problema</button>
+                    <input type="submit" value="Partenza" name="Partenza" class="Button" style="height: 30px; width: 120px;"/>
+                    <input type="submit" value="Arrivo" name="Arrivo" class="Button" style="height: 30px; width: 120px;"/>
+                    <button type="button" id="problem_button" class="Button" style="height: 30px; width: 150px;">Riporta un problema</button>
                 </form>
                 <form id="problem_form" hidden action="Report">
                     <input type="text" value="<%=rs.getString("id")%>" name="id" hidden/>
                     <table>
                         <tr>
-                            <td><label>Minuti ritardo: </label></td>
-                            <td><input type="number" min="0" max="300" name="min" required/></td>
+                            <td>Minuti ritardo:</td>
+                            <td><input style="margin-bottom: 15px;" class="Input" type="number" min="0" max="300" name="min" required/></td>
                         </tr>
                         <tr>
-                            <td><label>Descrizione aggiuntiva</label></td>
-                            <td><textarea name="desc"></textarea></td>
+                            <td><label>Descrizione aggiuntiva: </label></td>
+                            <td><textarea style="margin-bottom: 15px;" class="Input" name="desc"></textarea></td>
                         </tr>
                         <tr>
-                            <td><input type="submit" value="Invia report" class="Button" required/></td>
+                            <td><input type="submit" value="Invia report" class="Button" style="height: 30px; width: 120px;" required/></td>
                         </tr>
                     </table>
                 </form>

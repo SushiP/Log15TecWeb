@@ -119,8 +119,8 @@
                                 <td></td>
                                 <td hidden><%=rs.getString("id")%></td>
                                 <td hidden><%=rs.getString("deadline")%></td>
-                                <td><button class="Button">Accetta</button></td>
-                                <td><button class="Button">Rifiuta</button></td>
+                                <td><button class="Button" style="height: 30px; width: 120px;">Accetta</button></td>
+                                <td><button class="Button" style="height: 30px; width: 120px;">Rifiuta</button></td>
                                 <script>
                                     /*Fill the row with data about the shipment.*/
                                     $start = $("#<%=rs.getString("id")%> td:nth(1)");
