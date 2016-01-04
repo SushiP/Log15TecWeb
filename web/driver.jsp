@@ -78,7 +78,7 @@
         </header>
         <section class="Container">
             <header>
-                ACCETTAZIONE ASSEGNAMENTI GIORNALIERI
+                ACCETTAZIONE ASSEGNAMENTI
             </header>
             <article>
                 <%--Query to recover all the shipments of the logged sriver --%>
@@ -168,11 +168,73 @@
                 %> 
             </article>
             <header>
-                ASSEGNAMENTI IN SETTIMANA
+                ASSEGNAMENTI ACCETTATI NEGLI ULTIMI 7 GIORNI
             </header>
             <article>
+                <%--Query to recover all the shipments of the logged sriver --%>
+                <%
+                    String query2 = "SELECT * FROM assegnamento WHERE autista = \"" + dlicence + "\" AND DATEDIFF(deadline, CURDATE()) <= 7 "
+                            + "AND accettato = 1";
+                    ResultSet rs2 = null;
+                    try{
+                        Statement st = new DBConnector().getConnection().createStatement();
+                        rs2 = st.executeQuery(query2);  
+                    }catch(SQLException e){
+                        System.out.println("Errore recupero dati"); 
+                %>
+                        <p>Impossibile accedere al database.</p>
+                <%
+                    }
+
+                    if(rs2 != null){
+                %>
+                    <table class="Table">
+                        <thead>
+                            <tr>
+                                <th>Deadline</th>
+                                <th>Partenza</th>
+                                <th>Tappe intermedie</th>
+                                <th>Arrivo</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                <%
+                        while(rs2.next()){
+                %>
+                            <tr id = "<%=rs2.getString("id")%>">
+                                <td><%=rs2.getString("deadline")%></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td hidden><%=rs2.getString("id")%></td>
+                                <td hidden><%=rs2.getString("deadline")%></td>
+                                <script>
+                                    /*Fill the row with data about the shipment.*/
+                                    $start = $("#<%=rs2.getString("id")%> td:nth(1)");
+                                    $wayp = $("#<%=rs2.getString("id")%> td:nth(2)");
+                                    $dest = $("#<%=rs2.getString("id")%> td:nth(3)");
+
+                                    /*Parse the route and insert it into the row.*/
+                                    route = JSON.parse('<%=rs2.getString("percorso")%>');
+                                    $start.text(route.start);
+                                    $dest.text(route.destination);
+
+                                    for(i = 0; i < route.waypoints.length; i++){
+                                        $way.text($way.text() + route.waypoints[i]);
+                                        if(i < route.waypoints.length - 1)
+                                            $way.text($way.text() + ", ");
+                                    }
+                                </script>
+                            </tr>
+                <%
+                        }
+                %>
+                        </tbody>
+                    </table>
+                <%
+                    }
+                %>
             </article>
-        </section>
-        
+        </section>   
     </body>
 </html>
