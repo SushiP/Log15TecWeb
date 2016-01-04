@@ -122,14 +122,14 @@
                     <table>
                         <tr>
                             <td><label>Minuti ritardo: </label></td>
-                            <td><input type="number" min="0" max="300" name="min" /></td>
+                            <td><input type="number" min="0" max="300" name="min" required/></td>
                         </tr>
                         <tr>
                             <td><label>Descrizione aggiuntiva</label></td>
                             <td><textarea name="desc"></textarea></td>
                         </tr>
                         <tr>
-                            <td><input type="submit" value="Invia report" class="Button"/></td>
+                            <td><input type="submit" value="Invia report" class="Button" required/></td>
                         </tr>
                     </table>
                 </form>

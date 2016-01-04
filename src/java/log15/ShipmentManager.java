@@ -25,12 +25,12 @@ public class ShipmentManager extends HttpServlet {
             response.setHeader("Location","admin.jsp?query=success");
             
             /*Update the customers inserted into new shipment.*/
-            String []values = request.getParameter("id_customers").split(", ");
+            String []values = request.getParameter("id_customers").split(",");
             String query = "DELETE FROM cliente WHERE id = " + values[0];
 
             for(int i = 1; i < values.length; i++)
                 query += " OR id = " + values[i];
-
+            
             try(Statement st = new DBConnector().getConnection().createStatement()){
                 st.executeUpdate(query);
             }catch(SQLException e){

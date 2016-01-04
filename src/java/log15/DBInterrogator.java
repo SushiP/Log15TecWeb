@@ -115,7 +115,7 @@ public class DBInterrogator {
                 tab += "<td></td><td>Nome</td><td>Sede Partenza</td><td>Sede Destinazione</td><td>Deadline</td><td>Peso Merce</td><td>Tipo Spedizione</td><td></td>";
                 tab += "</tr>";
                 
-                tab += "<tr>";
+                tab += "<tr id='search_row'>";
                 for (i = idStart; i<= count; i++) {
                     if (i == idStart)
                         tab += "<td></td>";
@@ -171,7 +171,7 @@ public class DBInterrogator {
                 tab += "<td></td><td>Patente</td><td>Nome</td><td>Cognome</td><td>Assenze Mensili</td><td></td>";
                 tab += "</tr>";
                 
-                tab += "<tr>";
+                tab += "<tr id='search_row'>";
                 tab += "<td></td>";
                 for (i = 1; i <= count; i++) 
                         tab += "<td><input type='text' name='" + rsmd.getColumnName(i) + "' /></td>";
@@ -223,7 +223,7 @@ public class DBInterrogator {
                 tab += "<td></td><td>Targa</td><td>Anno Registrazione</td><td>Carburante</td><td>Marca</td><td>Capacità</td><td></td>";
                 tab += "</tr>";
                 
-                tab += "<tr>";
+                tab += "<tr id='search_row'>";
                 tab += "<td></td>";
                 for (i = 1; i <= count; i++) 
                         tab += "<td><input type='text' name='" + rsmd.getColumnName(i) + "' /></td>";
@@ -254,7 +254,7 @@ public class DBInterrogator {
     
     public String getShipmentsTable() throws SQLException {
         String tab = "";
-        String query = "SELECT * FROM assegnamento";
+        String query = "SELECT * FROM assegnamento WHERE deadline = curdate()";
         int idStart = 1;
         
         try{
@@ -275,7 +275,7 @@ public class DBInterrogator {
                 tab += "<td></td><td>Veicolo</td><td>Autista</td><td>Deadline</td><td>Stato</td><td></td>";
                 tab += "</tr>";
                 
-                tab += "<tr><td></td>";
+                tab += "<tr id='search_row'><td></td>";
                 tab += "<td><input type='text' name='veicolo' /></td>";
                 tab += "<td><input type='text' name='autista' /></td>";
                 tab += "<td><input type='text' name='deadline' /></td>";
@@ -295,6 +295,8 @@ public class DBInterrogator {
                     tab += "<td>" + rs.getString(rsmd.getColumnName(4)) + "</td>";
                     tab += "<td>" + rs.getString(rsmd.getColumnName(6)) + "</td><td></td>";
                     tab += "<td hidden>" + rs.getString(rsmd.getColumnName(7)) + "</td>";
+                    tab += "<td hidden>" + rs.getString(rsmd.getColumnName(8)) + "</td>";
+                    tab += "<td hidden>" + rs.getString(rsmd.getColumnName(9)) + "</td>";
                     tab += "</tr>";
                 }
                 
