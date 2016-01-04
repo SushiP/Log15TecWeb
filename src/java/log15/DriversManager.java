@@ -70,7 +70,7 @@ public class DriversManager extends HttpServlet {
         
         if(ps.executeUpdate() > 0)
         {
-            query = "INSERT INTO utente(username, password, dir) VALUES(?, MD5(?), 'Driver')";
+            query = "INSERT INTO utente(username, password, dir) VALUES(?, MD5('?'), 'Driver')";
             PreparedStatement ps2 = conn.prepareStatement(query);
             ps2.setString(1, request.getParameter("patente"));
             ps2.setString(2, request.getParameter("patente"));
