@@ -140,17 +140,17 @@
                             HttpSession sess = request.getSession();
                 %>
                 <form action="CustomerManager" method="post">
-                    <input type="text" name="nome" placeholder="Nome cliente" 
+                    <input style="margin-bottom: 15px;" class="Input" type="text" name="nome" placeholder="Nome cliente" 
                            value="<%if(sess.getAttribute("nome") != null) 
                                         out.println((String)sess.getAttribute("nome"));%>" required/><br />
-                    <input type="text" name="sedePartenza" placeholder="Sede di partenza"
+                    <input style="margin-bottom: 15px;" class="Input" type="text" name="sedePartenza" placeholder="Sede di partenza"
                            value="<%if(sess.getAttribute("sedePartenza") != null) 
                                         out.println((String)sess.getAttribute("sedePartenza"));%>" required/><br />
-                    <input type="text" name="sedeDestinazione" placeholder="Sede di destinazione" 
+                    <input style="margin-bottom: 15px;" class="Input" type="text" name="sedeDestinazione" placeholder="Sede di destinazione" 
                            value="<%if(sess.getAttribute("sedeDestinazione") != null) 
                                         out.println((String)sess.getAttribute("sedeDestinazione"));%>" required/><br />
                     Deadline: <br />
-                    <input type="date" name="deadline" 
+                    <input style="margin-bottom: 15px;" class="Input" type="date" name="deadline" 
                            value="<%if(sess.getAttribute("deadline") != null) 
                                         out.println((String)sess.getAttribute("deadline"));%>" required/><br />
                     Peso merce: <br />
@@ -159,7 +159,7 @@
                         if(sess.getAttribute("pesoMerce") != null) 
                             peso = Integer.parseInt((String)sess.getAttribute("pesoMerce"));
                     %>
-                    <select name="pesoMerce" required>
+                    <select style="margin-bottom: 15px;" class="Input" name="pesoMerce" required>
                         <option value="5" <%if(peso != null && peso.equals(5)) out.println("selected");%> >5</option>
                         <option value="10" <%if(peso != null && peso.equals(10)) out.println("selected");%> >10</option>
                         <option value="20" <%if(peso != null && peso.equals(20)) out.println("selected");%> >20</option>
@@ -171,18 +171,17 @@
                         if(sess.getAttribute("tipo") != null) 
                             tipo = (String)sess.getAttribute("tipo");
                     %>
-                    <select name="tipo" required>
+                    <select class="Input" name="tipo" required>
                         <option value="Standard" <%if(tipo != null && tipo.equals("Standard")) out.println("selected");%> >Standard</option>
                         <option value="Veloce" <%if(tipo != null && tipo.equals("Veloce")) out.println("selected");%> >Veloce</option>
                     </select><br /><br />
                     <p id="error_input_message" style="color: red"></p>
-                    <input type="submit" value="Inserisci" name="insert" />
+                    <input style="height: 30px; width: 120px;" class="Button" type="submit" value="Inserisci" name="insert" /> <a href="mcustomers.jsp"><button style="height: 30px; width: 120px;" class="Button" type="button">Annulla</button></a>
                     <input type="hidden" value="insert" name="operation"/>
                 </form>
                 <script>
                     control_customers_input();
                 </script>
-                <a href="mcustomers.jsp"><button>Annulla</button></a>
                 <%
                         }
                         else if (request.getParameter("op").equals("update"))
@@ -194,32 +193,31 @@
                 %>
                 <form action="CustomerManager" method="post">
                     <input type="hidden" name="id" value="<%=row[1]%>" required/>
-                    <input type="text" name="nome" placeholder="Nome cliente" value="<%=row[2]%>" required/><br />
-                    <input type="text" name="sedePartenza" placeholder="Sede di partenza" value="<%=row[3]%>" required/><br />
-                    <input type="text" name="sedeDestinazione" placeholder="Sede di destinazione" value="<%=row[4]%>" required/><br />
+                    <input style="margin-bottom: 15px;" class="Input" type="text" name="nome" placeholder="Nome cliente" value="<%=row[2]%>" required/><br />
+                    <input style="margin-bottom: 15px;" class="Input" type="text" name="sedePartenza" placeholder="Sede di partenza" value="<%=row[3]%>" required/><br />
+                    <input style="margin-bottom: 15px;" class="Input" type="text" name="sedeDestinazione" placeholder="Sede di destinazione" value="<%=row[4]%>" required/><br />
                     Deadline: <br />
-                    <input type="date" name="deadline" value="<%=row[5]%>" required/><br />
+                    <input style="margin-bottom: 15px;" class="Input" type="date" name="deadline" value="<%=row[5]%>" required/><br />
                     Peso merce: <br />
-                    <select name="pesoMerce" required>
+                    <select style="margin-bottom: 15px;" class="Input" name="pesoMerce" required>
                         <option value="5" <% if (row[6].equals("5")) out.println("selected"); %>>5</option>
                         <option value="10" <% if (row[6].equals("10")) out.println("selected"); %>>10</option>
                         <option value="15" <% if (row[6].equals("20")) out.println("selected"); %>>20</option>
                         <option value="35" <% if (row[6].equals("35")) out.println("selected"); %>>35</option>
                     </select> <br />
                     Tipo Spedizione: <br />
-                    <select name="tipo" required>
+                    <select class="Input" name="tipo" required>
                         <option value="Standard" <% if (row[7].equals("Standard")) out.println("selected"); %>>Standard</option>
                         <option value="Veloce" <% if (row[7].equals("Veloce")) out.println("selected"); %>>Veloce</option>
                     </select><br /><br />
                     <p id="error_input_message" style="color: red"></p>
-                    <input type="submit" value="Modifica" name="update" />
+                    <input class="Button" style="height: 30px; width: 120px;" type="submit" value="Modifica" name="update" /> <a href="mcustomers.jsp"><button style="height: 30px; width: 120px;" type="button" class="Button">Annulla</button></a>
                     <input type="hidden" name="operation" value="update" />
                     <input type="hidden" name="odeadline" value="<%=row[5]%>" />
                 </form>
                 <script>
                     control_customers_input();
                 </script>
-                <a href="mcustomers.jsp"><button>Annulla</button></a>
                 <%
                             }
                             else {
