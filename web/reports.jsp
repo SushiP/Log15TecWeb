@@ -212,20 +212,25 @@
                         });
                     }
                     <%
-                        if(rs.getString("oraPartenza") == null){
+                            if(rs.getString("oraPartenza") == null){
                     %>
-                    $("#buttons_form > input[name='Arrivo']").attr("disabled", true);
+                                $("#buttons_form > input[name='Arrivo']").attr("disabled", true);
                     <%
-                        }
-                        else if(rs.getString("oraArrivo") == null){
+                            }
+                            else if(rs.getString("oraArrivo") == null){
                     %>
-                    $("#buttons_form > input[name='Partenza']").attr("disabled", true);
-                    //control_duration();  
+                                $("#buttons_form > input[name='Partenza']").attr("disabled", true);
+                                control_duration();  
                     <%
-                        }
+                            }
+                            else{
+                    %>
+                                $("#buttons_form > input, #buttons_form > button").attr("disabled", true);
+                    <%
+                            }
                     %>
                 </script>
-                <%        }
+                <%      }
                     }catch(SQLException e){
                         System.out.println("Errore nella connessione al database:" + e.getMessage());
                     }
