@@ -217,7 +217,7 @@
                         try{
                             Statement st = new DBConnector().getConnection().createStatement();
                             ResultSet rs = st.executeQuery("SELECT * FROM cliente C WHERE tipo='standard' " +
-                                                            "AND DATEDIFF(C.deadline, CURDATE()) <= 7");
+                                                            "AND DATEDIFF(C.deadline, CURDATE()) = 7");
                             rs.next();
                     %>
                     shipment.start = "<%=rs.getString("sedePartenza")%>";
