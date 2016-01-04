@@ -40,7 +40,7 @@ public class Report extends HttpServlet {
             int id = Integer.parseInt(request.getParameter("id"));
             
             try {
-                String query = "UPDATE assegnamento SET oraArrivo = CURTIME() WHERE id = ?";
+                String query = "UPDATE assegnamento SET oraArrivo = CURTIME(), stato='Consegnato' WHERE id = ?";
                 PreparedStatement ps = conn.prepareStatement(query);
                 ps.setInt(1, id);
                 
