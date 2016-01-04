@@ -272,10 +272,11 @@ public class DBInterrogator {
                 
                 /*Draw the column's names.*/
                 tab += "<tr style='background-color: #F5F5F5;'>";
-                tab += "<td></td><td>Veicolo</td><td>Autista</td><td>Deadline</td><td>Stato</td><td></td>";
+                tab += "<td></td><td>Clienti</td><td>Veicolo</td><td>Autista</td><td>Deadline</td><td>Stato</td><td></td>";
                 tab += "</tr>";
                 
                 tab += "<tr id='search_row'><td></td>";
+                tab += "<td><input type='text' name='clienti' /></td>";
                 tab += "<td><input type='text' name='veicolo' /></td>";
                 tab += "<td><input type='text' name='autista' /></td>";
                 tab += "<td><input type='text' name='deadline' /></td>";
@@ -293,10 +294,11 @@ public class DBInterrogator {
                     tab += "<td>" + rs.getString(rsmd.getColumnName(2)) + "</td>";
                     tab += "<td>" + rs.getString(rsmd.getColumnName(3)) + "</td>";
                     tab += "<td>" + rs.getString(rsmd.getColumnName(4)) + "</td>";
-                    tab += "<td>" + rs.getString(rsmd.getColumnName(6)) + "</td><td></td>";
-                    tab += "<td hidden>" + rs.getString(rsmd.getColumnName(7)) + "</td>";
+                    tab += "<td>" + rs.getString(rsmd.getColumnName(5)) + "</td>";
+                    tab += "<td>" + rs.getString(rsmd.getColumnName(7)) + "</td><td></td>";
                     tab += "<td hidden>" + rs.getString(rsmd.getColumnName(8)) + "</td>";
                     tab += "<td hidden>" + rs.getString(rsmd.getColumnName(9)) + "</td>";
+                    tab += "<td hidden>" + rs.getString(rsmd.getColumnName(10)) + "</td>";
                     tab += "</tr>";
                 }
                 

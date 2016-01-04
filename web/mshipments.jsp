@@ -181,7 +181,7 @@
                     $(".row").click(function(){
                         /*If the clicked row, is not the selected one, make it.*/
                         if(!$(this).hasClass("selected")){
-                            var shipment = JSON.parse(this.children[6].innerHTML);
+                            var shipment = JSON.parse(this.children[7].innerHTML);
                             
                             /*Clear the error messages and make the clicked row the selected one.*/
                             $("#error_message").empty();
@@ -199,7 +199,7 @@
                             /*Create the route*/
                             create_route(shipment.start, shipment.destination, shipment.waypoints, function(info, response){
                                 /*Create the polyline and get the time passed from the start of the shipment.*/
-                                var date = $(".selected td:nth(7)").text().replace(" ", "T");
+                                var date = $(".selected td:nth(8)").text().replace(" ", "T");
                                 var pol = create_polyline(response.routes[0]);
                                 
                                 /*If shipment is started put the marker in the approximate position.*/
@@ -218,7 +218,7 @@
                                         id = window.setInterval(function(){next_step(info, pol)}, 100);
                                     }
                                     else
-                                        marker.setPosition(pol.GetPointAtDistance(info.distance()));
+                                        marker.setPosition(pol.GetPointAtDistance(pol.Distance()));
                                 }
                                 else{
                                     marker.setPosition(pol.GetPointAtDistance(0));

@@ -46,6 +46,12 @@
             .row{
                 cursor: pointer;
             }
+            
+            #customers{
+                border: none;
+                cursor: default;
+                font-size: 1em;
+            }
         </style>
         <script>
             /*All the objects.*/
@@ -90,25 +96,31 @@
                         if(rows[index].children[2].innerHTML == shipment.destination){
                             /*Copy in newRoute the current shipment, modifing it with the new destination.*/
                             newRoute.start = shipment.start;
-                            newRoute.waypoints = shipment.waypoints.split();
+                            newRoute.waypoints = shipment.waypoints.slice();
                             newRoute.waypoints.push({location: shipment.destination});
                             newRoute.destination = rows[index].children[3].innerHTML;
+
+                            function save_scope(ind){
+                                create_route(newRoute.start, newRoute.destination, newRoute.waypoints, function(info){
+                                    var newPallet = parseInt($("input[name='pallet']").val()) + 
+                                                    parseInt(rows[ind].children[5].innerHTML);
+                                    var newName = rows[ind].children[1].innerHTML;
+                                    
+                                    if(info.duration() > MAXDURATION || newPallet > 35)
+                                        find_shipment(--ind);
+                                    else{
+                                        $("#customers").val($("#customers").val() + "," + newName);
+                                        $("input[name='id_customers']").val($("input[name='id_customers']").val() + "," +
+                                                                            rows[ind].children[0].children[0].value);
+                                        $("input[name='dur_tim']").val(info.duration());
+                                        $("input[name='pallet']").val(newPallet);
+                                        $("input[name='route']").val(JSON.stringify(newRoute));
+                                        $("input[name='sub']").click();
+                                    }
+                                }, false);
+                            }
                             
-                            create_route(newRoute.start, newRoute.destination, newRoute.waypoints, function(info){
-                                var newPallet = parseInt($("input[name='pallet']").val()) + 
-                                                parseInt(rows[index].children[5].innerHTML);
-                                
-                                if(info.duration() > MAXDURATION || newPallet > 35)
-                                    find_shipment(--ind);
-                                else{
-                                    $("input[name='id_customers']").val($("input[name='id_customers']").val() + "," +
-                                                                        rows[index].children[0].children[0].value);
-                                    $("input[name='dur_tim']").val(info.duration());
-                                    $("input[name='pallet']").val(newPallet);
-                                    $("input[name='route']").val(JSON.stringify(newRoute));
-                                    $("input[name='sub']").click();
-                                }
-                            }, false);
+                            save_scope(index);
                         }
                         else
                             find_shipment(--ind);
@@ -218,8 +230,11 @@
                     placesVisited.push(shipment.destination);
                     create_route(shipment.start, shipment.destination, shipment.waypoints, function(info){
                         /*Set duration visible and set shipment JSON object.*/
-                        $("#customers").text("<%=rs.getString("nome")%>");
                         $("input[name='id_customers']").val("<%=rs.getString("id")%>");
+                        
+                        /*Set the other attributes.*/
+                        $("#customers").val("<%=rs.getString("nome")%>");
+                        $("input[name='deadline']").val("<%=rs.getDate("deadline")%>");
                         
                         $("#dur").text(info.duration_text());
                         $("input[name='dur_time']").val(info.duration());
@@ -233,7 +248,7 @@
                     <table>
                         <tr>
                             <td>Clienti: </td>
-                            <td id="customers"></td>
+                            <td><input type="text" id="customers" name="customers"/></td>
                             <td hidden><input type="text" name="id_customers"/></td>
                         </tr>
                         <tr>
@@ -252,7 +267,7 @@
                         </tr>
                         <tr>
                             <td hidden><input type="text" name="route"/></td>
-                            <td hidden><input type='text' name='deadline' value="<%=rs.getDate("deadline")%>"/></td>
+                            <td hidden><input type='text' name='deadline'/></td>
                         </tr>
                         <tr>
                             <td><button type='Button' style='height: 40px; width: 180px;' class='Button' id="show_shipment">Mostra percorso attuale</button></td>
@@ -394,7 +409,7 @@
                         numGoods += newNumGoods;
                         
                         /*Update customers.*/
-                        $("#customers").text($("#customers").text() + ", " + newName);
+                        $("#customers").val($("#customers").val() + ", " + newName);
                         $("input[name='id_customers']").val($("input[name='id_customers']").val() + "," + newId);
 
                         /*Update number of pallet.*/
