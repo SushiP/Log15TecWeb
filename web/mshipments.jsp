@@ -157,7 +157,7 @@
                         Statement st1 = new DBConnector().getConnection().createStatement();
                         ResultSet rs1 = st1.executeQuery(query1);                      
                         table = "<table id='logproblems' class='Table'>" +
-                                "<thead><tr><td colspan='3'>Log Problemi</td></tr></thead>"+
+                                "<thead><tr><td style='background-color: #F5F5F5;' colspan='3'>Log Problemi</td></tr></thead>"+
                                 "<tbody>";
                         
                         while(rs1.next()){
