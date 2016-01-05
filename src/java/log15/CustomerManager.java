@@ -13,7 +13,7 @@ import java.util.concurrent.TimeUnit;
 
 /**
  *
- * @author Maurizio
+ * @authors Auriemma Mazzoccola Giulio, Maurizio Cimino
  */
 @WebServlet(name = "CustomerManager", urlPatterns = {"/CustomerManager"})
 public class CustomerManager extends HttpServlet {
@@ -67,15 +67,16 @@ public class CustomerManager extends HttpServlet {
         Connection conn = new DBConnector().getConnection();
         
         if (request.getParameter("tipo").equals("Veloce")) {
-            String query = "INSERT INTO assegnamento(veicolo, autista, deadline, stato, percorso) VALUES (?, ?, ?, 'In Preparazione', '{\"start\": " + request.getParameter("sedePartenza") + ", \"destination\": " + request.getParameter("sedeDestinazione") +  ", \"waypoints\": []}')";
+            String query = "INSERT INTO assegnamento(clienti, veicolo, autista, deadline, stato, percorso) VALUES (?, ?, ?, ?, 'In Preparazione', '{\"start\": " + request.getParameter("sedePartenza") + ", \"destination\": " + request.getParameter("sedeDestinazione") +  ", \"waypoints\": []}')";
             ShipmentManager shipment = new ShipmentManager();
-            String veicolo = shipment.takeVehicle(Integer.parseInt(request.getParameter("pesoMerce")));
+            String veicolo = shipment.takeVehicle(Integer.parseInt(request.getParameter("pesoMerce")), request.getParameter("deadline"));
             String autista = shipment.takeDriver(request.getParameter("deadline"));
             PreparedStatement ps = conn.prepareStatement(query);
             
-            ps.setString(1, veicolo);
-            ps.setString(2, autista);
-            ps.setString(3, request.getParameter("deadline"));
+            ps.setString(1, request.getParameter("nome"));
+            ps.setString(2, veicolo);
+            ps.setString(3, autista);
+            ps.setString(4, request.getParameter("deadline"));
             
             if (ps.executeUpdate() > 0)
                 return true;

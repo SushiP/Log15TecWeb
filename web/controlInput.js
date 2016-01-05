@@ -1,8 +1,4 @@
-/* 
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+/*This script contains all the function to control input data.*/
 function check_date(){
     /*Check the user not insert wrong character.*/
     $("input[type='date']").keypress(function(e){

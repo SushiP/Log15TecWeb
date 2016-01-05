@@ -1,8 +1,4 @@
-/* 
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+/*This script contains all the function to interact with google maps.*/
 
 /*Draw the info of all the route's legs.*/
 function RouteInfo(route){

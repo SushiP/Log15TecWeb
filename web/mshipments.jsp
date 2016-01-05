@@ -26,6 +26,7 @@
             String username = null;
             String logTime = null;
         %>
+        <%--Control if admin is correctly logged in.--%>
         <%
             Cookie[] cookies = request.getCookies();
             
@@ -149,6 +150,7 @@
             <article>
                 <div id="map" style="width: 1024px; height: 500px;"></div>
                 <p id="error_message" style="color:red"></p>
+                <%--Recover the table of problems.--%>
                 <%
                     /*Create the table of the problems.*/
                     String table = "";

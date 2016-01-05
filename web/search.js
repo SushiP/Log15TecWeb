@@ -1,3 +1,4 @@
+/*In this script there is the search function used for all the tables.*/
 function search(inputs, row){
     var parameters = new Array(4);
     var inputs = $(inputs);

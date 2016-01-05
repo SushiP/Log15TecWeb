@@ -9,7 +9,7 @@ import java.sql.*;
 
 /**
  *
- * @author Maurizio
+ * @authors Auriemma Mazzoccola Giulio, Maurizio Cimino
  */
 @WebServlet(name = "Report", urlPatterns = {"/Report"})
 public class Report extends HttpServlet {

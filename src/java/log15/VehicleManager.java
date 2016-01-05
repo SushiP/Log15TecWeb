@@ -12,7 +12,7 @@ import java.util.GregorianCalendar;
 
 /**
  *
- * @author Maurizio
+ * @authors Auriemma Mazzoccola Giulio, Maurizio Cimino
  */
 @WebServlet(name = "VehicleManager", urlPatterns = {"/VehicleManager"})
 public class VehicleManager extends HttpServlet {

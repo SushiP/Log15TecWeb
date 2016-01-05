@@ -5,7 +5,7 @@ import java.sql.*;
 
 /**
  *
- * @author Maurizio, Giulio
+ * @authors Auriemma Mazzoccola Giulio, Maurizio Cimino
  */
 public class DBConnector {
     /* Connection to database */

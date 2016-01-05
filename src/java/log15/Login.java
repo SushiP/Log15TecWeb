@@ -10,7 +10,7 @@ import java.util.UUID;
 
 /**
  *
- * @author Maurizio, Giulio
+ * @authors Auriemma Mazzoccola Giulio, Maurizio Cimino
  */
 @WebServlet(name = "Login", urlPatterns = {"/Login"})
 

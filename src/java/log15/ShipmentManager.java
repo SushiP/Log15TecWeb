@@ -59,13 +59,14 @@ public class ShipmentManager extends HttpServlet {
         }
     }
     
-    public String takeVehicle(int weight) {
+    public String takeVehicle(int weight, String deadline) {
         Connection conn = new DBConnector().getConnection();
-        String query = "SELECT V.targa from veicolo AS V WHERE NOT EXISTS(SELECT V.targa FROM veicolo AS V1 JOIN assegnamento AS A ON V1.targa = A.veicolo WHERE A.stato <> 'Consegnato' AND V1.targa = V.targa) AND ? <= V.capacita ORDER BY V.capacita ASC";
+        String query = "SELECT V.targa from veicolo AS V WHERE NOT EXISTS(SELECT V.targa FROM veicolo AS V1 JOIN assegnamento AS A ON V1.targa = A.veicolo WHERE A.stato <> 'Consegnato' AND V1.targa = V.targa AND A.deadline = ?) AND ? <= V.capacita ORDER BY V.capacita ASC";
         
         try {
             PreparedStatement ps = conn.prepareStatement(query);
-            ps.setInt(1, weight);
+            ps.setString(1, deadline);
+            ps.setInt(2, weight);
             ResultSet rs = ps.executeQuery();
             if (rs.next())
                 return rs.getString("targa");
@@ -97,7 +98,7 @@ public class ShipmentManager extends HttpServlet {
     }
     
     private boolean createShipment(String customers, int weight, String deadline, String percorso) {
-        String veicolo = takeVehicle(weight);
+        String veicolo = takeVehicle(weight, deadline);
         String autista = takeDriver(deadline);
         if (insertShipment(customers, veicolo, autista, deadline, percorso))
             return true;

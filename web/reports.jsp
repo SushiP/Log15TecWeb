@@ -15,7 +15,7 @@
             DBInterrogator interrogator = new DBInterrogator(new DBConnector().getConnection());
             String userType = null, driver = null, logTime = null, dlicence = null;
         %>
-        <%--Be sure the driver was successfully logged--%>
+        <%--Be sure the driver is successfully logged.--%>
         <%
             Cookie[] cookies = request.getCookies();
             

@@ -21,7 +21,7 @@
             String row[] = null;
             String search = null;
         %>
-        
+        <%--Check if driver is correctly logged in.--%>
         <%
             Cookie[] cookies = request.getCookies();
             
@@ -110,6 +110,7 @@
         </header>
         <section class="Container">
             <header>
+        <%--Print the right text basis on the operation.--%>
         <%
             if (request.getParameter("op") != null && request.getParameter("op").equals("insert"))
             {
@@ -132,6 +133,7 @@
         %>
             </header>
             <article>
+                <%--Show the right form.--%>
                 <%
                     if (request.getParameter("op") != null) 
                     {

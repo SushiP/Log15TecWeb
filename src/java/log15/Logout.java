@@ -9,7 +9,7 @@ import javax.servlet.http.Cookie;
 
 /**
  *
- * @author Maurizio
+ * @authors Auriemma Mazzoccola Giulio, Maurizio Cimino
  */
 @WebServlet(name = "Logout", urlPatterns = {"/Logout"})
 public class Logout extends HttpServlet {

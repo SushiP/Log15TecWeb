@@ -10,7 +10,7 @@ import java.util.Vector;
 
 /**
  *
- * @author Maurizio
+ * @authors Auriemma Mazzoccola Giulio, Maurizio Cimino
  */
 @WebServlet(name = "DriversManager", urlPatterns = {"/DriversManager"})
 public class DriversManager extends HttpServlet {

@@ -12,7 +12,7 @@
             DBInterrogator interrogator = new DBInterrogator(new DBConnector().getConnection());
             String userType = null;
         %>
-        
+        <%--Control if the user has not been logged in.--%>
         <%
             Cookie[] cookies = request.getCookies();
             

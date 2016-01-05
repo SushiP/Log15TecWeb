@@ -9,7 +9,7 @@ import java.sql.*;
 
 /**
  *
- * @author Giulio
+ * @authors Auriemma Mazzoccola Giulio, Maurizio Cimino
  */
 public class DBInterrogator {
     private Connection connection = null;
