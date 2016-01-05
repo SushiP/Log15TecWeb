@@ -109,7 +109,7 @@
                                     if(info.duration() > MAXDURATION || newPallet > 35)
                                         find_shipment(--ind);
                                     else{
-                                        $("#customers").val($("#customers").val() + "," + newName);
+                                        $("#customers").val($("#customers").val() + ", " + newName);
                                         $("input[name='id_customers']").val($("input[name='id_customers']").val() + "," +
                                                                             rows[ind].children[0].children[0].value);
                                         $("input[name='dur_tim']").val(info.duration());
@@ -135,12 +135,14 @@
                     create_new_route([tds[2].innerHTML, tds[3].innerHTML], function(dist){
                         if(dist != undefined && dist != null){
                             var newPallet = parseInt($("input[name='pallet']").val()) + parseInt(tds[5].innerHTML);
-                                        
+                            var newName = tds[1].innerHTML;
+                            
                             if(dist > 1000000 || newPallet > 35)
                                 window.setTimeout(function(){find_shipment(++ind)}, 300);
                             else{
                                 shipment = newRoute;
                                 create_route(shipment.start, shipment.destination, shipment.waypoints, function(info){
+                                    $("#customers").val($("#customers").val() + ", " + newName);
                                     $("input[name='id_customers']").val($("input[name='id_customers']").val() + "," +
                                                                         tds[0].children[0].value);
                                     $("input[name='dur_tim']").val(info.duration());
@@ -234,7 +236,7 @@
                         
                         /*Set the other attributes.*/
                         $("#customers").val("<%=rs.getString("nome")%>");
-                        $("input[name='deadline']").val("<%=rs.getDate("deadline")%>");
+                        $("form input[name='deadline']").val("<%=rs.getDate("deadline")%>");
                         
                         $("#dur").text(info.duration_text());
                         $("input[name='dur_time']").val(info.duration());
@@ -423,7 +425,7 @@
                     function copy_shipment(from, to){
                         to.start = from.start;
                         to.dest = from.dest;
-                        to.waypoints = from.waypoints;
+                        to.waypoints = from.waypoints.slice();
                     }
                 </script>
                 <%}
