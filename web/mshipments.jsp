@@ -79,7 +79,7 @@
                 directionsDisplay.setMap(map); //Set map for Renderer object.
                 /*Create the marker.*/
                 marker = new google.maps.Marker({map: map,
-                                                icon: "https://maps.google.com/mapfiles/kml/shapes/schools_maps.png"})
+                                                icon: "images/marker.png"})
             }
             
             /*Create the polyline from a route.*/
