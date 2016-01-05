@@ -107,6 +107,7 @@ public class DriversManager extends HttpServlet {
         if (sids == null)
             return false;
         else {
+            /*First delete all the drivers from "autista" table.*/
             Vector ids = new Vector(2);
             for (int i = 0; i < sids.length; i++)
                 if (sids[i] != null)
@@ -120,8 +121,20 @@ public class DriversManager extends HttpServlet {
             for (int i = 0; i < ids.size(); i++)
                 ps.setString(i+1, (String)ids.elementAt(i));
 
-            if(ps.executeUpdate() > 0)
+            if(ps.executeUpdate() > 0){
+                /*If no errors were detected, delete the driver also from "utente" table.*/
+                query = "DELETE FROM utente WHERE username = ?";
+                for (int i = 0; i < ids.size()-1; i++)
+                    query +=" OR username = ?";
+                
+                PreparedStatement ps2 = conn.prepareStatement(query);
+                for (int i = 0; i < ids.size(); i++)
+                    ps2.setString(i+1, (String)ids.elementAt(i));
+                
+                ps2.executeUpdate();
+                
                 return true;
+            }
             else
                 return false;
         }
