@@ -49,13 +49,8 @@
         <% 
             DBInterrogator interrogator = new DBInterrogator(new DBConnector().getConnection());
             String shipments = null;
-        %>
-        <%
-            String query = "SELECT * FROM assegnamento WHERE deadline = curdate()";
             
             try{
-                Statement st = new DBConnector().getConnection().createStatement();
-                ResultSet rs = st.executeQuery(query);
         %>
         <style>
             .selected{
@@ -67,14 +62,9 @@
             }
         </style>
         <script>
-            var routes = [];
             var polylines = [];
             var marker;
             var id, step, dist;
-            
-            <%while(rs.next()){%>
-                routes.push(JSON.parse('<%=rs.getString("percorso")%>'));
-            <%}%>
                 
             /*Create the google maps.*/
             function create_map(){
