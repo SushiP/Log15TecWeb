@@ -49,7 +49,7 @@
          %>
         <section class="Error">
             <article>
-                <p>Errore nella cancellazione: controlla di aver selezionato almeno un campo.</p>
+                <p>Errore nella cancellazione: controlla di aver selezionato almeno un campo oppure che l'autista non sia coinvolto in qualche assegnamento.</p>
             </article>
         </section>        
          <%

@@ -121,7 +121,9 @@ public class DriversManager extends HttpServlet {
             for (int i = 0; i < ids.size(); i++)
                 ps.setString(i+1, (String)ids.elementAt(i));
 
-            if(ps.executeUpdate() > 0){
+            try {
+                ps.executeUpdate();
+
                 /*If no errors were detected, delete the driver also from "utente" table.*/
                 query = "DELETE FROM utente WHERE username = ?";
                 for (int i = 0; i < ids.size()-1; i++)
@@ -131,12 +133,14 @@ public class DriversManager extends HttpServlet {
                 for (int i = 0; i < ids.size(); i++)
                     ps2.setString(i+1, (String)ids.elementAt(i));
                 
-                ps2.executeUpdate();
                 
-                return true;
-            }
-            else
+                if (ps2.executeUpdate() > 0)
+                    return true;
+                else
+                    return false;
+            } catch (SQLException e) {
                 return false;
+            }
         }
     }
     

@@ -121,10 +121,12 @@ public class VehicleManager extends HttpServlet {
             for (int i = 0; i < ids.size(); i++)
                 ps.setString(i+1, (String)ids.elementAt(i));
 
-            if(ps.executeUpdate() > 0)
+            try {
+                ps.executeUpdate();
                 return true;
-            else
+            } catch (SQLException e) {
                 return false;
+            }
         }
     }
     
