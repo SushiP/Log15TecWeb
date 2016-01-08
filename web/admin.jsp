@@ -33,7 +33,7 @@
                 response.setStatus(302);
                 response.setHeader("location", "index.jsp");
             }
-            else if (userType.equals("Driver")){
+            else if (userType.equals("Autista")){
                 response.setStatus(302);
                 response.setHeader("location", "driver.jsp");
             }
@@ -99,7 +99,8 @@
                             newRoute.waypoints = shipment.waypoints.slice();
                             newRoute.waypoints.push({location: shipment.destination});
                             newRoute.destination = rows[index].children[3].innerHTML;
-
+                            
+                            /*Save the value of the index when the create_route function was called.*/
                             function save_scope(ind){
                                 create_route(newRoute.start, newRoute.destination, newRoute.waypoints, function(info){
                                     var newPallet = parseInt($("input[name='pallet']").val()) + 
@@ -130,32 +131,38 @@
                 }
                 /*Else search for a client that can be merged with the shipment.*/
                 else if(ind < rows.length){
-                    var tds = rows[ind].children;
+                    var tableDatas = rows[ind].children;
                     
-                    create_new_route([tds[2].innerHTML, tds[3].innerHTML], function(dist){
-                        if(dist != undefined && dist != null){
-                            var newPallet = parseInt($("input[name='pallet']").val()) + parseInt(tds[5].innerHTML);
-                            var newName = tds[1].innerHTML;
-                            
-                            if(dist > 1000000 || newPallet > 35)
-                                window.setTimeout(function(){find_shipment(++ind)}, 300);
-                            else{
-                                shipment = newRoute;
-                                create_route(shipment.start, shipment.destination, shipment.waypoints, function(info){
-                                    $("#customers").val($("#customers").val() + ", " + newName);
-                                    $("input[name='id_customers']").val($("input[name='id_customers']").val() + "," +
-                                                                        tds[0].children[0].value);
-                                    $("input[name='dur_tim']").val(info.duration());
-                                    $("input[name='pallet']").val(newPallet);
-                                    $("input[name='route']").val(JSON.stringify(shipment));
-                                    
-                                    $("input[name='sub']").click();
-                                });
+                    /*Save the value of the index when the create_route function was called.*/
+                    function save_scope(tds){
+                        create_new_route([tds[2].innerHTML, tds[3].innerHTML], function(dist){
+                            if(dist != undefined && dist != null){
+                                var newPallet = parseInt($("input[name='pallet']").val()) + parseInt(tds[5].innerHTML);
+                                var newName = tds[1].innerHTML;
+
+                                if(dist > 1000000 || newPallet > 35)
+                                    window.setTimeout(function(){find_shipment(++ind)}, 300);
+                                else{
+                                    shipment = newRoute;
+                                    create_route(shipment.start, shipment.destination, shipment.waypoints, function(info){
+                                        $("#customers").val($("#customers").val() + ", " + newName);
+                                        $("input[name='id_customers']").val($("input[name='id_customers']").val() + "," +
+                                                                            tds[0].children[0].value);
+                                        $("input[name='dur_tim']").val(info.duration());
+                                        $("input[name='pallet']").val(newPallet);
+                                        $("input[name='route']").val(JSON.stringify(shipment));
+
+                                        $("input[name='sub']").click();
+                                    });
+                                }
                             }
-                        }
-                    });
+                        });
+                    }
+                    
+                    save_scope(tableDatas);
                 }
                 else{
+                    /*Delete the loading screen.*/
                     $(".loading").remove();
                     $("#error_message").text("Nessun assegnamento automatico disponibile");
                 }

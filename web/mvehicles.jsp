@@ -36,7 +36,7 @@
                 response.setStatus(302);
                 response.setHeader("location", "index.jsp");
             }
-            else if (userType.equals("Driver")){
+            else if (userType.equals("Autista")){
                 response.setStatus(302);
                 response.setHeader("location", "driver.jsp");
             }
